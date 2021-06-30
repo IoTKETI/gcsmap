@@ -1875,6 +1875,35 @@ export default {
             }
         },
 
+        send_set_servo_command(target_name, pub_topic, target_sys_id, target_number, target_pwm) {
+            var btn_params = {};
+            btn_params.target_system = target_sys_id;
+            btn_params.target_component = 1;
+            btn_params.command = mavlink.MAV_CMD_DO_SET_SERVO;
+            btn_params.confirmation = 0;
+            btn_params.param1 = target_number; // Servo number - target servo output pin/channel number.
+            btn_params.param2 = target_pwm; // PWM value to output, in microseconds (typically 1000 to 2000).
+            btn_params.param3 = 0; //
+            btn_params.param4 = 0; //
+            btn_params.param5 = 0; //
+            btn_params.param6 = 0; //
+            btn_params.param7 = 0; //
+
+            try {
+                var msg = this.mavlinkGenerateMessage(255, 0xbe, mavlink.MAVLINK_MSG_ID_COMMAND_LONG, btn_params);
+                if (msg == null) {
+                    console.log("mavlink message is null");
+                }
+                else {
+                    console.log('Send Set Servo command to %s (' + target_number + ', ' + target_pwm + ')', target_name);
+                    this.doPublish(pub_topic, msg);
+                }
+            }
+            catch (ex) {
+                console.log('[ERROR] ' + ex);
+            }
+        },
+
         send_rtl_command(target_name, pub_topic, target_sys_id) {
             var btn_params = {};
             btn_params.target_system = target_sys_id;
@@ -3551,6 +3580,52 @@ export default {
             setTimeout(this.send_set_mode_command, 30 + parseInt(Math.random()*10), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
 
             setTimeout(this.send_auto_command, 60 + parseInt(Math.random()*10), this.name, this.target_pub_topic, this.sys_id, this.$store.state.drone_infos[this.name].goto_positions, start_idx, end_idx, delay, start_idx);
+        });
+
+        EventBus.$on('command-set-pwms-' + this.name, (pwms) => {
+            if(Object.prototype.hasOwnProperty.call(pwms, 'ch9')) {
+                if(pwms.ch9[this.name] !== undefined) {
+                    let pwm_value = parseInt(pwms.ch9[this.name]);
+
+                    setTimeout((name, target_pub_topic, sys_id, pwm_value) => {
+                        this.send_set_servo_command(name, target_pub_topic, sys_id, 9, pwm_value);
+
+                    }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, pwm_value);
+                }
+            }
+
+            if(Object.prototype.hasOwnProperty.call(pwms, 'ch10')) {
+                if(pwms.ch10[this.name] !== undefined) {
+                    let pwm_value = parseInt(pwms.ch10[this.name]);
+
+                    setTimeout((name, target_pub_topic, sys_id, pwm_value) => {
+                        this.send_set_servo_command(name, target_pub_topic, sys_id, 10, pwm_value);
+
+                    }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, pwm_value);
+                }
+            }
+
+            if(Object.prototype.hasOwnProperty.call(pwms, 'ch11')) {
+                if(pwms.ch11[this.name] !== undefined) {
+                    let pwm_value = parseInt(pwms.ch11[this.name]);
+
+                    setTimeout((name, target_pub_topic, sys_id, pwm_value) => {
+                        this.send_set_servo_command(name, target_pub_topic, sys_id, 11, pwm_value);
+
+                    }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, pwm_value);
+                }
+            }
+
+            if(Object.prototype.hasOwnProperty.call(pwms, 'ch12')) {
+                if(pwms.ch12[this.name] !== undefined) {
+                    let pwm_value = parseInt(pwms.ch12[this.name]);
+
+                    setTimeout((name, target_pub_topic, sys_id, pwm_value) => {
+                        this.send_set_servo_command(name, target_pub_topic, sys_id, 12, pwm_value);
+
+                    }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, pwm_value);
+                }
+            }
         });
 
         EventBus.$on('command-set-rtl-' + this.name, (rtl_speed) => {

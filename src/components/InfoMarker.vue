@@ -87,56 +87,56 @@
                             ></v-text-field>
                         </v-card>
                     </v-col>
-                    <v-col cols="12" sm="2">
+                    <v-col cols="12" sm="2" class="text-center">
                         <v-card flat tile>
-                            <v-row no-gutters align="center" justify="center">
-                                <v-col cols="12" sm="6">
-                                    <v-card flat tile align="end">
-                                        <p class="mb-2 display-0 font-weight-bold">비행고도</p>
-                                        <span class="display-1 font-weight-light">{{targetAlt}}</span>
-                                        <span class="subheading font-weight-light ml-1">m</span>
-                                    </v-card>
-                                </v-col>
-                                <v-col
-                                        cols="12"
-                                        sm="6"
-                                        class="text-left"
-                                >
-                                    <v-card flat tile>
-                                        <v-slider
-                                                v-model="targetAlt"
-                                                color="indigo"
-                                                hint="Altitude"
-                                                min="3"
-                                                max="500"
-                                                thumb-label="always"
-                                                vertical
-                                                track-fill-color="orange"
-                                                dense
-                                                ticks
-                                                hide-details
-                                        >
-                                            <template v-slot:prepend>
-                                                <v-icon
-                                                        color="primary"
-                                                        @click="decrementAlt"
-                                                >
-                                                    mdi-minus
-                                                </v-icon>
-                                            </template>
+                            <span class="display-0 font-weight-bold">비행고도</span>
+                            <span class="pl-6 display-1 font-weight-light">{{targetAlt}}</span>
+                            <span class="subheading font-weight-light mx-1">m</span>
+                        </v-card>
+                        <v-card flat tile class="px-2 pt-12">
+                            <v-slider
+                                    v-model="targetAlt"
+                                    color="amber"
+                                    hint="Altitude"
+                                    min="3"
+                                    max="500"
+                                    thumb-label="always"
+                                    track-fill-color="orange"
+                                    dense
+                                    ticks
+                                    hide-details
+                            >
+                                <template v-slot:prepend>
+                                    <v-icon
+                                            color="primary"
+                                            @click="decrementAlt"
+                                    >
+                                        mdi-minus
+                                    </v-icon>
+                                </template>
 
-                                            <template v-slot:append>
-                                                <v-icon
-                                                        color="secondary"
-                                                        @click="incrementAlt"
-                                                >
-                                                    mdi-plus
-                                                </v-icon>
-                                            </template>
-                                        </v-slider>
-                                    </v-card>
-                                </v-col>
-                            </v-row>
+                                <template v-slot:append>
+                                    <v-icon
+                                            color="secondary"
+                                            @click="incrementAlt"
+                                    >
+                                        mdi-plus
+                                    </v-icon>
+                                </template>
+
+                                <template v-slot:append>
+                                    <v-text-field
+                                            v-model="targetAlt"
+                                            class="mt-0 pt-0"
+                                            hide-details
+                                            single-line
+                                            type="number"
+                                            style="width: 80px"
+                                            outlined dense
+                                            color="amber"
+                                    ></v-text-field>
+                                </template>
+                            </v-slider>
                         </v-card>
                     </v-col>
                     <v-col cols="12" sm="2" class="text-center">
@@ -174,6 +174,19 @@
                                     >
                                         mdi-plus
                                     </v-icon>
+                                </template>
+
+                                <template v-slot:append>
+                                    <v-text-field
+                                            v-model="targetSpeed"
+                                            class="mt-0 pt-0"
+                                            hide-details
+                                            single-line
+                                            type="number"
+                                            style="width: 70px"
+                                            outlined dense
+                                            color="teal"
+                                    ></v-text-field>
                                 </template>
                             </v-slider>
                         </v-card>
@@ -214,6 +227,19 @@
                                         mdi-plus
                                     </v-icon>
                                 </template>
+
+                                <template v-slot:append>
+                                    <v-text-field
+                                            v-model="targetRadius"
+                                            class="mt-0 pt-0"
+                                            hide-details
+                                            single-line
+                                            type="number"
+                                            style="width: 80px"
+                                            outlined dense
+                                            color="blue"
+                                    ></v-text-field>
+                                </template>
                             </v-slider>
                         </v-card>
                     </v-col>
@@ -253,6 +279,19 @@
                                         mdi-plus
                                     </v-icon>
                                 </template>
+
+                                <template v-slot:append>
+                                    <v-text-field
+                                            v-model="targetTurningSpeed"
+                                            class="mt-0 pt-0"
+                                            hide-details
+                                            single-line
+                                            type="number"
+                                            style="width: 70px"
+                                            outlined dense
+                                            color="purple"
+                                    ></v-text-field>
+                                </template>
                             </v-slider>
                         </v-card>
                     </v-col>
@@ -263,6 +302,7 @@
                 <v-btn
                         text
                         @click="resetForm"
+                        outlined
                 >
                     Cancel
                 </v-btn>
@@ -272,6 +312,7 @@
                         color="primary"
                         type="submit"
                         :disabled="conditions"
+                        outlined
                 >
                     Register
                 </v-btn>
@@ -282,6 +323,7 @@
                         fab
                         dark
                         @click="deleteMarker"
+                        outlined
                 >
                     <v-icon>mdi-delete</v-icon>
                 </v-btn>

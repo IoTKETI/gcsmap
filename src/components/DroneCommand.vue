@@ -28,7 +28,27 @@
                     </v-card-subtitle>
                     <v-card style="opacity: 0.86" class="mx-4 my-2 pa-0">
                         <v-row class="mb-6" no-gutters align="center">
-                            <v-col cols="7">
+                            <v-col cols="2">
+                                <v-card class="pa-2" outlined tile>
+                                    <v-row>
+                                        <div v-for="(drone, i) in $store.state.drone_infos" :key="i">
+                                            <div v-if="drone.selected && drone.targeted">
+                                                <v-chip
+                                                        label outlined
+                                                        class="px-4 py-5 ma-1"
+                                                        v-if="drone"
+                                                        color="primary"
+                                                >
+                                                    <v-icon left>
+                                                        mdi-airplane
+                                                    </v-icon> {{i}}
+                                                </v-chip>
+                                            </div>
+                                        </div>
+                                    </v-row>
+                                </v-card>
+                            </v-col>
+                            <v-col cols="8">
                                 <v-card class="pa-2" outlined tile>
                                     <v-card class="mx-auto">
 <!--                                        <v-toolbar flat dense-->
@@ -260,6 +280,61 @@
                                                 </div>
                                             </div>
                                         </v-card>
+                                        <v-card tile flat v-if="(command.title === commands[10].title)">
+                                            <div v-for="(d, dName) in $store.state.drone_infos" :key="'control'+dName">
+                                                <div v-if="d.selected && d.targeted">
+                                                    <v-row no-gutters>
+                                                        <v-col cols="12">
+                                                            <v-subheader>{{d.name}} 임무제어(PWM): </v-subheader>
+                                                        </v-col>
+                                                        <v-col cols="3">
+                                                            <v-text-field
+                                                                    label="CH9"
+                                                                    class="mx-2 pt-0"
+                                                                    outlined dense
+                                                                    v-model="pwms.ch9[d.name]"
+                                                                    type="number"
+                                                                    min="1100" max="1900"
+                                                                    hint="1100 ~ 1900"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="3">
+                                                            <v-text-field
+                                                                    label="CH10"
+                                                                    class="mx-2 pt-0"
+                                                                    outlined dense
+                                                                    v-model="pwms.ch10[d.name]"
+                                                                    type="number"
+                                                                    min="1100" max="1900"
+                                                                    hint="1100 ~ 1900"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="3">
+                                                            <v-text-field
+                                                                    label="CH11"
+                                                                    class="mx-2 pt-0"
+                                                                    outlined dense
+                                                                    v-model="pwms.ch11[d.name]"
+                                                                    type="number"
+                                                                    min="1100" max="1900"
+                                                                    hint="1100 ~ 1900"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="3">
+                                                            <v-text-field
+                                                                    label="CH12"
+                                                                    class="mx-2 pt-0"
+                                                                    outlined dense
+                                                                    v-model="pwms.ch12[d.name]"
+                                                                    type="number"
+                                                                    min="1100" max="1900"
+                                                                    hint="1100 ~ 1900"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                    </v-row>
+                                                </div>
+                                            </div>
+                                        </v-card>
                                         <v-card tile flat v-if="(command.title === commands[11].title)">
                                             <div v-for="(d, dIndex) in $store.state.drone_infos" :key="'autoIndex'+dIndex">
                                                 <div v-if="d.selected && d.targeted">
@@ -378,41 +453,22 @@
                                         <span v-else-if="command.title === commands[7].title">정지확인</span>
                                         <span v-else-if="command.title === commands[8].title">착륙확인</span>
                                         <span v-else-if="command.title === commands[9].title">귀환확인</span>
+                                        <span v-else-if="command.title === commands[10].title">제어확인</span>
                                         <span v-else-if="command.title === commands[11].title">자동확인</span>
                                         <span v-else-if="command.title === commands[12].title">종료확인</span>
                                         <span v-else-if="command.title === commands[13].title">설정확인</span>
                                     </v-btn>
                                 </v-card>
                             </v-col>
-                            <v-col cols="1">
-                                <v-card class="pa-2" outlined tile>
-                                    <v-progress-linear
-                                            color="red lighten-2"
-                                            buffer-value="0"
-                                            stream
-                                    ></v-progress-linear>
-                                </v-card>
-                            </v-col>
-                            <v-col :cols="undefined">
-                                <v-card class="pa-2" outlined tile>
-                                    <v-row>
-                                        <div v-for="(drone, i) in $store.state.drone_infos" :key="i">
-                                            <div v-if="drone.selected && drone.targeted">
-                                                <v-chip
-                                                        label outlined
-                                                        class="px-4 py-5 ma-1"
-                                                        v-if="drone"
-                                                        color="primary"
-                                                >
-                                                    <v-icon left>
-                                                        mdi-airplane
-                                                    </v-icon> {{i}}
-                                                </v-chip>
-                                            </div>
-                                        </div>
-                                    </v-row>
-                                </v-card>
-                            </v-col>
+<!--                            <v-col cols="1">-->
+<!--                                <v-card class="pa-2" outlined tile>-->
+<!--                                    <v-progress-linear-->
+<!--                                            color="red lighten-2"-->
+<!--                                            buffer-value="0"-->
+<!--                                            stream-->
+<!--                                    ></v-progress-linear>-->
+<!--                                </v-card>-->
+<!--                            </v-col>-->
                         </v-row>
                     </v-card>
                 </v-card>
@@ -469,6 +525,9 @@
                     </span>
                     <span v-else-if="curTab === commands[9].title">
                         비행체에 <span class="ml-2 mr-2" style="font-size: 20px">귀환</span> 명령 전송.
+                    </span>
+                    <span v-else-if="curTab === commands[10].title">
+                        비행체에 각 채널로 <span class="ml-2 mr-2" style="font-size: 20px">PWM 제어</span> 명령 전송.
                     </span>
                     <span v-else-if="curTab === commands[11].title">
                         비행체에 비행경로 다운로드 후 <span class="ml-2 mr-2" style="font-size: 20px">자동 비행</span> 명령 전송.
@@ -595,6 +654,13 @@
                     atcSlewYaw: {},
                     wpnavSpeedUp: {},
                     wpnavSpeedDn: {}
+                },
+
+                pwms: {
+                    ch9: {},
+                    ch10: {},
+                    ch11: {},
+                    ch12: {}
                 }
             }
         },
@@ -848,6 +914,9 @@
                 else if(this.curTab === this.commands[9].title) {
                     this.setRtl();
                 }
+                else if(this.curTab === this.commands[10].title) {
+                    this.setPwms();
+                }
                 else if(this.curTab === this.commands[11].title) {
                     this.setAutoGoto();
                 }
@@ -1056,6 +1125,31 @@
                     self.mode_sheet = !self.mode_sheet;
                     self.loading = false;
                     self.$forceUpdate();
+                }, 100);
+            },
+
+            setPwms() {
+                console.log(this.pwms);
+                for(let name in this.$store.state.drone_infos) {
+                    if (Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, name)) {
+                        if(this.$store.state.drone_infos[name].selected && this.$store.state.drone_infos[name].targeted) {
+                            EventBus.$emit('command-set-pwms-' + name, this.pwms);
+                        }
+                    }
+                }
+
+                setTimeout(() => {
+                    this.mode_sheet = !this.mode_sheet;
+                    this.loading = false;
+                    this.$forceUpdate();
+
+                    this.pwms = {
+                        ch9: {},
+                        ch10: {},
+                        ch11: {},
+                        ch12: {}
+                    };
+
                 }, 100);
             },
 

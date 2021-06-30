@@ -3,7 +3,7 @@
         <v-toolbar-title>
             <v-row no-gutters align="center">
                 <v-icon left>mdi-monitor-dashboard</v-icon>
-                UMACAir GCS
+                KETI GCS
             </v-row>
         </v-toolbar-title>
 
