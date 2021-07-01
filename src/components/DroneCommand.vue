@@ -1,4 +1,3 @@
-<script src="../../../../NodeJsWorkspace/nCube-mavUTM/terminal_app.js"></script>
 <template>
     <v-card flat tile class="mx-1 tab_position" :style="{top:context_top + 'px',left:context_left+'px'}">
         <v-tabs v-if="prepared"
@@ -19,7 +18,7 @@
 
             <v-tab-item value="virtual" class=""></v-tab-item>
             <v-tab-item v-for="(command) in commands" :key="command.title" :value="command.title" class="">
-                <v-card outlined color="grey lighten-4" style="opacity: 0.86" class="pa-0">
+                <v-card outlined color="grey lighten-4" style="opacity: 0.86" class="pa-0 overflow-y-auto" :max-height="$store.state.command_tab_max_height+'px'">
 <!--                    <v-card-title primary-title class="headline">-->
 <!--                        {{command.title}}-->
 <!--                    </v-card-title>-->
@@ -48,7 +47,7 @@
                                     </v-row>
                                 </v-card>
                             </v-col>
-                            <v-col cols="8">
+                            <v-col cols="9">
                                 <v-card class="pa-2" outlined tile>
                                     <v-card class="mx-auto">
 <!--                                        <v-toolbar flat dense-->
@@ -445,193 +444,182 @@
                                                             <v-subheader>{{d.name}} 임무 장치 제어: </v-subheader>
                                                         </v-col>
                                                         <v-col cols="3">
-                                                            <v-card flat tile>
-                                                                <div>
-                                                                    <JoyStick v-bind:joystick_size="128" @change="handleChange('left', $event);" />
-                                                                    <div style="display: inline-block; margin: 8px">
+                                                            <v-row no-gutters align="center" justify="center">
+                                                                <v-col cols="6">
+                                                                    <v-select
+                                                                            dense outlined hide-details
+                                                                            :items="channels"
+                                                                            label="CH01" v-model="targetCh1[d.name]"
+                                                                            class="ml-1"
+                                                                            prepend-icon="mdi-arrow-left-right"
+                                                                    ></v-select>
+                                                                </v-col>
+                                                                <v-col cols="6">
+                                                                    <v-select
+                                                                            dense outlined hide-details
+                                                                            :items="channels"
+                                                                            label="CH02" v-model="targetCh2[d.name]"
+                                                                            class="ml-1"
+                                                                            prepend-icon="mdi-arrow-up-down"
+                                                                    ></v-select>
+                                                                </v-col>
+                                                            </v-row>
+                                                            <v-row no-gutters align="center" justify="center">
+                                                                <v-col cols="12">
+                                                                    <v-card flat tile class="text-center">
                                                                         <div>
-                                                                            <span>X {{ leftStick.x }} </span>
-                                                                            <span>Y {{ leftStick.y }} </span>
+                                                                            <JoyStick v-bind:joystick_size="128" @change="handleLeftChange(dName, 'left', $event);" />
+                                                                            <div style="display: inline-block; margin: 8px">
+                                                                                <div>
+                                                                                    <span>X {{ leftStick.x[dName] }} </span>
+                                                                                    <span>Y {{ leftStick.y[dName] }} </span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <span>Angle {{ leftStick.angle[dName] }} </span>
+                                                                                    <span>Speed {{ leftStick.speed[dName] }} </span>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div>
-                                                                            <span>Angle {{ leftStick.angle }} </span>
-                                                                            <span>Speed {{ leftStick.speed }} </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </v-card>
+                                                                    </v-card>
+                                                                </v-col>
+                                                            </v-row>
                                                         </v-col>
                                                         <v-col cols="3">
-                                                            <v-card flat tile>
-                                                                <div>
-                                                                    <JoyStick v-bind:joystick_size="128" @change="handleChange('right', $event);" />
-                                                                    <div style="display: inline-block; margin: 8px">
+                                                            <v-row no-gutters align="center" justify="center">
+                                                                <v-col cols="6">
+                                                                    <v-select
+                                                                            dense outlined hide-details
+                                                                            :items="channels"
+                                                                            label="CH03" v-model="targetCh3[d.name]"
+                                                                            class="ml-1"
+                                                                            prepend-icon="mdi-arrow-left-right"
+                                                                    ></v-select>
+                                                                </v-col>
+                                                                <v-col cols="6">
+                                                                    <v-select
+                                                                            dense outlined hide-details
+                                                                            :items="channels"
+                                                                            label="CH04" v-model="targetCh4[d.name]"
+                                                                            class="ml-1"
+                                                                            prepend-icon="mdi-arrow-up-down"
+                                                                    ></v-select>
+                                                                </v-col>
+                                                            </v-row>
+                                                            <v-row no-gutters align="center" justify="center">
+                                                                <v-col cols="12">
+                                                                    <v-card flat tile class="text-center">
                                                                         <div>
-                                                                            <span>X {{ leftStick.x }} </span>
-                                                                            <span>Y {{ leftStick.y }} </span>
+                                                                            <JoyStick v-bind:joystick_size="128" @change="handleRightChange(dName, 'right', $event);" />
+                                                                            <div style="display: inline-block; margin: 8px">
+                                                                                <div>
+                                                                                    <span>X {{ rightStick.x[dName] }} </span>
+                                                                                    <span>Y {{ rightStick.y[dName] }} </span>
+                                                                                </div>
+                                                                                <div>
+                                                                                    <span>Angle {{ rightStick.angle[dName] }} </span>
+                                                                                    <span>Speed {{ rightStick.speed[dName] }} </span>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div>
-                                                                            <span>Angle {{ leftStick.angle }} </span>
-                                                                            <span>Speed {{ leftStick.speed }} </span>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </v-card>
+                                                                    </v-card>
+                                                                </v-col>
+                                                            </v-row>
                                                         </v-col>
                                                         <v-col cols="6">
                                                             <v-card flat tile outlined>
-                                                                <v-row no-gutters>
-                                                                    <v-col cols="6" class="my-2">
-                                                                        <v-btn-toggle
-                                                                                v-model="mission_toggle.ch9[d.name]"
-                                                                                mandatory
-                                                                        >
-                                                                            <span class="mt-1">
-                                                                                CH09:
-                                                                            </span>
-                                                                            <v-btn small class="ml-2">
-                                                                                <v-icon small>mdi-format-align-left</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-center</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-right</v-icon>
-                                                                            </v-btn>
-                                                                        </v-btn-toggle>
+                                                                <v-row no-gutters align="center" justify="center">
+                                                                    <v-col class="my-2" cols="6">
+                                                                        <div v-for="(num) in channels" :key="num">
+                                                                            <div v-if="5 <= num && num <= 8">
+                                                                                <v-btn-toggle
+                                                                                        v-model="mission_value[`ch${num}`][d.name]"
+                                                                                        mandatory
+                                                                                        class="text-center align-center"
+                                                                                >
+                                                                                    <v-select
+                                                                                            dense outlined hide-details
+                                                                                            :items="channels"
+                                                                                            :label="'CH'+num" v-model="('targetCh'+num)[d.name]"
+                                                                                            class="mx-1"
+                                                                                    ></v-select>
+                                                                                    <v-btn small class="ml-1">
+                                                                                        <v-icon small>mdi-format-align-left</v-icon>
+                                                                                    </v-btn>
+                                                                                    <v-btn small>
+                                                                                        <v-icon small>mdi-format-align-center</v-icon>
+                                                                                    </v-btn>
+                                                                                    <v-btn small class="mr-1">
+                                                                                        <v-icon small>mdi-format-align-right</v-icon>
+                                                                                    </v-btn>
+                                                                                </v-btn-toggle>
+                                                                            </div>
+                                                                        </div>
                                                                     </v-col>
-                                                                    <v-col cols="6" class="my-2">
-                                                                        <v-btn-toggle
-                                                                                v-model="mission_toggle.ch10[d.name]"
-                                                                                mandatory
-                                                                        >
-                                                                            <span class="mt-1">
-                                                                                CH10:
-                                                                            </span>
-                                                                            <v-btn small class="ml-2">
-                                                                                <v-icon small>mdi-format-align-left</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-center</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-right</v-icon>
-                                                                            </v-btn>
-                                                                        </v-btn-toggle>
+                                                                    <v-col class="my-2" cols="6">
+                                                                        <div v-for="(num) in channels" :key="num">
+                                                                            <div v-if="9 <= num && num <= 12">
+                                                                                <v-btn-toggle
+                                                                                        v-model="mission_value[`ch${num}`][d.name]"
+                                                                                        mandatory
+                                                                                        class="text-center align-center"
+                                                                                >
+                                                                                    <v-select
+                                                                                            dense outlined hide-details
+                                                                                            :items="channels"
+                                                                                            :label="'CH'+num" v-model="('targetCh'+num)[d.name]"
+                                                                                            class="mx-1"
+                                                                                    ></v-select>
+                                                                                    <v-btn small class="ml-1">
+                                                                                        <v-icon small>mdi-format-align-left</v-icon>
+                                                                                    </v-btn>
+                                                                                    <v-btn small>
+                                                                                        <v-icon small>mdi-format-align-center</v-icon>
+                                                                                    </v-btn>
+                                                                                    <v-btn small class="mr-1">
+                                                                                        <v-icon small>mdi-format-align-right</v-icon>
+                                                                                    </v-btn>
+                                                                                </v-btn-toggle>
+                                                                            </div>
+                                                                        </div>
                                                                     </v-col>
-                                                                    <v-col cols="6" class="my-2">
-                                                                        <v-btn-toggle
-                                                                                v-model="mission_toggle.ch11[d.name]"
-                                                                                mandatory
-                                                                        >
-                                                                            <span class="mt-1">
-                                                                                CH11:
-                                                                            </span>
-                                                                            <v-btn small class="ml-2">
-                                                                                <v-icon small>mdi-format-align-left</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-center</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-right</v-icon>
-                                                                            </v-btn>
-                                                                        </v-btn-toggle>
-                                                                    </v-col>
-                                                                    <v-col cols="6" class="my-2">
-                                                                        <v-btn-toggle
-                                                                                v-model="mission_toggle.ch12[d.name]"
-                                                                                mandatory
-                                                                        >
-                                                                            <span class="mt-1">
-                                                                                CH12:
-                                                                            </span>
-                                                                            <v-btn small class="ml-2">
-                                                                                <v-icon small>mdi-format-align-left</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-center</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-right</v-icon>
-                                                                            </v-btn>
-                                                                        </v-btn-toggle>
-                                                                    </v-col>
-                                                                    <v-col cols="6" class="my-2">
-                                                                        <v-btn-toggle
-                                                                                v-model="mission_toggle.ch13[d.name]"
-                                                                                mandatory
-                                                                        >
-                                                                            <span class="mt-1">
-                                                                                CH13:
-                                                                            </span>
-                                                                            <v-btn small class="ml-2">
-                                                                                <v-icon small>mdi-format-align-left</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-center</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-right</v-icon>
-                                                                            </v-btn>
-                                                                        </v-btn-toggle>
-                                                                    </v-col>
-                                                                    <v-col cols="6" class="my-2">
-                                                                        <v-btn-toggle
-                                                                                v-model="mission_toggle.ch14[d.name]"
-                                                                                mandatory
-                                                                        >
-                                                                            <span class="mt-1">
-                                                                                CH14:
-                                                                            </span>
-                                                                            <v-btn small class="ml-2">
-                                                                                <v-icon small>mdi-format-align-left</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-center</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-right</v-icon>
-                                                                            </v-btn>
-                                                                        </v-btn-toggle>
-                                                                    </v-col>
-                                                                    <v-col cols="6" class="my-2">
-                                                                        <v-btn-toggle
-                                                                                v-model="mission_toggle.ch15[d.name]"
-                                                                                mandatory
-                                                                        >
-                                                                            <span class="mt-1">
-                                                                                CH15:
-                                                                            </span>
-                                                                            <v-btn small class="ml-2">
-                                                                                <v-icon small>mdi-format-align-left</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-center</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-right</v-icon>
-                                                                            </v-btn>
-                                                                        </v-btn-toggle>
-                                                                    </v-col>
-                                                                    <v-col cols="6" class="my-2">
-                                                                        <v-btn-toggle
-                                                                                v-model="mission_toggle.ch16[d.name]"
-                                                                                mandatory
-                                                                        >
-                                                                            <span class="mt-1">
-                                                                                CH16:
-                                                                            </span>
-                                                                            <v-btn small class="ml-2">
-                                                                                <v-icon small>mdi-format-align-left</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-center</v-icon>
-                                                                            </v-btn>
-                                                                            <v-btn small>
-                                                                                <v-icon small>mdi-format-align-right</v-icon>
-                                                                            </v-btn>
-                                                                        </v-btn-toggle>
+                                                                    <v-col class="my-2" cols="12">
+                                                                        <div v-for="(num) in channels" :key="num">
+                                                                            <div v-if="13 <= num && num <= 16">
+                                                                                <v-row no-gutters align="center" justify="center">
+                                                                                    <v-col cols="4">
+                                                                                        <v-select
+                                                                                                dense outlined hide-details
+                                                                                                :items="channels"
+                                                                                                :label="'CH'+num" v-model="('targetCh'+num)[d.name]"
+                                                                                                class="mx-1"
+                                                                                        ></v-select>
+                                                                                    </v-col>
+                                                                                    <v-col cols="8">
+                                                                                        <v-slider
+                                                                                                v-model="mission_value[`ch${num}`][d.name]"
+                                                                                                class="mx-2 my-3 align-center"
+                                                                                                :min="1100"
+                                                                                                :max="1500"
+                                                                                                hide-details
+                                                                                                thumb-label="always"
+                                                                                                step="10"
+                                                                                                ticks="always"
+                                                                                                tick-size="4"
+                                                                                        >
+                                                                                            <template v-slot:append>
+                                                                                                <v-text-field
+                                                                                                        v-model="mission_value[`ch${num}`][d.name]"
+                                                                                                        class="mt-0 pt-0"
+                                                                                                        hide-details
+                                                                                                        single-line
+                                                                                                        type="number"
+                                                                                                ></v-text-field>
+                                                                                            </template>
+                                                                                        </v-slider>
+                                                                                    </v-col>
+                                                                                </v-row>
+                                                                            </div>
+                                                                        </div>
                                                                     </v-col>
                                                                 </v-row>
                                                             </v-card>
@@ -687,7 +675,7 @@
                                     </v-card>
                                 </v-card>
                             </v-col>
-                            <v-col cols="2">
+                            <v-col cols="1">
                                 <v-card class="pa-2 align-self-center text-center" outlined tile>
                                     <v-btn color="blue" dark @click="curTab = command.title; mode_sheet = !mode_sheet;">
                                         <span v-if="command.title === commands[0].title">모드확인</span>
@@ -812,7 +800,32 @@
 
         data() {
             return {
-                mission_toggle: {
+                channels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+                targetCh1: {},
+                targetCh2: {},
+                targetCh3: {},
+                targetCh4: {},
+                targetCh5: {},
+                targetCh6: {},
+                targetCh7: {},
+                targetCh8: {},
+                targetCh9: {},
+                targetCh10: {},
+                targetCh11: {},
+                targetCh12: {},
+                targetCh13: {},
+                targetCh14: {},
+                targetCh15: {},
+                targetCh16: {},
+                mission_value: {
+                    ch1: {},
+                    ch2: {},
+                    ch3: {},
+                    ch4: {},
+                    ch5: {},
+                    ch6: {},
+                    ch7: {},
+                    ch8: {},
                     ch9: {},
                     ch10: {},
                     ch11: {},
@@ -823,17 +836,18 @@
                     ch16: {},
                 },
                 leftStick: {
-                    x: 0,
-                    y: 0,
-                    speed: 0,
-                    angle: 0
+                    x: {},
+                    y: {},
+                    speed: {},
+                    angle: {}
                 },
                 rightStick: {
-                    x: 0,
-                    y: 0,
-                    speed: 0,
-                    angle: 0
+                    x: {},
+                    y: {},
+                    speed: {},
+                    angle: {}
                 },
+
                 items_wp_yaw_behavior: [
                     '0 = Never change Yaw.',
                     '1 = Face Next Waypoint including facing home during RTL.',
@@ -911,6 +925,7 @@
 
                 context_top: 1,
                 context_left: 1,
+                context_max_height: 640,
 
                 active_tab: 'virtual',
                 target_alt: 20,
@@ -1004,6 +1019,11 @@
 
             command_tab_left_x: function (newVal) {
                 this.context_left = newVal;
+            },
+
+            command_tab_max_height: function (newVal) {
+                console.log('DroneCommand-context_max_height', newVal)
+                this.context_max_height = newVal;
             }
         },
         computed: {
@@ -1069,6 +1089,10 @@
                             this.autoDelay[name] = this.$store.state.drone_infos[name].autoDelay;
                             this.gotoType[name] = this.$store.state.drone_infos[name].gotoType;
                             this.prepared = true;
+                            for(let i = 0; i < this.channels.length; i++) {
+                                let num = this.channels[i];
+                                this.mission_value[`ch${num}`][name] = 0;
+                            }
                         }
                     }
                 }
@@ -1120,12 +1144,66 @@
             // });
         },
         methods: {
-            handleChange(id, { x, y, speed, angle }) {
+            handleLeftChange(dName, id, { x, y, speed, angle }) {
                 const stick = this[`${id}Stick`];
-                stick.x = x;
-                stick.y = y;
-                stick.speed = speed;
-                stick.angle = angle;
+                stick.x[dName] = x;
+                stick.y[dName] = y;
+                stick.speed[dName] = speed;
+                stick.angle[dName] = angle;
+
+                //console.log(dName, angle, stick.angle[dName]);
+
+                let temp = JSON.parse(JSON.stringify(stick));
+                this[`${id}Stick`] = null;
+                this[`${id}Stick`] = JSON.parse(JSON.stringify(temp));
+
+                let payload = {};
+                payload.num = 1;
+                payload.value = parseInt(1100 + ((x + 47) / 94) * 800);
+
+                setTimeout((payload)=>{
+                    EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+
+                    let _payload = {};
+                    _payload.num = 1;
+                    _payload.value = parseInt(1100 + ((y + 47) / 94) * 800);
+
+                    setTimeout((payload)=>{
+                        EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+
+                    }, 1, JSON.parse(JSON.stringify(_payload)));
+                }, 0, JSON.parse(JSON.stringify(payload)));
+            },
+
+            handleRightChange(dName, id, { x, y, speed, angle }) {
+                const stick = this[`${id}Stick`];
+                stick.x[dName] = x;
+                stick.y[dName] = y;
+                stick.speed[dName] = speed;
+                stick.angle[dName] = angle;
+
+                //console.log(dName, angle, stick.angle[dName]);
+
+                let temp = JSON.parse(JSON.stringify(stick));
+                this[`${id}Stick`] = null;
+                this[`${id}Stick`] = JSON.parse(JSON.stringify(temp));
+
+                let payload = {};
+                payload.num = 3;
+                payload.value = parseInt(1100 + ((x + 47) / 94) * 800);
+
+                setTimeout((payload)=>{
+                    EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+
+                    let _payload = {};
+                    _payload.num = 4;
+                    _payload.value = parseInt(1100 + ((y + 47) / 94) * 800);
+
+                    setTimeout((payload)=>{
+                        EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+
+                    }, 1, JSON.parse(JSON.stringify(_payload)));
+                }, 0, JSON.parse(JSON.stringify(payload)));
             },
 
             decrement () {
@@ -1539,13 +1617,6 @@
         z-index: 2;
     }
 
-    /*#joy {*/
-    /*    font-family: "Avenir", Helvetica, Arial, sans-serif;*/
-    /*    -webkit-font-smoothing: antialiased;*/
-    /*    -moz-osx-font-smoothing: grayscale;*/
-    /*    text-align: center;*/
-    /*    color: #2c3e50;*/
-    /*    margin-top: 60px;*/
-    /*}*/
+
 
 </style>

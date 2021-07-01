@@ -389,6 +389,7 @@ export default new Vuex.Store({
             'RTL', 'CIRCLE', 'POSITION', 'LAND', 'OF_LOITER', 'DRIFT', 'RESERVED_12', 'SPORT',
             'FLIP', 'AUTOTUNE', 'POS_HOLD', 'BRAKE', 'THROW', 'AVOID_ADSB', 'GUIDED_NOGPS', 'SAFE_RTL'],
         command_tab_left_x: 0,
+        command_tab_max_height: 640,
         currentCommandTab: 'virtual',
         // dronesChecked: {},
 
@@ -1394,6 +1395,10 @@ export default new Vuex.Store({
 
         setCommandTabLeftX(state, value) {
             state.command_tab_left_x = value;
+        },
+
+        setCommandTabMaxHeight(state, value) {
+            state.command_tab_max_height = value;
         },
 
         // setSelectedDroneInfo(state, payload) {

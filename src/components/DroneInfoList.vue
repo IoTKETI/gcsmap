@@ -158,7 +158,9 @@
 
                 this.myHeight = window.innerHeight-50;
 
-                //console.log(this.myWidth, this.myHeight);
+                this.$store.state.command_tab_max_height = this.myHeight-50;
+
+                console.log('DroneInfoList-onResize', this.myWidth, this.myHeight);
             },
         },
 

@@ -1,6 +1,6 @@
 <template>
     <div ref="joys"
-         class="vue-joystick mx-4"
+         class="vue-joystick ma-2"
          :style="style"
          @touchmove="handleTouch"
          @mousemove="handleMove"
@@ -47,8 +47,8 @@
                     "--joystick_before_width": `${(this.joystick_size/4)}px`,
                     "--joystick_before_height": `${(this.joystick_size/4)}px`,
                     "--joystick_before_margin": `${-(this.joystick_size/4/2+4)}px`,
-                    "--joystick_after_bottom": `${(this.joystick_size/2-4)}px`,
-                    "--joystick_after_left": `${(this.joystick_size/2-4)}px`
+                    "--joystick_after_bottom": `${(this.joystick_size/2)}px`,
+                    "--joystick_after_left": `${(this.joystick_size/2)}px`
                 };
             }
         },
@@ -77,7 +77,7 @@
 
                 //const { offsetLeft, offsetTop } = this.$el;
 
-                const offsetLeft = this.$refs.joys.getBoundingClientRect().left;
+                const offsetLeft = this.$refs.joys.getBoundingClientRect().left+4;
                 const offsetTop = this.$refs.joys.getBoundingClientRect().top
                 const x = Math.round(clientX - offsetLeft - this.joystick_size/2);
                 const y = Math.round(clientY - offsetTop - this.joystick_size/2);
