@@ -6,6 +6,7 @@ import store from './store'
 
 import * as VueGoogleMaps from 'vue2-google-maps';
 
+
 import VueCookies from "vue-cookies";
 //쿠키를 사용한다.
 Vue.use(VueCookies);

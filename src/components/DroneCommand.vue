@@ -437,6 +437,148 @@
                                                 </div>
                                             </div>
                                         </v-card>
+                                        <v-card tile flat v-if="(command.title === commands[14].title)">
+                                            <div v-for="(d, dName) in $store.state.drone_infos" :key="'params'+dName">
+                                                <div v-if="d.selected && d.targeted">
+                                                    <v-row no-gutters>
+                                                        <v-col cols="12">
+                                                            <v-subheader>{{d.name}} 임무 장치 제어: </v-subheader>
+                                                        </v-col>
+                                                        <v-col cols="3">
+                                                            <v-card flat tile outlined>
+                                                                <div>
+                                                                    <JoyStick v-bind:joystick_size="128" @change="handleChange('left', $event);" />
+                                                                    <div style="display: inline-block; margin: 8px">
+                                                                        <div>
+                                                                            <span>X {{ leftStick.x }} </span>
+                                                                            <span>Y {{ leftStick.y }} </span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <span>Angle {{ leftStick.angle }} </span>
+                                                                            <span>Speed {{ leftStick.speed }} </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </v-card>
+                                                        </v-col>
+                                                        <v-col cols="3">
+                                                            <v-card flat tile outlined>
+                                                                <div>
+                                                                    <JoyStick v-bind:joystick_size="128" @change="handleChange('right', $event);" />
+                                                                    <div style="display: inline-block; margin: 8px">
+                                                                        <div>
+                                                                            <span>X {{ leftStick.x }} </span>
+                                                                            <span>Y {{ leftStick.y }} </span>
+                                                                        </div>
+                                                                        <div>
+                                                                            <span>Angle {{ leftStick.angle }} </span>
+                                                                            <span>Speed {{ leftStick.speed }} </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </v-card>
+                                                        </v-col>
+                                                        <v-col cols="6">
+                                                            <v-card flat tile outlined>
+                                                                <v-row no-gutters>
+                                                                    <v-col cols="12">
+                                                                        <v-subheader>{{d.name}} 파라미터 설정: </v-subheader>
+                                                                    </v-col>
+                                                                    <v-col cols="3">
+                                                                        <v-select
+                                                                                dense outlined :items="items_wp_yaw_behavior"
+                                                                                label="WP_YAW_BEHAVIOR" v-model="params.wpYawBehavior[d.name]"
+                                                                                hide-details
+                                                                                class="mx-2"
+                                                                        ></v-select>
+                                                                    </v-col>
+                                                                    <v-col cols="3">
+                                                                        <v-text-field
+                                                                                label="ATC_SLEW_YAW (meterdgrees/s), 5-180, 1"
+                                                                                class="mx-2 pt-0"
+                                                                                outlined dense hide-details
+                                                                                v-model="params.atcSlewYaw[d.name]"
+                                                                                type="number"
+                                                                                min="5"
+                                                                                max="180"
+                                                                                hint="Range:5~180, Increment:1"
+                                                                        ></v-text-field>
+                                                                    </v-col>
+                                                                    <v-col cols="3">
+                                                                        <v-text-field
+                                                                                label="WPNAV_SPEED_UP (m/s), 0.1-10.0, 0.5"
+                                                                                class="mx-2 pt-0"
+                                                                                outlined dense hide-details
+                                                                                v-model="params.wpnavSpeedUp[d.name]"
+                                                                                placeholder="2.5"
+                                                                                type="number"
+                                                                                min="0.1"
+                                                                                max="10.0"
+                                                                        ></v-text-field>
+                                                                    </v-col>
+                                                                    <v-col cols="3">
+                                                                        <v-text-field
+                                                                                label="WPNAV_SPEED_DN (m/s), 0.1-5.0, 0.1"
+                                                                                class="mx-2 pt-0"
+                                                                                outlined dense hide-details
+                                                                                v-model="params.wpnavSpeedDn[d.name]"
+                                                                                placeholder="1.5"
+                                                                                type="number"
+                                                                                min="0.1"
+                                                                                max="5.0"
+                                                                        ></v-text-field>
+                                                                    </v-col>
+                                                                </v-row>
+                                                            </v-card>
+                                                        </v-col>
+                                                        <!--                                                        <v-col cols="3">-->
+<!--                                                            <v-select-->
+<!--                                                                    dense outlined :items="items_wp_yaw_behavior"-->
+<!--                                                                    label="WP_YAW_BEHAVIOR" v-model="params.wpYawBehavior[d.name]"-->
+<!--                                                                    hide-details-->
+<!--                                                                    class="mx-2"-->
+<!--                                                            ></v-select>-->
+<!--                                                        </v-col>-->
+<!--                                                        <v-col cols="3">-->
+<!--                                                            <v-text-field-->
+<!--                                                                    label="ATC_SLEW_YAW (meterdgrees/s), 5-180, 1"-->
+<!--                                                                    class="mx-2 pt-0"-->
+<!--                                                                    outlined dense hide-details-->
+<!--                                                                    v-model="params.atcSlewYaw[d.name]"-->
+<!--                                                                    type="number"-->
+<!--                                                                    min="5"-->
+<!--                                                                    max="180"-->
+<!--                                                                    hint="Range:5~180, Increment:1"-->
+<!--                                                            ></v-text-field>-->
+<!--                                                        </v-col>-->
+<!--                                                        <v-col cols="3">-->
+<!--                                                            <v-text-field-->
+<!--                                                                    label="WPNAV_SPEED_UP (m/s), 0.1-10.0, 0.5"-->
+<!--                                                                    class="mx-2 pt-0"-->
+<!--                                                                    outlined dense hide-details-->
+<!--                                                                    v-model="params.wpnavSpeedUp[d.name]"-->
+<!--                                                                    placeholder="2.5"-->
+<!--                                                                    type="number"-->
+<!--                                                                    min="0.1"-->
+<!--                                                                    max="10.0"-->
+<!--                                                            ></v-text-field>-->
+<!--                                                        </v-col>-->
+<!--                                                        <v-col cols="3">-->
+<!--                                                            <v-text-field-->
+<!--                                                                    label="WPNAV_SPEED_DN (m/s), 0.1-5.0, 0.1"-->
+<!--                                                                    class="mx-2 pt-0"-->
+<!--                                                                    outlined dense hide-details-->
+<!--                                                                    v-model="params.wpnavSpeedDn[d.name]"-->
+<!--                                                                    placeholder="1.5"-->
+<!--                                                                    type="number"-->
+<!--                                                                    min="0.1"-->
+<!--                                                                    max="5.0"-->
+<!--                                                            ></v-text-field>-->
+<!--                                                        </v-col>-->
+                                                    </v-row>
+                                                </div>
+                                            </div>
+                                        </v-card>
                                     </v-card>
                                 </v-card>
                             </v-col>
@@ -503,10 +645,18 @@
                         비행체에 <span class="ml-2 mr-2" style="font-size: 20px">시동</span> 명령 전송.
                     </span>
                     <span v-else-if="curTab === commands[2].title">
-                        비행체에 <span class="ml-2 mr-2" style="font-size: 20px">{{ target_alt }}</span>미터로 <span class="ml-2 mr-2" style="font-size: 20px">이륙</span> 명령 전송.
+                        <div v-for="(drone, i) in $store.state.drone_infos" :key="i">
+                            <div v-if="drone.selected && drone.targeted">
+                                {{i}} 비행체에 <span class="ml-2 mr-2" style="font-size: 20px">{{  targetTakeoffAlt[i] }}</span>미터로 <span class="ml-2 mr-2" style="font-size: 20px">이륙</span> 명령 전송.
+                            </div>
+                        </div>
                     </span>
                     <span v-else-if="curTab === commands[3].title">
-                        비행체에 <span class="ml-2 mr-2" style="font-size: 20px">{{ target_alt }}</span>미터로 <span class="ml-2 mr-2" style="font-size: 20px">고도 변경</span> 명령 전송.
+                         <div v-for="(drone, i) in $store.state.drone_infos" :key="i">
+                             <div v-if="drone.selected && drone.targeted">
+                                 {{i}} 비행체에 <span class="ml-2 mr-2" style="font-size: 20px">{{ targetAlt[i] }}</span>미터로 <span class="ml-2 mr-2" style="font-size: 20px">고도 변경</span> 명령 전송.
+                             </div>
+                         </div>
                     </span>
                     <span v-else-if="curTab === commands[4].title">
                         비행체에 선택한 지점으로 <span class="ml-2 mr-2" style="font-size: 20px">이동</span> 명령 전송.
@@ -546,15 +696,29 @@
 
 <script>
     import EventBus from '../EventBus';
-    // import GcsMap from "./GcsMap";
+    import JoyStick from './JoyStick';
 
     export default {
         name: "DroneCommand",
+
         components: {
-            // GcsMap
+            JoyStick
         },
+
         data() {
             return {
+                leftStick: {
+                    x: 0,
+                    y: 0,
+                    speed: 0,
+                    angle: 0
+                },
+                rightStick: {
+                    x: 0,
+                    y: 0,
+                    speed: 0,
+                    angle: 0
+                },
                 items_wp_yaw_behavior: [
                     '0 = Never change Yaw.',
                     '1 = Face Next Waypoint including facing home during RTL.',
@@ -616,6 +780,10 @@
                     {
                         title: '설정',
                         text: '선택한 비행체의 파라미터 설정'
+                    },
+                    {
+                        title: '임무',
+                        text: '선택한 비행체의 임무 장비 제어 (16채널)'
                     }
                 ],
 
@@ -837,6 +1005,14 @@
             // });
         },
         methods: {
+            handleChange(id, { x, y, speed, angle }) {
+                const stick = this[`${id}Stick`];
+                stick.x = x;
+                stick.y = y;
+                stick.speed = speed;
+                stick.angle = angle;
+            },
+
             decrement () {
                 this.target_alt--
             },
@@ -1247,5 +1423,14 @@
         opacity: 0.85; /* for demo purpose  */
         z-index: 2;
     }
+
+    /*#joy {*/
+    /*    font-family: "Avenir", Helvetica, Arial, sans-serif;*/
+    /*    -webkit-font-smoothing: antialiased;*/
+    /*    -moz-osx-font-smoothing: grayscale;*/
+    /*    text-align: center;*/
+    /*    color: #2c3e50;*/
+    /*    margin-top: 60px;*/
+    /*}*/
 
 </style>

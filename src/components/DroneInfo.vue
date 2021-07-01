@@ -2657,9 +2657,9 @@ export default {
                             let cur_alt = this.gpi.relative_alt / 1000;
                             let target_alt = this.$store.state.drone_infos[this.name].targetTakeoffAlt
 
-                            this.watchingMissionStatus = Math.ceil((((Math.abs(target_alt - this.watchingInitAlt) + 1) - Math.abs(target_alt - cur_alt)) / (Math.abs(target_alt - this.watchingInitAlt) + 1)) * 100);
+                            this.watchingMissionStatus = Math.ceil((((Math.abs(target_alt - this.watchingInitAlt) + 0.5) - Math.abs(target_alt - cur_alt)) / (Math.abs(target_alt - this.watchingInitAlt) + 0.5)) * 100);
 
-                            if(this.watchingMissionStatus >= 100) {
+                            if(this.watchingMissionStatus >= 99) {
                                 console.log(this.name, ' takeoff complete');
                                 this.watchingMission = 'complete';
                                 this.watchingMissionStatus = 0;
@@ -2667,7 +2667,7 @@ export default {
                             }
 
                             else {
-                                if (Math.abs(this.gpi.relative_alt - this.pre_relative_alt) < 0.1) {
+                                if (Math.abs(this.gpi.relative_alt - this.pre_relative_alt) < 0.05) {
                                     this.watchingCount++;
                                     if(this.watchingCount > 16) {
                                         console.log(this.name, ' takeoff fail');
@@ -2676,15 +2676,18 @@ export default {
                                         this.watchingCount = 0;
                                     }
                                 }
+                                else {
+                                    this.watchingCount = 0;
+                                }
                             }
                         }
                         else if(this.watchingMission === 'goto_alt') {
                             let cur_alt = this.gpi.relative_alt / 1000;
                             let target_alt = this.$store.state.drone_infos[this.name].targetAlt
 
-                            this.watchingMissionStatus = Math.ceil((((Math.abs(target_alt - this.watchingInitAlt) + 1) - Math.abs(target_alt - cur_alt)) / (Math.abs(target_alt - this.watchingInitAlt) + 1)) * 100);
+                            this.watchingMissionStatus = Math.ceil((((Math.abs(target_alt - this.watchingInitAlt) + 0.5) - Math.abs(target_alt - cur_alt)) / (Math.abs(target_alt - this.watchingInitAlt) + 0.5)) * 100);
 
-                            if(this.watchingMissionStatus >= 100) {
+                            if(this.watchingMissionStatus >= 99) {
                                 console.log(this.name, ' goto_alt complete');
                                 this.watchingMission = 'complete';
                                 this.watchingMissionStatus = 0;
@@ -2692,7 +2695,7 @@ export default {
                             }
 
                             else {
-                                if (Math.abs(this.gpi.relative_alt - this.pre_relative_alt) < 0.1) {
+                                if (Math.abs(this.gpi.relative_alt - this.pre_relative_alt) < 0.05) {
                                     this.watchingCount++;
                                     if(this.watchingCount > 16) {
                                         console.log(this.name, ' goto_alt fail');
@@ -2700,6 +2703,9 @@ export default {
                                         this.watchingMissionStatus = 0;
                                         this.watchingCount = 0;
                                     }
+                                }
+                                else {
+                                    this.watchingCount = 0;
                                 }
                             }
                         }
@@ -2723,7 +2729,7 @@ export default {
 
                             this.watchingMissionStatus = Math.ceil((this.watchingInitDist - cur_dist) / this.watchingInitDist * 100);
 
-                            if(this.watchingMissionStatus >= 100) {
+                            if(this.watchingMissionStatus >= 99) {
                                 console.log(this.name, ' goto complete');
                                 this.watchingMission = 'complete';
                                 this.watchingMissionStatus = 0;
@@ -2739,6 +2745,9 @@ export default {
                                         this.watchingMissionStatus = 0;
                                         this.watchingCount = 0;
                                     }
+                                }
+                                else {
+                                    this.watchingCount = 0;
                                 }
                             }
                         }
