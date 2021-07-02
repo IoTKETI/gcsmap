@@ -90,6 +90,9 @@
                 this.emitAll("release");
                 this.isMouseDown = false;
                 this.updatePosition(0, 0);
+                setTimeout(()=>{
+                    this.updatePosition(0, 0);
+                }, 1000);
             },
 
             updatePosition(x, y) {

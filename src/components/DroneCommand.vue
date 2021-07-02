@@ -823,8 +823,8 @@
 
         data() {
             return {
-                mission_ch_min: 258,
-                mission_ch_max: 1958,
+                mission_ch_min: 223,
+                mission_ch_max: 1823,
                 channels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
 
                 target_mission_num: {
@@ -1125,7 +1125,7 @@
                             else {
                                 for(let i = 0; i < this.channels.length; i++) {
                                     let num = this.channels[i];
-                                    this.mission_value[`ch${num}`][name] = 0;
+                                    this.mission_value[`ch${num}`][name] = (this.mission_ch_max + this.mission_ch_min) / 2;
                                     this.target_mission_num[`targetCh${num}`][name] = num;
                                 }
 
