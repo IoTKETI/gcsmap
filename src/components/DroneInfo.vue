@@ -3524,7 +3524,7 @@ export default {
         });
 
         EventBus.$on('command-set-pwms-mission-' + this.name, (mission_pwms) => {
-            let mission_pwms_topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/Mission_Data/' + this.name + '/msw_remote_gimbal/_msw_remote_gimbal/REMOTE';
+            let mission_pwms_topic = '/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/Mission_Data/' + this.name + '/msw_remote_gimbal/REMOTE';
 
             this.doPublish(mission_pwms_topic, JSON.stringify(mission_pwms));
 
