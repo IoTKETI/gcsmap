@@ -35,7 +35,7 @@
         },
         computed: {
             style() {
-                console.log('JoyStick - computed', this.joystick_size)
+                //console.log('JoyStick - computed', this.joystick_size)
                 return {
                     "--x": `${this.x + parseInt(this.joystick_size/2)}px`,
                     "--y": `${this.y + parseInt(this.joystick_size/2)}px`,
@@ -56,6 +56,7 @@
             handleStart() {
                 this.isMouseDown = true;
             },
+
             handleTouch({ touches: [touch] }) {
 
                 console.log('handleTouch', touch)
@@ -68,12 +69,13 @@
                 const y = Math.round(clientY - offsetTop - this.joystick_size/2);
                 this.updatePosition(x, y);
             },
+
             handleMove({ clientX, clientY }) {
                 if (!this.isMouseDown) {
                     return;
                 }
 
-                console.log('handleMove', clientX, clientY, this.$refs.joys.getBoundingClientRect().left)
+                //console.log('handleMove', clientX, clientY, this.$refs.joys.getBoundingClientRect().left)
 
                 //const { offsetLeft, offsetTop } = this.$el;
 
@@ -83,11 +85,13 @@
                 const y = Math.round(clientY - offsetTop - this.joystick_size/2);
                 this.updatePosition(x, y);
             },
+
             handleRelease() {
                 this.emitAll("release");
                 this.isMouseDown = false;
                 this.updatePosition(0, 0);
             },
+
             updatePosition(x, y) {
                 const offset = parseInt((this.joystick_size/2) - (this.joystick_size/8));
                 const radians = Math.atan2(y, x);
@@ -101,6 +105,7 @@
                 this.y = this.speed >= offset ? Math.sin(radians) * offset : y;
                 this.emitAll();
             },
+
             emitAll(name = "change") {
                 this.$emit(name, {
                     x: this.x,

@@ -443,24 +443,25 @@
                                                         <v-col cols="12">
                                                             <v-subheader>{{d.name}} 임무 장치 제어: </v-subheader>
                                                         </v-col>
-                                                        <v-col cols="3">
+                                                        <v-col cols="2">
                                                             <v-row no-gutters align="center" justify="center">
-                                                                <v-col cols="6">
+                                                                <v-col cols="6" class="text-center">
+                                                                    <v-icon small class="mb-1">mdi-arrow-left-right</v-icon>
                                                                     <v-select
                                                                             dense outlined hide-details
                                                                             :items="channels"
-                                                                            label="CH01" v-model="targetCh1[d.name]"
+                                                                            label="CH01" v-model="target_mission_num.targetCh1[d.name]"
                                                                             class="ml-1"
-                                                                            prepend-icon="mdi-arrow-left-right"
                                                                     ></v-select>
                                                                 </v-col>
-                                                                <v-col cols="6">
+                                                                <v-col cols="6" class="text-center">
+                                                                    <v-icon small class="mb-1">mdi-arrow-up-down</v-icon>
                                                                     <v-select
                                                                             dense outlined hide-details
                                                                             :items="channels"
-                                                                            label="CH02" v-model="targetCh2[d.name]"
+                                                                            label="CH02" v-model="target_mission_num.targetCh2[d.name]"
                                                                             class="ml-1"
-                                                                            prepend-icon="mdi-arrow-up-down"
+                                                                            prepend-icon=""
                                                                     ></v-select>
                                                                 </v-col>
                                                             </v-row>
@@ -484,24 +485,24 @@
                                                                 </v-col>
                                                             </v-row>
                                                         </v-col>
-                                                        <v-col cols="3">
+                                                        <v-col cols="2">
                                                             <v-row no-gutters align="center" justify="center">
-                                                                <v-col cols="6">
+                                                                <v-col cols="6" class="text-center">
+                                                                    <v-icon small class="mb-1">mdi-arrow-left-right</v-icon>
                                                                     <v-select
                                                                             dense outlined hide-details
                                                                             :items="channels"
-                                                                            label="CH03" v-model="targetCh3[d.name]"
+                                                                            label="CH03" v-model="target_mission_num.targetCh3[d.name]"
                                                                             class="ml-1"
-                                                                            prepend-icon="mdi-arrow-left-right"
                                                                     ></v-select>
                                                                 </v-col>
-                                                                <v-col cols="6">
+                                                                <v-col cols="6" class="text-center">
+                                                                    <v-icon small class="mb-1">mdi-arrow-up-down</v-icon>
                                                                     <v-select
                                                                             dense outlined hide-details
                                                                             :items="channels"
-                                                                            label="CH04" v-model="targetCh4[d.name]"
+                                                                            label="CH04" v-model="target_mission_num.targetCh4[d.name]"
                                                                             class="ml-1"
-                                                                            prepend-icon="mdi-arrow-up-down"
                                                                     ></v-select>
                                                                 </v-col>
                                                             </v-row>
@@ -525,60 +526,76 @@
                                                                 </v-col>
                                                             </v-row>
                                                         </v-col>
-                                                        <v-col cols="6">
+                                                        <v-col cols="8">
                                                             <v-card flat tile outlined>
                                                                 <v-row no-gutters align="center" justify="center">
                                                                     <v-col class="my-2" cols="6">
                                                                         <div v-for="(num) in channels" :key="num">
                                                                             <div v-if="5 <= num && num <= 8">
-                                                                                <v-btn-toggle
-                                                                                        v-model="mission_value[`ch${num}`][d.name]"
-                                                                                        mandatory
-                                                                                        class="text-center align-center"
-                                                                                >
-                                                                                    <v-select
-                                                                                            dense outlined hide-details
-                                                                                            :items="channels"
-                                                                                            :label="'CH'+num" v-model="('targetCh'+num)[d.name]"
-                                                                                            class="mx-1"
-                                                                                    ></v-select>
-                                                                                    <v-btn small class="ml-1">
-                                                                                        <v-icon small>mdi-format-align-left</v-icon>
-                                                                                    </v-btn>
-                                                                                    <v-btn small>
-                                                                                        <v-icon small>mdi-format-align-center</v-icon>
-                                                                                    </v-btn>
-                                                                                    <v-btn small class="mr-1">
-                                                                                        <v-icon small>mdi-format-align-right</v-icon>
-                                                                                    </v-btn>
-                                                                                </v-btn-toggle>
+                                                                                <v-row no-gutters align="center" justify="center" class="text-center">
+                                                                                    <v-col cols="4">
+                                                                                        <v-select
+                                                                                                dense outlined hide-details
+                                                                                                :items="channels"
+                                                                                                :label="'CH'+num" v-model="target_mission_num[`targetCh${num}`][d.name]"
+                                                                                                class="ml-1 mx-1 mb-2"
+                                                                                        ></v-select>
+                                                                                    </v-col>
+                                                                                    <v-col cols="8">
+                                                                                        <v-btn-toggle
+                                                                                                v-model="mission_value[`ch${num}`][d.name]"
+                                                                                                mandatory
+                                                                                                class="text-center align-center mx-0"
+                                                                                        >
+                                                                                            <v-btn small>
+                                                                                                <v-icon small>mdi-format-align-left</v-icon>
+                                                                                            </v-btn>
+                                                                                            <v-btn small>
+                                                                                                <v-icon small>mdi-format-align-center</v-icon>
+                                                                                            </v-btn>
+                                                                                            <v-btn small>
+                                                                                                <v-icon small>mdi-format-align-right</v-icon>
+                                                                                            </v-btn>
+                                                                                        </v-btn-toggle>
+
+                                                                                        <v-btn small color="primary" class="mx-1 mb-1" @click="handlePwmClick(dName, num, $event);"><v-icon>mdi-send</v-icon></v-btn>
+                                                                                    </v-col>
+                                                                                </v-row>
                                                                             </div>
                                                                         </div>
                                                                     </v-col>
                                                                     <v-col class="my-2" cols="6">
                                                                         <div v-for="(num) in channels" :key="num">
                                                                             <div v-if="9 <= num && num <= 12">
-                                                                                <v-btn-toggle
-                                                                                        v-model="mission_value[`ch${num}`][d.name]"
-                                                                                        mandatory
-                                                                                        class="text-center align-center"
-                                                                                >
-                                                                                    <v-select
-                                                                                            dense outlined hide-details
-                                                                                            :items="channels"
-                                                                                            :label="'CH'+num" v-model="('targetCh'+num)[d.name]"
-                                                                                            class="mx-1"
-                                                                                    ></v-select>
-                                                                                    <v-btn small class="ml-1">
-                                                                                        <v-icon small>mdi-format-align-left</v-icon>
-                                                                                    </v-btn>
-                                                                                    <v-btn small>
-                                                                                        <v-icon small>mdi-format-align-center</v-icon>
-                                                                                    </v-btn>
-                                                                                    <v-btn small class="mr-1">
-                                                                                        <v-icon small>mdi-format-align-right</v-icon>
-                                                                                    </v-btn>
-                                                                                </v-btn-toggle>
+                                                                                <v-row no-gutters align="center" justify="center" class="text-center">
+                                                                                    <v-col cols="4">
+                                                                                        <v-select
+                                                                                                dense outlined hide-details
+                                                                                                :items="channels"
+                                                                                                :label="'CH'+num" v-model="target_mission_num[`targetCh${num}`][d.name]"
+                                                                                                class="ml-1 mx-1 mb-2"
+                                                                                        ></v-select>
+                                                                                    </v-col>
+                                                                                    <v-col cols="8">
+                                                                                        <v-btn-toggle
+                                                                                                v-model="mission_value[`ch${num}`][d.name]"
+                                                                                                mandatory
+                                                                                                class="text-center align-center mx-0"
+                                                                                        >
+                                                                                            <v-btn small>
+                                                                                                <v-icon small>mdi-format-align-left</v-icon>
+                                                                                            </v-btn>
+                                                                                            <v-btn small>
+                                                                                                <v-icon small>mdi-format-align-center</v-icon>
+                                                                                            </v-btn>
+                                                                                            <v-btn small>
+                                                                                                <v-icon small>mdi-format-align-right</v-icon>
+                                                                                            </v-btn>
+                                                                                        </v-btn-toggle>
+
+                                                                                        <v-btn small color="lime" class="mx-1 mb-1" @click="handlePwmClick(dName, num, $event);"><v-icon>mdi-send</v-icon></v-btn>
+                                                                                    </v-col>
+                                                                                </v-row>
                                                                             </div>
                                                                         </div>
                                                                     </v-col>
@@ -586,25 +603,28 @@
                                                                         <div v-for="(num) in channels" :key="num">
                                                                             <div v-if="13 <= num && num <= 16">
                                                                                 <v-row no-gutters align="center" justify="center">
-                                                                                    <v-col cols="4">
+                                                                                    <v-col cols="3">
                                                                                         <v-select
                                                                                                 dense outlined hide-details
                                                                                                 :items="channels"
-                                                                                                :label="'CH'+num" v-model="('targetCh'+num)[d.name]"
+                                                                                                :label="'CH'+num" v-model="target_mission_num[`targetCh${num}`][d.name]"
                                                                                                 class="mx-1"
                                                                                         ></v-select>
                                                                                     </v-col>
-                                                                                    <v-col cols="8">
+                                                                                    <v-col cols="9">
                                                                                         <v-slider
                                                                                                 v-model="mission_value[`ch${num}`][d.name]"
                                                                                                 class="mx-2 my-3 align-center"
-                                                                                                :min="1100"
-                                                                                                :max="1500"
+                                                                                                :min="mission_ch_min"
+                                                                                                :max="mission_ch_max"
                                                                                                 hide-details
                                                                                                 thumb-label="always"
                                                                                                 step="10"
                                                                                                 ticks="always"
                                                                                                 tick-size="4"
+                                                                                                color="indigo"
+                                                                                                track-color="orange"
+                                                                                                @input ="handlePwmSlide(dName, num, $event)"
                                                                                         >
                                                                                             <template v-slot:append>
                                                                                                 <v-text-field
@@ -613,6 +633,7 @@
                                                                                                         hide-details
                                                                                                         single-line
                                                                                                         type="number"
+                                                                                                        style="width: 65px"
                                                                                                 ></v-text-field>
                                                                                             </template>
                                                                                         </v-slider>
@@ -677,7 +698,9 @@
                             </v-col>
                             <v-col cols="1">
                                 <v-card class="pa-2 align-self-center text-center" outlined tile>
-                                    <v-btn color="blue" dark @click="curTab = command.title; mode_sheet = !mode_sheet;">
+                                    <v-btn color="blue" @click="curTab = command.title; mode_sheet = !mode_sheet;"
+                                           :disabled="(command.title === commands[14].title)"
+                                    >
                                         <span v-if="command.title === commands[0].title">모드확인</span>
                                         <span v-else-if="command.title === commands[1].title">시동확인</span>
                                         <span v-else-if="command.title === commands[2].title">이륙확인</span>
@@ -800,23 +823,28 @@
 
         data() {
             return {
+                mission_ch_min: 258,
+                mission_ch_max: 1958,
                 channels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
-                targetCh1: {},
-                targetCh2: {},
-                targetCh3: {},
-                targetCh4: {},
-                targetCh5: {},
-                targetCh6: {},
-                targetCh7: {},
-                targetCh8: {},
-                targetCh9: {},
-                targetCh10: {},
-                targetCh11: {},
-                targetCh12: {},
-                targetCh13: {},
-                targetCh14: {},
-                targetCh15: {},
-                targetCh16: {},
+
+                target_mission_num: {
+                    targetCh1: {},
+                    targetCh2: {},
+                    targetCh3: {},
+                    targetCh4: {},
+                    targetCh5: {},
+                    targetCh6: {},
+                    targetCh7: {},
+                    targetCh8: {},
+                    targetCh9: {},
+                    targetCh10: {},
+                    targetCh11: {},
+                    targetCh12: {},
+                    targetCh13: {},
+                    targetCh14: {},
+                    targetCh15: {},
+                    targetCh16: {},
+                },
                 mission_value: {
                     ch1: {},
                     ch2: {},
@@ -1089,9 +1117,20 @@
                             this.autoDelay[name] = this.$store.state.drone_infos[name].autoDelay;
                             this.gotoType[name] = this.$store.state.drone_infos[name].gotoType;
                             this.prepared = true;
-                            for(let i = 0; i < this.channels.length; i++) {
-                                let num = this.channels[i];
-                                this.mission_value[`ch${num}`][name] = 0;
+
+                            if(this.$cookies.isKey('target_mission_num')) {
+                                this.target_mission_num = this.$cookies.get('target_mission_num');
+                                this.mission_value = this.$cookies.get('mission_value');
+                            }
+                            else {
+                                for(let i = 0; i < this.channels.length; i++) {
+                                    let num = this.channels[i];
+                                    this.mission_value[`ch${num}`][name] = 0;
+                                    this.target_mission_num[`targetCh${num}`][name] = num;
+                                }
+
+                                this.$cookies.set('target_mission_num', this.target_mission_num);
+                                this.$cookies.set('mission_value', this.mission_value);
                             }
                         }
                     }
@@ -1158,21 +1197,19 @@
                 this[`${id}Stick`] = JSON.parse(JSON.stringify(temp));
 
                 let payload = {};
-                payload.num = 1;
-                payload.value = parseInt(1100 + ((x + 47) / 94) * 800);
+                payload.num = this.target_mission_num.targetCh1[dName];
+                payload.value = parseInt(this.mission_ch_min + ((x + 47) / 94) * (this.mission_ch_max-this.mission_ch_min));
 
-                setTimeout((payload)=>{
-                    EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+                EventBus.$emit('command-set-pwms-mission-' + dName, payload);
 
-                    let _payload = {};
-                    _payload.num = 1;
-                    _payload.value = parseInt(1100 + ((y + 47) / 94) * 800);
+                let _payload = {};
+                _payload.num = this.target_mission_num.targetCh2[dName];
+                _payload.value = parseInt(this.mission_ch_min + ((y + 47) / 94) * (this.mission_ch_max-this.mission_ch_min));
 
-                    setTimeout((payload)=>{
-                        EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+                EventBus.$emit('command-set-pwms-mission-' + dName, _payload);
 
-                    }, 1, JSON.parse(JSON.stringify(_payload)));
-                }, 0, JSON.parse(JSON.stringify(payload)));
+                this.$cookies.set('target_mission_num', this.target_mission_num);
+                this.$cookies.set('mission_value', this.mission_value);
             },
 
             handleRightChange(dName, id, { x, y, speed, angle }) {
@@ -1189,21 +1226,41 @@
                 this[`${id}Stick`] = JSON.parse(JSON.stringify(temp));
 
                 let payload = {};
-                payload.num = 3;
-                payload.value = parseInt(1100 + ((x + 47) / 94) * 800);
+                payload.num = this.target_mission_num.targetCh3[dName];
+                payload.value = parseInt(this.mission_ch_min + ((x + 47) / 94) * (this.mission_ch_max-this.mission_ch_min));
 
-                setTimeout((payload)=>{
-                    EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+                EventBus.$emit('command-set-pwms-mission-' + dName, payload);
 
-                    let _payload = {};
-                    _payload.num = 4;
-                    _payload.value = parseInt(1100 + ((y + 47) / 94) * 800);
+                let _payload = {};
+                _payload.num = this.target_mission_num.targetCh4[dName];
+                _payload.value = parseInt(this.mission_ch_min + ((y + 47) / 94) * (this.mission_ch_max-this.mission_ch_min));
 
-                    setTimeout((payload)=>{
-                        EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+                EventBus.$emit('command-set-pwms-mission-' + dName, _payload);
 
-                    }, 1, JSON.parse(JSON.stringify(_payload)));
-                }, 0, JSON.parse(JSON.stringify(payload)));
+                this.$cookies.set('target_mission_num', this.target_mission_num);
+                this.$cookies.set('mission_value', this.mission_value);
+            },
+
+            handlePwmClick(dName, num) {
+                let payload = {};
+                payload.num = this.target_mission_num[`targetCh${num}`][dName];
+                payload.value = parseInt(this.mission_ch_min + (this.mission_value[`ch${num}`][dName] / 2) * (this.mission_ch_max-this.mission_ch_min));
+
+                EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+
+                this.$cookies.set('target_mission_num', this.target_mission_num);
+                this.$cookies.set('mission_value', this.mission_value);
+            },
+
+            handlePwmSlide(dName, num) {
+                let payload = {};
+                payload.num = this.target_mission_num[`targetCh${num}`][dName];
+                payload.value = parseInt(this.mission_ch_max - ((this.mission_ch_max-this.mission_value[`ch${num}`][dName]) / (this.mission_ch_max-this.mission_ch_min)) * (this.mission_ch_max-this.mission_ch_min));
+
+                EventBus.$emit('command-set-pwms-mission-' + dName, payload);
+
+                this.$cookies.set('target_mission_num', this.target_mission_num);
+                this.$cookies.set('mission_value', this.mission_value);
             },
 
             decrement () {
