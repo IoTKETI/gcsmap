@@ -1,4 +1,3 @@
-<script src="../../../../NodeJsWorkspace/nCube-mavUTM/terminal_app.js"></script>
 <template>
     <v-container :class="borderColor" class="pa-0 ma-0">
         <v-card ref="info" tile flat :color="$store.state.drone_infos[name].color">
@@ -978,49 +977,50 @@ export default {
             }
 
             if (!this.client.connected) {
-                var self = this;
+                //var self = this;
 
                 this.client.loading = true;
                 const {host, port, endpoint, ...options} = this.connection
                 const connectUrl = `ws://${host}:${port}${endpoint}`
                 try {
-                    this.client = mqtt.connect(connectUrl, options)
+                    this.client = mqtt.connect(connectUrl, options);
+
+                    this.client.on('connect', () => {
+                        console.log(this.name, 'Connection succeeded!');
+
+                        this.client.connected = true;
+
+                        // if(this.subscribeSuccess) {
+                        //     this.doUnSubscribe()
+                        // }
+
+                        this.client.loading = false;
+
+                        onConnect();
+                    });
+
+                    this.client.on('error', (error) => {
+                        console.log('Connection failed', error);
+
+                        this.client.connected = false;
+                    });
+
+                    this.client.on('close', () => {
+                        console.log('Connection closed');
+
+                        this.client.connected = false;
+                    });
+
+                    this.client.on('message', (topic, message) => {
+                        // this.receiveNews = this.receiveNews.concat(message)
+                        // console.log(`Received message ${message} from topic ${topic}`);
+
+                        this.onMessageHandler(topic, message);
+                    });
                 } catch (error) {
-                    console.log('mqtt.connect error', error)
+                    console.log('mqtt.connect error', error);
+                    this.client.connected = false;
                 }
-
-                this.client.on('connect', () => {
-                    console.log(this.name, 'Connection succeeded!');
-
-                    self.client.connected = true;
-
-                    // if(this.subscribeSuccess) {
-                    //     this.doUnSubscribe()
-                    // }
-
-                    this.client.loading = false;
-
-                    onConnect();
-                });
-
-                this.client.on('error', error => {
-                    console.log('Connection failed', error);
-
-                    self.client.connected = false;
-                });
-
-                this.client.on('close', () => {
-                    console.log('Connection closed');
-
-                    self.client.connected = false;
-                });
-
-                this.client.on('message', (topic, message) => {
-                    // this.receiveNews = this.receiveNews.concat(message)
-                    // console.log(`Received message ${message} from topic ${topic}`);
-
-                    this.onMessageHandler(topic, message);
-                });
             }
         },
         doSubscribe(topic) {
@@ -1728,7 +1728,7 @@ export default {
                 var latitude = parseFloat(arr_cur_goto_position[0]);
                 var longitude = parseFloat(arr_cur_goto_position[1]);
                 var rel_altitude = parseFloat(arr_cur_goto_position[2]);
-                var speed = parseFloat(arr_cur_goto_position[3]);
+                //var speed = parseFloat(arr_cur_goto_position[3]);
 
                 btn_params.target_system = target_sys_id;
                 btn_params.target_component = 1;
@@ -1757,7 +1757,7 @@ export default {
                     this.doPublish(pub_topic, msg);
 
                     if(cur_idx <= end_idx) {
-                        if (!this.mission_request.hasOwnProperty(target_sys_id)) {
+                        if (!Object.prototype.hasOwnProperty.call(this.mission_request, target_sys_id)) {
                             this.mission_request[target_sys_id] = {};
                         }
                         this.mission_request[target_sys_id].seq = 255;
@@ -1766,7 +1766,7 @@ export default {
                         setTimeout(this.result_auto_mission_protocol, 50, target_name, pub_topic, target_sys_id, goto_each_position, start_idx, end_idx, delay, cur_idx, this.result_check_count);
                     }
                     else {
-                        if(!this.result_mission_ack.hasOwnProperty(target_sys_id)) {
+                        if(!Object.prototype.hasOwnProperty.call(this.result_mission_ack, target_sys_id)) {
                             this.result_mission_ack[target_sys_id] = {};
                         }
                         this.result_mission_ack[target_sys_id].type = 255;
@@ -1815,7 +1815,7 @@ export default {
                     console.log('Send MISSION_COUNT to %s, msg: ' + msg.toString('hex') + ' - ' + cur_idx, target_name);
                     this.doPublish(pub_topic, msg);
 
-                    if(!this.mission_request.hasOwnProperty(target_sys_id)) {
+                    if(!Object.prototype.hasOwnProperty.call(this.mission_request, target_sys_id)) {
                         this.mission_request[target_sys_id] = {};
                     }
                     this.mission_request[target_sys_id].seq = 255;
@@ -1861,7 +1861,7 @@ export default {
                     console.log('Send Mission Clear All command to %s, msg: ' + msg.toString('hex') + ' - ' + cur_idx, target_name);
                     this.doPublish(pub_topic, msg);
 
-                    if(!this.result_mission_ack.hasOwnProperty(target_sys_id)) {
+                    if(!Object.prototype.hasOwnProperty.call(this.result_mission_ack, target_sys_id)) {
                         this.result_mission_ack[target_sys_id] = {};
                     }
                     this.result_mission_ack[target_sys_id].type = 255;
@@ -2967,69 +2967,69 @@ export default {
                 //     this.rssi = parseInt((Buffer.from(rssi, 'hex').readUInt8(0)) / 255 * 100);
                 // }
 
-                else if (msg_id === mavlink.MAVLINK_MSG_ID_PARAM_VALUE) {
-                     if (ver === 'fd') {
-                        base_offset = 20;
-                        var param_value = mavPacket.substr(base_offset, 8).toLowerCase();
-                        base_offset += 8;
-                        var param_count = mavPacket.substr(base_offset, 4).toLowerCase();
-                        base_offset += 4;
-                        var param_index = mavPacket.substr(base_offset, 4).toLowerCase();
-                        base_offset += 4;
-                        var param_id = mavPacket.substr(base_offset, 32).toLowerCase();
-                        base_offset += 32;
-                        var param_type = mavPacket.substr(base_offset, 2).toLowerCase();
-                    }
-                    else {
-                        base_offset = 12;
-                        param_value = mavPacket.substr(base_offset, 8).toLowerCase();
-                        base_offset += 8;
-                        param_count = mavPacket.substr(base_offset, 4).toLowerCase();
-                        base_offset += 4;
-                        param_index = mavPacket.substr(base_offset, 4).toLowerCase();
-                        base_offset += 4;
-                        param_id = mavPacket.substr(base_offset, 32).toLowerCase();
-                        base_offset += 32;
-                        param_type = mavPacket.substr(base_offset, 2).toLowerCase();
-                    }
-
-                     param_id = Buffer.from(param_id, "hex").toString('ASCII');
-
-                    // if (param_id.includes('STAT_FLTTIME')) {
-                    //
-                    //     this.stat_flttime_param = {};
-                    //     this.stat_flttime_param.param_value = Buffer.from(param_value, 'hex').readFloatLE(0);
-                    //     this.stat_flttime_param.param_type = Buffer.from(param_type, 'hex').readInt8(0);
-                    //     this.stat_flttime_param.param_count = Buffer.from(param_count, 'hex').readInt16LE(0);
-                    //     this.stat_flttime_param.param_index = Buffer.from(param_index, 'hex').readUInt16LE(0);
-                    //
-                    //     console.log(this.name, 'STAT_FLTTIME', this.stat_flttime_param.param_value);
-                    //
-                    //     // if(this.$store.state.drone_infos[this.name].lastFlightTime > this.stat_flttime_param.param_value) {
-                    //     //     this.$store.state.drone_infos[this.name].lastFlightTime = this.stat_flttime_param.param_value;
-                    //     //
-                    //     //     this.postDroneInfos();
-                    //     // }
-                    // }
-                    // else {
-                    //     if(this.curArmStatus === 'ARMED') {
-                    //         let curFlightTime = this.stat_flttime_param.param_value - this.$store.state.drone_infos[this.name].lastFlightTime;
-                    //         console.log(this.name, 'curFlightTime', curFlightTime);
-                    //     }
-                    // }
-
-                    // else if (param_id.includes('STAT_RUNTIME')) {
-                    //
-                    //     let stat_runtime_param = {};
-                    //     stat_runtime_param.param_value = Buffer.from(param_value, 'hex').readFloatLE(0);
-                    //     stat_runtime_param.param_type = Buffer.from(param_type, 'hex').readInt8(0);
-                    //     stat_runtime_param.param_count = Buffer.from(param_count, 'hex').readInt16LE(0);
-                    //     stat_runtime_param.param_index = Buffer.from(param_index, 'hex').readUInt16LE(0);
-                    //
-                    //     console.log(this.name, 'STAT_RUNTIME', stat_runtime_param);
-                    // }
-
-                //     else if (param_id.includes('RC1_MIN')) {
+                // else if (msg_id === mavlink.MAVLINK_MSG_ID_PARAM_VALUE) {
+                //      if (ver === 'fd') {
+                //         base_offset = 20;
+                //         var param_value = mavPacket.substr(base_offset, 8).toLowerCase();
+                //         base_offset += 8;
+                //         var param_count = mavPacket.substr(base_offset, 4).toLowerCase();
+                //         base_offset += 4;
+                //         var param_index = mavPacket.substr(base_offset, 4).toLowerCase();
+                //         base_offset += 4;
+                //         var param_id = mavPacket.substr(base_offset, 32).toLowerCase();
+                //         base_offset += 32;
+                //         var param_type = mavPacket.substr(base_offset, 2).toLowerCase();
+                //     }
+                //     else {
+                //         base_offset = 12;
+                //         param_value = mavPacket.substr(base_offset, 8).toLowerCase();
+                //         base_offset += 8;
+                //         param_count = mavPacket.substr(base_offset, 4).toLowerCase();
+                //         base_offset += 4;
+                //         param_index = mavPacket.substr(base_offset, 4).toLowerCase();
+                //         base_offset += 4;
+                //         param_id = mavPacket.substr(base_offset, 32).toLowerCase();
+                //         base_offset += 32;
+                //         param_type = mavPacket.substr(base_offset, 2).toLowerCase();
+                //     }
+                //
+                //     param_id = Buffer.from(param_id, "hex").toString('ASCII');
+                //
+                //     // if (param_id.includes('STAT_FLTTIME')) {
+                //     //
+                //     //     this.stat_flttime_param = {};
+                //     //     this.stat_flttime_param.param_value = Buffer.from(param_value, 'hex').readFloatLE(0);
+                //     //     this.stat_flttime_param.param_type = Buffer.from(param_type, 'hex').readInt8(0);
+                //     //     this.stat_flttime_param.param_count = Buffer.from(param_count, 'hex').readInt16LE(0);
+                //     //     this.stat_flttime_param.param_index = Buffer.from(param_index, 'hex').readUInt16LE(0);
+                //     //
+                //     //     console.log(this.name, 'STAT_FLTTIME', this.stat_flttime_param.param_value);
+                //     //
+                //     //     // if(this.$store.state.drone_infos[this.name].lastFlightTime > this.stat_flttime_param.param_value) {
+                //     //     //     this.$store.state.drone_infos[this.name].lastFlightTime = this.stat_flttime_param.param_value;
+                //     //     //
+                //     //     //     this.postDroneInfos();
+                //     //     // }
+                //     // }
+                //     // else {
+                //     //     if(this.curArmStatus === 'ARMED') {
+                //     //         let curFlightTime = this.stat_flttime_param.param_value - this.$store.state.drone_infos[this.name].lastFlightTime;
+                //     //         console.log(this.name, 'curFlightTime', curFlightTime);
+                //     //     }
+                //     // }
+                //
+                //     // else if (param_id.includes('STAT_RUNTIME')) {
+                //     //
+                //     //     let stat_runtime_param = {};
+                //     //     stat_runtime_param.param_value = Buffer.from(param_value, 'hex').readFloatLE(0);
+                //     //     stat_runtime_param.param_type = Buffer.from(param_type, 'hex').readInt8(0);
+                //     //     stat_runtime_param.param_count = Buffer.from(param_count, 'hex').readInt16LE(0);
+                //     //     stat_runtime_param.param_index = Buffer.from(param_index, 'hex').readUInt16LE(0);
+                //     //
+                //     //     console.log(this.name, 'STAT_RUNTIME', stat_runtime_param);
+                //     // }
+                //
+                //     if (param_id.includes('RC1_MIN')) {
                 //         if (!Object.prototype.hasOwnProperty.call(this.rc1_min, sys_id)) {
                 //             this.rc1_min[sys_id] = {};
                 //         }
@@ -3149,7 +3149,7 @@ export default {
                 //         this.rc4_trim[sys_id].param_count = Buffer.from(param_count, 'hex').readInt16LE(0);
                 //         this.rc4_trim[sys_id].param_index = Buffer.from(param_index, 'hex').readUInt16LE(0);
                 //     }
-                }
+                // }
 
                 else if (msg_id === mavlink.MAVLINK_MSG_ID_MISSION_ITEM) {
                     // console.log('---> ' + 'MAVLINK_MSG_ID_MISSION_ITEM - ' + mavPacket);
@@ -3162,9 +3162,9 @@ export default {
                         base_offset += 4;
                         var target_system = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
-                        var target_component = mavPacket.substr(base_offset, 2).toLowerCase();
+                        //var target_component = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
-                        var mission_type = mavPacket.substr(base_offset, 2).toLowerCase();
+                        //var mission_type = mavPacket.substr(base_offset, 2).toLowerCase();
                     }
                     else {
                         base_offset = 12;
@@ -3172,9 +3172,9 @@ export default {
                         base_offset += 4;
                         target_system = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
-                        target_component = mavPacket.substr(base_offset, 2).toLowerCase();
+                        //target_component = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
-                        mission_type = mavPacket.substr(base_offset, 2).toLowerCase();
+                        //mission_type = mavPacket.substr(base_offset, 2).toLowerCase();
                     }
 
                     if (Object.prototype.hasOwnProperty.call(this.mission_request, sys_id)) {
@@ -3196,21 +3196,21 @@ export default {
                         base_offset = 20;
                         target_system = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
-                        target_component = mavPacket.substr(base_offset, 2).toLowerCase();
+                        //target_component = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
                         var mission_result_type = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
-                        mission_type = mavPacket.substr(base_offset, 2).toLowerCase();
+                        //mission_type = mavPacket.substr(base_offset, 2).toLowerCase();
                     }
                     else {
                         base_offset = 12;
                         target_system = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
-                        target_component = mavPacket.substr(base_offset, 2).toLowerCase();
+                        //target_component = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
                         mission_result_type = mavPacket.substr(base_offset, 2).toLowerCase();
                         base_offset += 2;
-                        mission_type = mavPacket.substr(base_offset, 2).toLowerCase();
+                        //mission_type = mavPacket.substr(base_offset, 2).toLowerCase();
                     }
 
                     if (Object.prototype.hasOwnProperty.call(this.result_mission_ack, sys_id)) {
@@ -3582,7 +3582,7 @@ export default {
             setTimeout(this.send_arm_command, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, 0, 0);
         });
 
-        EventBus.$on('command-set-auto_goto-' + this.name, (position) => {
+        EventBus.$on('command-set-auto_goto-' + this.name, () => {
             let start_idx = parseInt(this.$store.state.drone_infos[this.name].autoStartIndex);
             let end_idx = parseInt(this.$store.state.drone_infos[this.name].autoEndIndex);
             let delay = this.$store.state.drone_infos[this.name].autoDelay;
@@ -3676,7 +3676,7 @@ export default {
             var lat = parseFloat(arr_cur_goto_position[0]);
             var lon = parseFloat(arr_cur_goto_position[1]);
             var alt = parseFloat(arr_cur_goto_position[2]);
-            var speed = parseFloat(arr_cur_goto_position[3]);
+            //var speed = parseFloat(arr_cur_goto_position[3]);
             var radius = parseFloat(arr_cur_goto_position[4]);
             var circle_speed = parseFloat(arr_cur_goto_position[5]);
             var degree_speed = parseInt((circle_speed / radius) * (180 / 3.14), 10);

@@ -320,25 +320,46 @@ export default new Vuex.Store({
         VUE_APP_MOBIUS_GCS: 'KETI_GCS',
 
         markerColor: [
-            'red',
-            'pink',
-            'purple',
-            'deep-purple',
-            'indigo',
-            'blue',
-            'light-blue',
-            'cyan',
-            'teal',
-            'green',
-            'light-green',
-            'lime',
-            'yellow',
-            'amber',
-            'orange',
-            'deep-orange',
-            'brown',
-            'blue-grey'
+            '#F44336',
+            '#E91E63',
+            '#9C27B0',
+            '#673AB7',
+            '#3F51B5',
+            '#2196F3',
+            '#03A9F4',
+            '#00BCD4',
+            '#009688',
+            '#4CAF50',
+            '#8BC34A',
+            '#CDDC39',
+            '#FFEB3B',
+            '#FFC107',
+            '#FF9800',
+            '#FF5722',
+            '#795548',
+            '#607D8B'
         ],
+
+        // markerColor: [
+        //     'red',
+        //     'pink',
+        //     'purple',
+        //     'deep-purple',
+        //     'indigo',
+        //     'blue',
+        //     'light-blue',
+        //     'cyan',
+        //     'teal',
+        //     'green',
+        //     'light-green',
+        //     'lime',
+        //     'yellow',
+        //     'amber',
+        //     'orange',
+        //     'deep-orange',
+        //     'brown',
+        //     'blue-grey'
+        // ],
 
         form: Object.assign({}, defaultForm),
 
@@ -1304,7 +1325,7 @@ export default new Vuex.Store({
                         }
 
                         if (!Object.prototype.hasOwnProperty.call(state.drone_infos[dName], 'takeoffDelay')) {
-                            state.drone_infos[dName].takeoffDelay = 10;
+                            state.drone_infos[dName].takeoffDelay = 6;
                         }
 
 

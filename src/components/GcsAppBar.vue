@@ -1,4 +1,5 @@
 <template>
+    <div>
     <v-app-bar app color="primary" dark dense>
         <v-toolbar-title>
             <v-row no-gutters align="center">
@@ -47,9 +48,23 @@
             <v-icon>mdi-quadcopter</v-icon>
         </v-btn>
 
-        <v-btn text>
-            <v-icon>mdi-magnify</v-icon>
+
+<!--        <v-btn text @click.stop="openCam">-->
+<!--            <v-icon>mdi-video</v-icon>-->
+<!--        </v-btn>-->
+
+        <v-btn text @click.stop="openCam2">
+            <v-icon>mdi-video</v-icon>
         </v-btn>
+
+<!--        <router-link-->
+<!--                to="/cam"-->
+<!--                target="_blank"-->
+<!--        >-->
+<!--            <v-btn text>-->
+<!--                <v-icon>mdi-video</v-icon>-->
+<!--            </v-btn>-->
+<!--        </router-link>-->
 
         <v-btn text>
             <v-icon>mdi-account</v-icon>
@@ -328,17 +343,31 @@
         </v-dialog>
 
     </v-app-bar>
+
+<!--    <WindowPortal v-model="open">-->
+<!--        <WebrtcCard></WebrtcCard>-->
+<!--    </WindowPortal>-->
+
+    </div>
 </template>
 
 <script>
     import axios from 'axios'
     import EventBus from "@/EventBus";
+    // import WindowPortal from "./WindowPortal";
+    // import WebrtcCard from "./WebrtcCard";
 
     export default {
         name: "GcsAppBar",
 
+        components: {
+            // WebrtcCard,
+            // WindowPortal
+        },
+
         data: function () {
             return {
+                open: false,
                 MOBIUS_CONNECTION_TEXT: 'Connect',
                 MOBIUS_CONNECTION_CONNECTED: false,
                 MOBIUS_CONNECTION_DISABLED: false,
@@ -407,6 +436,26 @@
                 // ],
                 type_selected: 'pixhawk',
                 color_selected: 'teal',
+                refColorValue: {
+                    red: '#F44336',
+                    pink: '#E91E63',
+                    purple: '#9C27B0',
+                    'deep-purple': '#673AB7',
+                    indigo: '#3F51B5',
+                    blue: '#2196F3',
+                    'light-blue': '#03A9F4',
+                    cyan: '#00BCD4',
+                    teal: '#009688',
+                    green: '#4CAF50',
+                    'light-green': '#8BC34A',
+                    lime: '#CDDC39',
+                    yellow: '#FFEB3B',
+                    amber: '#FFC107',
+                    orange: '#FF9800',
+                    'deep-orange': '#FF5722',
+                    brown: '#795548',
+                    'blue-grey': '#607D8B'
+                },
                 selected: [],
                 dialog: false,
                 add_dialog: false,
@@ -741,6 +790,20 @@
                 this.dialog = true;
             },
 
+            openCam() {
+                this.open = !this.open;
+                console.log(this.open);
+
+                window.open("https://westonsoftware.github.io/vue-webrtc/", "_blank");
+            },
+
+            openCam2() {
+                this.open = !this.open;
+                console.log(this.open);
+
+                window.open("http://203.253.128.177/videoroomtest.html", "_blank");
+            },
+
             postDroneInfos(callback) {
                 axios({
                     validateStatus: function (status) {
@@ -896,7 +959,7 @@
                     payload.host = this.host;
                     payload.gcs = this.gcs;
                     payload.type = this.type_selected;
-                    payload.color = this.color_selected;
+                    payload.color = this.refColorValue[this.color_selected];
                     payload.name = this.drone_name;
                     payload.drone_host = this.drone_host;
                     payload.id = this.drone_id;
@@ -942,7 +1005,7 @@
                     payload.host = this.host;
                     payload.gcs = this.gcs;
                     payload.type = this.type_selected;
-                    payload.color = this.color_selected;
+                    payload.color = this.refColorValue[this.color_selected];
                     payload.name = this.drone_name;
                     payload.drone_host = this.drone_host;
                     payload.id = this.drone_id;

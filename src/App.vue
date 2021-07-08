@@ -3,24 +3,25 @@
         <GcsAppBar/>
 
         <v-main>
-            <DroneInfoList/>
-            <GcsMap/>
+            <router-view></router-view>
+<!--            <DroneInfoList/>-->
+<!--            <GcsMap/>-->
         </v-main>
     </v-app>
 </template>
 
 <script>
-    import GcsMap from "./components/GcsMap";
     import GcsAppBar from "./components/GcsAppBar";
-    import DroneInfoList from "./components/DroneInfoList";
+    // import GcsMap from "./components/GcsMap";
+    // import DroneInfoList from "./components/DroneInfoList";
 
     export default {
         name: 'App',
 
         components: {
-            GcsMap,
             GcsAppBar,
-            DroneInfoList
+            // GcsMap,
+            // DroneInfoList
         },
 
         data: () => ({
