@@ -2530,7 +2530,7 @@ export default {
                         }
 
                         this.iconArming = 'mdi-airplane';
-                        this.colorArming = this.$store.state.drone_infos[this.name].color + ' darken-4';
+                        this.colorArming = this.$store.state.refColorName[this.$store.state.drone_infos[this.name].color] + ' darken-4';
                         this.curArmStatus = 'ARMED';
                         this.colorArm = 'td-text-red';
                     }

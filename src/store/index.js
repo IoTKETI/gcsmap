@@ -340,6 +340,48 @@ export default new Vuex.Store({
             '#607D8B'
         ],
 
+        refColorValue: {
+            red: '#F44336',
+            pink: '#E91E63',
+            purple: '#9C27B0',
+            'deep-purple': '#673AB7',
+            indigo: '#3F51B5',
+            blue: '#2196F3',
+            'light-blue': '#03A9F4',
+            cyan: '#00BCD4',
+            teal: '#009688',
+            green: '#4CAF50',
+            'light-green': '#8BC34A',
+            lime: '#CDDC39',
+            yellow: '#FFEB3B',
+            amber: '#FFC107',
+            orange: '#FF9800',
+            'deep-orange': '#FF5722',
+            brown: '#795548',
+            'blue-grey': '#607D8B'
+        },
+
+        refColorName: {
+            '#F44336': 'red' ,
+            '#E91E63': 'pink',
+            '#9C27B0': 'purple',
+            '#673AB7': 'deep-purple',
+            '#3F51B5': 'indigo',
+            '#2196F3': 'blue',
+            '#03A9F4': 'light-blue',
+            '#00BCD4': 'cyan',
+            '#009688': 'teal',
+            '#4CAF50': 'green',
+            '#8BC34A': 'light-green',
+            '#CDDC39': 'lime',
+            '#FFEB3B': 'yellow',
+            '#FFC107': 'amber',
+            '#FF9800': 'orange',
+            '#FF5722': 'deep-orange',
+            '#795548': 'brown',
+            '#607D8B': 'blue-grey'
+        },
+
         // markerColor: [
         //     'red',
         //     'pink',
