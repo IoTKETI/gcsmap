@@ -313,51 +313,72 @@
                     <v-row no-gutters>
                         <v-col cols="12">
                             <v-card tile outlined
-                                    class="mx-auto overflow-y-auto overflow"
-                                    :class="flagReceiving?'overflow-y-auto':'overflow-y-hidden'"
-                                    max-height="135"
-                                    min-height="135">
-                                <v-list dense>
-                                    <v-list-item-group
-                                        v-model="selectedItem"
-                                        color="deep-orange darken-4"
+                                    class="mx-auto overflow-y-auto overflow">
+<!--                                    :class="flagReceiving?'overflow-y-auto':'overflow-y-hidden'"-->
+<!--                                    max-height="135"-->
+<!--                                    min-height="135"-->
+                                <v-sheet
+                                        elevation="10"
+                                        class="py-2 px-1"
+                                >
+                                    <v-chip-group
+                                            v-model="selectedItem"
+                                            active-class="primary--text"
+                                            :center-active="true"
+                                            show-arrows
                                     >
                                         <draggable v-model="positions">
-                                            <v-list-item v-for="(position, i) in positions" :key="i">
-                                                <!--                                <v-card flat rounded shaped width="25" class="mr-2 text-center" style="{border-radius: 50%; }">{{i}}</v-card>-->
-                                                <v-list-item-avatar class="ma-0 mr-1" size="24" color="grey lighten-4">
-                                                    <span>{{ i + 1 }}</span>
-                                                </v-list-item-avatar>
-                                                <v-list-item-icon>
-                                                    <v-icon class="mr-2" v-text="position.icon"></v-icon>
-                                                </v-list-item-icon>
-                                                <v-hover>
-                                                    <template v-slot:default="{ hover }">
-                                                        <v-list-item-content>
-                                                            <v-list-item-title v-text="position.text"></v-list-item-title>
-                                                            <v-overlay
-                                                                v-if="hover"
-                                                                absolute
-                                                                color="transparent"
-                                                                style="padding-left: 88%"
-                                                            >
-                                                                <v-btn
-                                                                    class="pa-0 ma-0"
-                                                                    fab
-                                                                    dark
-                                                                    x-small
-                                                                    color="grey darken-3"
-                                                                >
-                                                                    <v-icon dark>mdi-trash-can</v-icon>
-                                                                </v-btn>
-                                                            </v-overlay>
-                                                        </v-list-item-content>
-                                                    </template>
-                                                </v-hover>
-                                            </v-list-item>
+                                            <v-chip
+                                                    v-for="(position, i) in positions"
+                                                    :key="'pos_chip'+i"
+                                                    @click="selectedPosition(i)"
+                                            >
+                                                {{ String(i) }}
+                                            </v-chip>
                                         </draggable>
-                                    </v-list-item-group>
-                                </v-list>
+                                    </v-chip-group>
+                                </v-sheet>
+<!--                                <v-list dense>-->
+<!--                                    <v-list-item-group-->
+<!--                                        v-model="selectedItem"-->
+<!--                                        color="deep-orange darken-4"-->
+<!--                                    >-->
+<!--                                        <draggable v-model="positions">-->
+<!--                                            <v-list-item v-for="(position, i) in positions" :key="i">-->
+<!--                                                &lt;!&ndash;                                <v-card flat rounded shaped width="25" class="mr-2 text-center" style="{border-radius: 50%; }">{{i}}</v-card>&ndash;&gt;-->
+<!--                                                <v-list-item-avatar class="ma-0 mr-1" size="24" color="grey lighten-4">-->
+<!--                                                    <span>{{ i + 1 }}</span>-->
+<!--                                                </v-list-item-avatar>-->
+<!--                                                <v-list-item-icon>-->
+<!--                                                    <v-icon class="mr-2" v-text="position.icon"></v-icon>-->
+<!--                                                </v-list-item-icon>-->
+<!--                                                <v-hover>-->
+<!--                                                    <template v-slot:default="{ hover }">-->
+<!--                                                        <v-list-item-content>-->
+<!--                                                            <v-list-item-title v-text="position.text"></v-list-item-title>-->
+<!--                                                            <v-overlay-->
+<!--                                                                v-if="hover"-->
+<!--                                                                absolute-->
+<!--                                                                color="transparent"-->
+<!--                                                                style="padding-left: 88%"-->
+<!--                                                            >-->
+<!--                                                                <v-btn-->
+<!--                                                                    class="pa-0 ma-0"-->
+<!--                                                                    fab-->
+<!--                                                                    dark-->
+<!--                                                                    x-small-->
+<!--                                                                    color="grey darken-3"-->
+<!--                                                                >-->
+<!--                                                                    <v-icon dark>mdi-trash-can</v-icon>-->
+<!--                                                                </v-btn>-->
+<!--                                                            </v-overlay>-->
+<!--                                                        </v-list-item-content>-->
+<!--                                                    </template>-->
+<!--                                                </v-hover>-->
+<!--                                            </v-list-item>-->
+<!--                                        </draggable>-->
+<!--                                    </v-list-item-group>-->
+<!--                                </v-list>-->
                                 <v-overlay :absolute="absolute" :value="!flagReceiving" :opacity="opacity" color="#E0E0E0"></v-overlay>
                             </v-card>
                         </v-col>
@@ -673,7 +694,7 @@ export default {
                 clean: true,
                 connectTimeout: 4000,
                 reconnectPeriod: 4000,
-                clientId: nanoid(),
+                clientId: this.name + nanoid(15),
                 username: 'keti_muv',
                 password: 'keti_muv',
             },
@@ -778,6 +799,7 @@ export default {
                         this.positions.push(goto_pos);
                     }
                 }
+                this.$forceUpdate();
             }
         },
 
@@ -887,6 +909,20 @@ export default {
     },
 
     methods: {
+        selectedPosition: function(i) {
+            let payload = {};
+            payload.pName = this.name;
+            payload.pIndex = i;
+
+            console.log(this.selectedItem);
+
+            //this.selectedItem = -1;
+
+            //(this.selectedItem === i) ? (this.selectedItem = -1) : (this.selectedItem);
+
+            EventBus.$emit('do-targetTempMarker', payload);
+        },
+
         showMyDroneInfoDialog() {
             this.strMyDroneInfo = JSON.stringify(this.$store.state.drone_infos[this.name], null, 4);
             this.dialog = true;
@@ -3497,6 +3533,15 @@ export default {
             this.targeted = value_selected;
             this.$store.state.drone_infos[this.name].targeted = value_selected;
             // this.$store.state.selectedDrone[this.name] = value_selected;
+        });
+
+        EventBus.$on('do-target-selected' + this.name, (payload) => {
+            if(payload.value) {
+                this.selectedItem = payload.pIndex;
+            }
+            else {
+                this.selectedItem = -1;
+            }
         });
 
         EventBus.$on('initialize-' + this.name, (payload) => {

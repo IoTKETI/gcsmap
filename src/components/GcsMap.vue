@@ -532,6 +532,7 @@
                         }
 
                         EventBus.$emit('do-selected-position', payload);
+                        EventBus.$emit('do-target-selected' + pName, payload);
 
                         this.drawLineTarget(payload);
 
