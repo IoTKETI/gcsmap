@@ -702,6 +702,7 @@ export default {
             watchingMission: '',
             watchingMissionStatus: 0,
             watchingCount: 0,
+            watchingMaxCount: 64,
             watchingInitAlt: 0,
             watchingInitDist: 0,
             watchingInitSpeed: 0,
@@ -2669,7 +2670,7 @@ export default {
                             else {
                                 if (Math.abs(this.gpi.relative_alt - this.pre_relative_alt) < 0.05) {
                                     this.watchingCount++;
-                                    if(this.watchingCount > 16) {
+                                    if(this.watchingCount > this.watchingMaxCount) {
                                         console.log(this.name, ' takeoff fail');
                                         this.watchingMission = 'fail';
                                         this.watchingMissionStatus = 0;
@@ -2697,7 +2698,7 @@ export default {
                             else {
                                 if (Math.abs(this.gpi.relative_alt - this.pre_relative_alt) < 0.05) {
                                     this.watchingCount++;
-                                    if(this.watchingCount > 16) {
+                                    if(this.watchingCount > this.watchingMaxCount) {
                                         console.log(this.name, ' goto_alt fail');
                                         this.watchingMission = 'fail';
                                         this.watchingMissionStatus = 0;
@@ -2739,7 +2740,7 @@ export default {
                             else {
                                 if (Math.abs(this.gpi.lat - this.pre_lat) < 0.1 && Math.abs(this.gpi.lon - this.pre_lng) < 0.1 && Math.abs(this.gpi.relative_alt - this.pre_relative_alt) < 0.1) {
                                     this.watchingCount++;
-                                    if(this.watchingCount > 16) {
+                                    if(this.watchingCount > this.watchingMaxCount) {
                                         console.log(this.name, ' goto fail');
                                         this.watchingMission = 'fail';
                                         this.watchingMissionStatus = 0;
@@ -3529,6 +3530,8 @@ export default {
             this.doPublish(mission_pwms_topic, JSON.stringify(mission_pwms));
 
             console.log('command-set-pwms-mission-' + this.name, mission_pwms.num, mission_pwms.value);
+
+            this.watchingMission = 'pwms-mission';
         });
 
         EventBus.$on('command-set-params-' + this.name, (params) => {
@@ -3575,11 +3578,15 @@ export default {
                     }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, param_value);
                 }
             }
+
+            this.watchingMission = 'params';
         });
 
         EventBus.$on('command-set-disarm-' + this.name, () => {
             console.log('send_disarm_command ', this.name);
             setTimeout(this.send_arm_command, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, 0, 0);
+
+            this.watchingMission = 'disarm';
         });
 
         EventBus.$on('command-set-auto_goto-' + this.name, () => {
@@ -3597,6 +3604,8 @@ export default {
             setTimeout(this.send_set_mode_command, 30 + parseInt(Math.random()*10), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
 
             setTimeout(this.send_auto_command, 60 + parseInt(Math.random()*10), this.name, this.target_pub_topic, this.sys_id, this.$store.state.drone_infos[this.name].goto_positions, start_idx, end_idx, delay, start_idx);
+
+            this.watchingMission = 'auto-goto';
         });
 
         EventBus.$on('command-set-pwms-' + this.name, (pwms) => {
@@ -3643,6 +3652,8 @@ export default {
                     }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, pwm_value);
                 }
             }
+
+            this.watchingMission = 'pwms';
         });
 
         EventBus.$on('command-set-rtl-' + this.name, (rtl_speed) => {
@@ -3652,12 +3663,16 @@ export default {
                 setTimeout((name, target_pub_topic, sys_id) => {
                     this.send_rtl_command(name, target_pub_topic, sys_id);
 
+                    this.watchingMission = 'rtl';
+
                 }, 5 + parseInt(Math.random()*5), name, target_pub_topic, sys_id);
             }, 5 + parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, rtl_speed);
         });
 
         EventBus.$on('command-set-land-' + this.name, () => {
             setTimeout(this.send_land_command, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id);
+
+            this.watchingMission = 'land';
         });
 
         EventBus.$on('command-set-stop-' + this.name, () => {
@@ -3665,10 +3680,14 @@ export default {
             var base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
             base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
             setTimeout(this.send_set_mode_command, 0, this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
+
+            this.watchingMission = 'stop';
         });
 
         EventBus.$on('command-set-change-speed-' + this.name, (target_speed) => {
             setTimeout(this.send_change_speed_command, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, target_speed);
+
+            this.watchingMission = 'change-speed';
         });
 
         EventBus.$on('command-set-goto-circle-' + this.name, (position) => {
@@ -3715,7 +3734,9 @@ export default {
 
                             delete this.$store.state.targetCircles[name];
 
-                            console.log('send_goto_circle_command', this.$store.state.missionCircles)
+                            console.log('send_goto_circle_command', this.$store.state.missionCircles);
+
+                            this.watchingMission = 'goto-circle';
 
                         }, 5 + parseInt(Math.random()*5), name, target_pub_topic, sys_id, lat, lon, alt, radius, degree_speed);
                     }, 5 + parseInt(Math.random()*5), name, target_pub_topic, sys_id, lat, lon, alt, radius, degree_speed);
@@ -3735,7 +3756,9 @@ export default {
             var alt = parseFloat(arr_cur_goto_position[2]);
             var speed = parseFloat(arr_cur_goto_position[3]);
 
-            this.$store.state.drone_infos[this.name].targetSpeed = speed;
+            //this.$store.state.drone_infos[this.name].targetSpeed = speed;
+            alt = this.$store.state.drone_infos[this.name].targetAlt;
+            speed = this.$store.state.drone_infos[this.name].targetSpeed;
 
             delete this.$store.state.missionCircles[this.name];
             delete this.$store.state.missionLines[this.name];
@@ -3888,11 +3911,22 @@ export default {
             base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
 
             setTimeout(this.send_set_mode_command, 1, this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
+
+            this.watchingMission = 'mode';
         });
 
         EventBus.$on('command-set-arm-' + this.name, () => {
-            console.log('send_arm_command ', this.name);
-            setTimeout(this.send_arm_command, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, 1, 0);
+            let custom_mode = 2; // ALT_HOLD Mode
+            let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
+            base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
+            setTimeout((name, target_pub_topic, sys_id, base_mode, custom_mode) => {
+                this.send_set_mode_command(name, target_pub_topic, sys_id, base_mode, custom_mode);
+                setTimeout((name, target_pub_topic, sys_id) => {
+                    console.log('send_arm_command ', this.name);
+                    this.send_arm_command(name, target_pub_topic, sys_id, 1, 0);
+                    this.watchingMission = 'arm';
+                }, parseInt(Math.random()*5), name, target_pub_topic, sys_id);
+            }, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
         });
 
         // EventBus.$on('push-status-' + this.name, (payload) => {

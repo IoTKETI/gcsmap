@@ -186,7 +186,7 @@
                                                                 value="alt_with"
                                                         ></v-radio>
                                                         <v-row>
-                                                            <v-col cols="8">
+                                                            <v-col cols="6">
                                                                 <v-select
                                                                         dense outlined hide-details
                                                                         :items="d.goto_positions" label="Goto positions"
@@ -195,9 +195,27 @@
                                                                         class="mt-4"
                                                                 ></v-select>
                                                             </v-col>
-                                                            <v-col cols="4">
+                                                            <v-col cols="2">
                                                                 <v-text-field
-                                                                        label="지점까지 거리(m)"
+                                                                        label="이동고도(m)"
+                                                                        class="mt-4 text-right"
+                                                                        outlined dense hide-details
+                                                                        v-model="targetAlt[d.name]"
+                                                                        type="number"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                            <v-col cols="2">
+                                                                <v-text-field
+                                                                        label="이동속도(m/s)"
+                                                                        class="mt-4 text-right"
+                                                                        outlined dense hide-details
+                                                                        v-model="targetSpeed[d.name]"
+                                                                        type="number"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                            <v-col cols="2">
+                                                                <v-text-field
+                                                                        label="지점거리(m)"
                                                                         class="mt-4 mr-2 text-right"
                                                                         outlined dense hide-details
                                                                         :value="Math.ceil($store.state.distanceTarget[d.name])"
@@ -1449,6 +1467,8 @@
                             console.log('DroneCommand-setGoto', this.position_selections[name]);
                             if(this.position_selections[name] && this.position_selections[name] !== '' && this.position_selections[name] !== "") {
                                 this.$store.state.drone_infos[name].gotoType = this.gotoType[name];
+                                this.$store.state.drone_infos[name].targetSpeed = parseInt(this.targetSpeed[name]);
+                                this.$store.state.drone_infos[name].targetAlt = parseInt(this.targetAlt[name]);
                                 EventBus.$emit('command-set-goto-' + name, this.position_selections[name]);
                             }
                         }
