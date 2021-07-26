@@ -629,7 +629,7 @@
                                                                                                 class="mx-1"
                                                                                         ></v-select>
                                                                                     </v-col>
-                                                                                    <v-col cols="9">
+                                                                                    <v-col cols="7">
                                                                                         <v-slider
                                                                                                 v-model="mission_value[`ch${num}`][d.name]"
                                                                                                 class="mx-2 my-3 align-center"
@@ -637,24 +637,32 @@
                                                                                                 :max="mission_ch_max"
                                                                                                 hide-details
                                                                                                 thumb-label="always"
-                                                                                                step="10"
-                                                                                                ticks="always"
-                                                                                                tick-size="4"
+                                                                                                step="1"
                                                                                                 color="indigo"
                                                                                                 track-color="orange"
                                                                                                 @input ="handlePwmSlide(dName, num, $event)"
                                                                                         >
-                                                                                            <template v-slot:append>
-                                                                                                <v-text-field
-                                                                                                        v-model="mission_value[`ch${num}`][d.name]"
-                                                                                                        class="mt-0 pt-0"
-                                                                                                        hide-details
-                                                                                                        single-line
-                                                                                                        type="number"
-                                                                                                        style="width: 65px"
-                                                                                                ></v-text-field>
-                                                                                            </template>
+<!--                                                                                            <template v-slot:append>-->
+<!--                                                                                                <v-text-field-->
+<!--                                                                                                        v-model="mission_value[`ch${num}`][d.name]"-->
+<!--                                                                                                        class="mt-0 pt-0"-->
+<!--                                                                                                        hide-details-->
+<!--                                                                                                        single-line-->
+<!--                                                                                                        type="number"-->
+<!--                                                                                                        style="width: 65px"-->
+<!--                                                                                                ></v-text-field>-->
+<!--                                                                                            </template>-->
                                                                                         </v-slider>
+                                                                                    </v-col>
+                                                                                    <v-col cols="2">
+                                                                                        <v-text-field
+                                                                                                v-model="mission_value[`ch${num}`][d.name]"
+                                                                                                class="mt-0 pt-0"
+                                                                                                hide-details
+                                                                                                single-line
+                                                                                                type="number"
+                                                                                                style="width: 65px"
+                                                                                        ></v-text-field>
                                                                                     </v-col>
                                                                                 </v-row>
                                                                             </div>
