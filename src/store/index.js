@@ -1411,6 +1411,8 @@ export default new Vuex.Store({
             state.drone_infos = {};
             state.drone_infos = JSON.parse(JSON.stringify(temp));
             temp = null;
+
+            console.log('delDroneInfo', state.drone_infos);
         },
 
         updateDroneInfos(state, payload) {

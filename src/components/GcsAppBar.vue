@@ -257,7 +257,7 @@
                                     <v-text-field ref="drone_host" v-model="drone_host" :rules="drone_host_update_rule" label="Drone Host*" required></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="4">
-                                    <v-text-field ref="drone_name" v-model="drone_name" :rules="drone_name_update_rule" label="Drone Name*" required></v-text-field>
+                                    <v-text-field disabled ref="drone_name" v-model="drone_name" :rules="drone_name_update_rule" label="Drone Name*" required></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="4">
                                     <v-text-field disabled ref="drone_id" v-model="drone_id" :rules="drone_id_rule" label="Drone ID*" hint="Unique ID of Drone" persistent-hint required
@@ -920,11 +920,11 @@
 
                 for(let el in this.form) {
                     if(Object.prototype.hasOwnProperty.call(this.form, el)) {
-                        if (!this.form[el]) {
-                            this.formHasErrors = true;
-                        }
+                        // if (!this.form[el]) {
+                        //     this.formHasErrors = true;
+                        // }
 
-                        console.log(el);
+                        // console.log(el);
 
                         this.$refs[el].validate(true);
                     }
@@ -972,6 +972,8 @@
                     if(Object.prototype.hasOwnProperty.call(this.form, el)) {
                         if (!this.form[el]) {
                             this.formHasErrors = true;
+
+                            console.log(el);
                         }
 
                         console.log(el);
@@ -981,6 +983,8 @@
                 }
 
                 if(this.formHasErrors === false) {
+                    console.log('update_submit', this.$store.state.drone_infos[this.drone_name]);
+
                     let payload = JSON.parse(JSON.stringify(this.$store.state.drone_infos[this.drone_name]));
                     payload.host = this.host;
                     payload.gcs = this.gcs;

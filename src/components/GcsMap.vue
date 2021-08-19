@@ -96,33 +96,33 @@
                                     :options="gotoLinesOptions[lIndex]"
                             ></GmapPolyline>
 
-                            <GmapCircle
-                                    v-for="(d, dName) in droneMarkers" :key="'circle2'+dName"
-                                    :center="{lat: d.lat, lng: d.lng}"
-                                    :radius="2"
-                                    :options="{fillOpacity: 0, strokeColor: '#D50000', strokeOpacity: 1, strokeWeight: 1}"
-                            ></GmapCircle>
+                            <div v-for="drone in $store.state.drone_infos" :key="drone.id">
+                                <div v-if="drone.selected">
+                                    <GmapCircle
+                                            :center="{lat: drone.lat, lng: drone.lng}"
+                                            :radius="2"
+                                            :options="{fillOpacity: 0, strokeColor: '#D50000', strokeOpacity: 1, strokeWeight: 1}"
+                                    ></GmapCircle>
 
-                            <GmapCircle
-                                    v-for="(d, dName) in droneMarkers" :key="'circle5'+dName"
-                                    :center="{lat: d.lat, lng: d.lng}"
-                                    :radius="5"
-                                    :options="{fillOpacity: 0, strokeColor: '#FF5252', strokeOpacity: 0.9, strokeWeight: 1}"
-                            ></GmapCircle>
+                                    <GmapCircle
+                                            :center="{lat: drone.lat, lng: drone.lng}"
+                                            :radius="5"
+                                            :options="{fillOpacity: 0, strokeColor: '#FF5252', strokeOpacity: 0.9, strokeWeight: 1}"
+                                    ></GmapCircle>
 
-                            <GmapCircle
-                                    v-for="(d, dName) in droneMarkers" :key="'circle10'+dName"
-                                    :center="{lat: d.lat, lng: d.lng}"
-                                    :radius="10"
-                                    :options="{fillOpacity: 0, strokeColor: '#FFCDD2', strokeOpacity: 0.8, strokeWeight: 1}"
-                            ></GmapCircle>
+                                    <GmapCircle
+                                            :center="{lat: drone.lat, lng: drone.lng}"
+                                            :radius="10"
+                                            :options="{fillOpacity: 0, strokeColor: '#FFCDD2', strokeOpacity: 0.8, strokeWeight: 1}"
+                                    ></GmapCircle>
 
-                            <GmapCircle
-                                    v-for="(d, dName) in droneMarkers" :key="'home'+dName"
-                                    :center="{lat: $store.state.drone_infos[dName].home_position.lat, lng: $store.state.drone_infos[dName].home_position.lng}"
-                                    :radius="5"
-                                    :options="{fillOpacity: 1, fillColor: '#FF5722', strokeColor: '#BF360C', strokeOpacity: 1, strokeWeight: 1}"
-                            ></GmapCircle>
+                                    <GmapCircle
+                                            :center="{lat: drone.home_position.lat, lng: drone.home_position.lng}"
+                                            :radius="5"
+                                            :options="{fillOpacity: 1, fillColor: '#FF5722', strokeColor: '#BF360C', strokeOpacity: 1, strokeWeight: 1}"
+                                    ></GmapCircle>
+                                </div>
+                            </div>
 
 
                             <GmapPolyline
@@ -1159,6 +1159,8 @@
                 else {
                     this.droneMarkers[payload.name].icon.fillColor = '#E0E0E0';
                 }
+
+                this.droneMarkers[payload.name].home_position
                 this.droneMarkers[payload.name].icon.rotation = payload.heading;
                 this.droneMarkers[payload.name].label = null;
                 this.droneMarkers[payload.name].label = {};

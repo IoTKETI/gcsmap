@@ -843,7 +843,7 @@ export default {
             let sortie = newData;
             let mission_topic = '/oneM2M/req/Mobius2/' + this.name + '/json';
 
-            let tid = setInterval(this.getParentSubscription, 1000, sortie, function (res) {
+            let tid = setInterval(this.getParentSubscription, 2000, sortie, function (res) {
                 console.log('getParentSubscription', res);
 
                 if (res.status === 200) {
@@ -874,7 +874,7 @@ export default {
                                 }
                             });
                         }
-                    })
+                    });
 
                     // self.deleteSubscription(sortie, function (res) {
                     //     console.log('deleteSubscription', res);
@@ -1052,7 +1052,109 @@ export default {
                         // this.receiveNews = this.receiveNews.concat(message)
                         // console.log(`Received message ${message} from topic ${topic}`);
 
-                        this.onMessageHandler(topic, message);
+                        // this.onMessageHandler(topic, message);
+
+                        if (topic.substr(0, 7) === "/Mobius") {
+                            this.receiveFromDrone(topic, message.toString('hex'));
+                        }
+                        else if (topic.includes('/oneM2M/req/')) {
+                            var jsonObj = JSON.parse(message.toString());
+
+                            if (jsonObj['m2m:rqp'] == null) {
+                                jsonObj['m2m:rqp'] = jsonObj;
+                            }
+
+                            if (Object.prototype.hasOwnProperty.call(jsonObj['m2m:rqp'], 'pc')) {
+
+                                // console.log(Object.keys(jsonObj['m2m:rqp'].pc)[0]);
+                                // console.log(jsonObj['m2m:rqp'].pc);
+
+                                let arr_topic = topic.split('/');
+                                let resp_topic = topic.replace('/req/', '/resp/');
+                                let rsp_message = {};
+                                rsp_message['m2m:rsp'] = {};
+                                rsp_message['m2m:rsp'].rsc = 2001;
+                                rsp_message['m2m:rsp'].to = '';
+                                rsp_message['m2m:rsp'].fr = arr_topic[4];
+                                rsp_message['m2m:rsp'].rqi = '12345';
+                                rsp_message['m2m:rsp'].pc = '';
+
+                                //console.log(resp_topic);
+
+                                this.doPublish(resp_topic, JSON.stringify(rsp_message['m2m:rsp']));
+
+                                rsp_message = null;
+
+                                if (Object.prototype.hasOwnProperty.call(jsonObj['m2m:rqp'].pc, 'm2m:sgn')) {
+                                    if (Object.prototype.hasOwnProperty.call(jsonObj['m2m:rqp'].pc['m2m:sgn'], 'nev')) {
+                                        if (Object.prototype.hasOwnProperty.call(jsonObj['m2m:rqp'].pc['m2m:sgn'].nev, 'rep')) {
+                                            if (Object.keys(jsonObj['m2m:rqp'].pc['m2m:sgn'].nev.rep)[0] === 'm2m:cin') {
+                                                let mission_payload = {};
+
+                                                mission_payload.drone_name = arr_topic[4];
+                                                mission_payload.payload = {}
+                                                mission_payload.payload.sur = jsonObj['m2m:rqp'].pc['m2m:sgn'].sur;
+                                                mission_payload.payload.con = jsonObj['m2m:rqp'].pc['m2m:sgn'].nev.rep['m2m:cin'].con;
+
+                                                //this.$store.commit('setMissionPayload', mission_payload);
+
+                                                //EventBus.$emit('push-mission-' + mission_payload.drone_name, mission_payload.payload);
+
+                                                let payload = JSON.parse(JSON.stringify(mission_payload.payload));
+                                                mission_payload = null;
+                                                let arr_sur = payload.sur.split('/');
+                                                arr_sur.pop();
+                                                payload.sur = '/' + arr_sur.join('/');
+
+                                                if ((this.missionLteUrl + '/' + this.sortie_name) === payload.sur) {
+                                                    // console.log(payload.sur);
+
+                                                    if (Object.prototype.hasOwnProperty.call(payload.con, 'rsrp')) {
+                                                        this.colorLteVal = 'td-text-gray';
+
+                                                        // setTimeout(() => {
+                                                        //
+                                                        // }, 200);
+
+                                                        this.curLteVal = payload.con.rsrp;
+                                                        //console.log(this.curLteVal);
+
+                                                        payload = null;
+
+                                                        if (0 > this.curLteVal && this.curLteVal >= -80) {
+                                                            this.iconLte = 'mdi-network-strength-4';
+                                                            this.colorLteVal = 'td-text-blue';
+                                                        }
+                                                        else if (-80 > this.curLteVal && this.curLteVal >= -90) {
+                                                            this.iconLte = 'mdi-network-strength-3';
+                                                            this.colorLteVal = 'td-text-green';
+                                                        }
+                                                        else if (-90 > this.curLteVal && this.curLteVal >= -100) {
+                                                            this.iconLte = 'mdi-network-strength-2';
+                                                            this.colorLteVal = 'td-text-yellow';
+                                                        }
+                                                        else {
+                                                            this.iconLte = 'mdi-network-strength-1';
+                                                            this.colorLteVal = 'td-text-red';
+                                                        }
+
+                                                        if (this.lteTimeoutObj) {
+                                                            clearTimeout(this.lteTimeoutObj);
+                                                        }
+
+                                                        this.lteTimeoutObj = setTimeout(() => {
+                                                            this.lteTimeoutObj = null;
+                                                            this.colorLteVal = 'td-text-gray';
+                                                            this.iconLte = 'mdi-network-strength-off-outline';
+                                                        }, 2500);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     });
                 } catch (error) {
                     console.log('mqtt.connect error', error);
@@ -1139,7 +1241,7 @@ export default {
             }
         },
 
-        receiveFromDrone(topic, content_each) {
+        receiveFromDrone(topic, hex_content_each) {
             var arr_topic = topic.split('/');
             let sortie_name = arr_topic.pop();
             topic = arr_topic.join('/');
@@ -1159,8 +1261,9 @@ export default {
                 this.mavStrFromDroneLength[topic] = 0;
             }
 
-            this.mavStrFromDrone[topic] += this.hex(content_each);
-            while(this.mavStrFromDrone[topic].length > 12) {
+            //this.mavStrFromDrone[topic] += this.hex(hex_content_each);
+            this.mavStrFromDrone[topic] = hex_content_each;
+            //while(this.mavStrFromDrone[topic].length > 12) {
                 var stx = this.mavStrFromDrone[topic].substr(0, 2);
                 if(stx === 'fe') {
                     if (stx === 'fe') {
@@ -1198,7 +1301,8 @@ export default {
                             this.borderColor = 'indicator-border-green';
                             this.flagReceiving = true;
 
-                            setTimeout(this.parseMavFromDrone, 0, JSON.parse(JSON.stringify(payload.data)));
+                            //setTimeout(this.parseMavFromDrone, 0, JSON.parse(JSON.stringify(payload.data)));
+                            this.parseMavFromDrone(JSON.parse(JSON.stringify(payload.data)));
 
                             payload = null;
 
@@ -1228,7 +1332,7 @@ export default {
                             }, 3000);
                         }
                         else {
-                            break;
+                            //break;
                         }
                     }
                     else {
@@ -1239,7 +1343,7 @@ export default {
                     this.mavStrFromDrone[topic] = this.mavStrFromDrone[topic].substr(2);
                     console.log(this.mavStrFromDrone[topic]);
                 }
-            }
+            //}
         },
 
         onMessageHandler(topic, message) {
@@ -2583,13 +2687,13 @@ export default {
                     //console.log(this.name, ' - bpm - ', this.bpm);
                     if(this.bpm < 50) {
                         console.log(this.name + ' - REQUEST_DATA_STREAM - bpm', this.bpm);
-                        setTimeout(this.send_request_data_stream_command, 1, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_RAW_SENSORS, 3, 1);
-                        setTimeout(this.send_request_data_stream_command, 3, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_EXTENDED_STATUS, 3, 1);
-                        setTimeout(this.send_request_data_stream_command, 5, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_RC_CHANNELS, 3, 1);
-                        setTimeout(this.send_request_data_stream_command, 7, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_POSITION, 3, 1);
-                        setTimeout(this.send_request_data_stream_command, 9, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_EXTRA1, 3, 1);
-                        setTimeout(this.send_request_data_stream_command, 11, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_EXTRA2, 3, 1);
-                        setTimeout(this.send_request_data_stream_command, 13, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_EXTRA3, 3, 1);
+                        setTimeout(this.send_request_data_stream_command, 1, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_RAW_SENSORS, 10, 1);
+                        setTimeout(this.send_request_data_stream_command, 3, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_EXTENDED_STATUS, 10, 1);
+                        setTimeout(this.send_request_data_stream_command, 5, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_RC_CHANNELS, 10, 1);
+                        setTimeout(this.send_request_data_stream_command, 7, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_POSITION, 10, 1);
+                        setTimeout(this.send_request_data_stream_command, 9, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_EXTRA1, 10, 1);
+                        setTimeout(this.send_request_data_stream_command, 11, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_EXTRA2, 10, 1);
+                        setTimeout(this.send_request_data_stream_command, 13, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_EXTRA3, 10, 1);
 
                         EventBus.$emit('onResize-DroneInfoList');
                     }
