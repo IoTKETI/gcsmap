@@ -119,7 +119,7 @@
                                     <GmapCircle
                                             :center="{lat: drone.home_position.lat, lng: drone.home_position.lng}"
                                             :radius="5"
-                                            :options="{fillOpacity: 1, fillColor: '#FF5722', strokeColor: '#BF360C', strokeOpacity: 1, strokeWeight: 1}"
+                                            :options="{fillOpacity: 0.6, fillColor: '#FF5722', strokeColor: '#BF360C', strokeOpacity: 1, strokeWeight: 1}"
                                     ></GmapCircle>
                                 </div>
                             </div>

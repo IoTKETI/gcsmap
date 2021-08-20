@@ -2820,7 +2820,7 @@ export default {
 
                             this.watchingMissionStatus = Math.ceil((((Math.abs(target_alt - this.watchingInitAlt) + 0.5) - Math.abs(target_alt - cur_alt)) / (Math.abs(target_alt - this.watchingInitAlt) + 0.5)) * 100);
 
-                            if(this.watchingMissionStatus >= 99) {
+                            if(this.watchingMissionStatus >= 95) {
                                 console.log(this.name, ' takeoff complete');
                                 this.watchingMission = 'complete';
                                 this.watchingMissionStatus = 0;
@@ -2848,7 +2848,7 @@ export default {
 
                             this.watchingMissionStatus = Math.ceil((((Math.abs(target_alt - this.watchingInitAlt) + 0.5) - Math.abs(target_alt - cur_alt)) / (Math.abs(target_alt - this.watchingInitAlt) + 0.5)) * 100);
 
-                            if(this.watchingMissionStatus >= 99) {
+                            if(this.watchingMissionStatus >= 95) {
                                 console.log(this.name, ' goto_alt complete');
                                 this.watchingMission = 'complete';
                                 this.watchingMissionStatus = 0;
