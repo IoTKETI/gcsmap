@@ -851,6 +851,9 @@
                     if(f === 'host') {
                         this.$refs[f].value = this.$store.state.VUE_APP_MOBIUS_HOST;
                     }
+                    else if(f === 'gcs') {
+                        this.$refs[f].value = this.$store.state.VUE_APP_MOBIUS_GCS;
+                    }
                     else {
                         this.$refs[f].reset();
                     }
@@ -868,7 +871,7 @@
                 this.type_selected = item.type;
                 this.bat_cell = item.bat_cell;
                 this.system_id = item.system_id;
-                this.color_selected = item.color;
+                this.color_selected = this.$store.state.refColorName[item.color];
 
                 this.init_drone_name = item.name;
                 this.init_drone_id = item.id;
