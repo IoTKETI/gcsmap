@@ -729,6 +729,8 @@
 
                             this.$store.state.targetLines = this.clone(this.$store.state.targetLines);
 
+                            this.$store.state.tempMarkers[payload.pName][payload.pIndex].radius = this.$store.state.drone_infos[payload.pName].targetRadius;
+
                             this.$store.state.targetCircles[payload.pName] = null;
                             this.$store.state.targetCircles[payload.pName] = {
                                 lat: this.$store.state.tempMarkers[payload.pName][payload.pIndex].lat,

@@ -1317,8 +1317,20 @@ export default new Vuex.Store({
                             state.drone_infos[dName].targetSpeed = 5;
                         }
 
+                        if (!Object.prototype.hasOwnProperty.call(state.drone_infos[dName], 'targetTurningSpeed')) {
+                            state.drone_infos[dName].targetTurningSpeed = 5;
+                        }
+
+                        if (!Object.prototype.hasOwnProperty.call(state.drone_infos[dName], 'targetRadius')) {
+                            state.drone_infos[dName].targetRadius = 50;
+                        }
+
                         if (!Object.prototype.hasOwnProperty.call(state.drone_infos[dName], 'targetTakeoffAlt')) {
                             state.drone_infos[dName].targetTakeoffAlt = 20;
+                        }
+
+                        if (!Object.prototype.hasOwnProperty.call(state.drone_infos[dName], 'circleType')) {
+                            state.drone_infos[dName].circleType = 'cw';
                         }
 
                         if (!Object.prototype.hasOwnProperty.call(state.drone_infos[dName], 'targetAlt')) {

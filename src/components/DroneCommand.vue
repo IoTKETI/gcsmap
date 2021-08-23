@@ -231,13 +231,63 @@
                                         <v-card tile flat v-if="(command.title === commands[5].title)">
                                             <div v-for="(d, dIndex) in $store.state.drone_infos" :key="'goto'+dIndex">
                                                 <div v-if="d.selected && d.targeted">
-                                                    <v-select
-                                                        dense outlined hide-details
-                                                        :items="d.goto_positions" label="Goto positions"
-                                                        v-model="position_selections[d.name]"
-                                                        @change="selectedPosition($event, d)"
-                                                        class="ml-1 mt-4 mr-1"
-                                                    ></v-select>
+                                                    <v-radio-group
+                                                            row hide-details
+                                                            v-model="circleType[d.name]"
+                                                            :label="d.name + ' 선회 방향'"
+                                                    >
+                                                        <v-radio
+                                                                color="red"
+                                                                label="시계 방향"
+                                                                value="cw"
+                                                        ></v-radio>
+                                                        <v-radio
+                                                                color="indigo"
+                                                                label="반시계 방향"
+                                                                value="ccw"
+                                                        ></v-radio>
+                                                        <v-row>
+                                                            <v-col cols="6">
+                                                                <v-select
+                                                                        dense outlined hide-details
+                                                                        :items="d.goto_positions" label="Center positions"
+                                                                        v-model="position_selections[d.name]"
+                                                                        @change="selectedPosition($event, d)"
+                                                                        class="ml-1 mt-4 mr-1"
+                                                                ></v-select>
+                                                            </v-col>
+                                                            <v-col cols="2">
+                                                                <v-text-field
+                                                                        label="반지름(m)"
+                                                                        class="mt-4 mr-2 text-right"
+                                                                        outlined dense hide-details
+                                                                        v-model="targetRadius[d.name]"
+                                                                        type="number"
+                                                                        min="10" max="255"
+                                                                        hint="10 ~ 255"
+                                                                        @change="drawRadius(d.name)"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                            <v-col cols="2">
+                                                                <v-text-field
+                                                                        label="선회고도(m)"
+                                                                        class="mt-4 text-right"
+                                                                        outlined dense hide-details
+                                                                        v-model="targetAlt[d.name]"
+                                                                        type="number"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                            <v-col cols="2">
+                                                                <v-text-field
+                                                                        label="선회속도(m/s)"
+                                                                        class="mt-4 text-right"
+                                                                        outlined dense hide-details
+                                                                        v-model="targetTurningSpeed[d.name]"
+                                                                        type="number"
+                                                                ></v-text-field>
+                                                            </v-col>
+                                                        </v-row>
+                                                    </v-radio-group>
                                                 </div>
                                             </div>
                                         </v-card>
@@ -992,12 +1042,15 @@
                 targetTakeoffAlt: {},
                 targetAlt: {},
                 targetSpeed: {},
+                targetTurningSpeed: {},
+                targetRadius: {},
                 autoStartIndex: {},
                 autoEndIndex: {},
                 autoSpeed: {},
                 autoDelay: {},
 
                 gotoType: {},
+                circleType: {},
 
                 rtlSpeed: {},
 
@@ -1119,6 +1172,10 @@
                 this.targetAlt = {};
                 this.targetSpeed = null;
                 this.targetSpeed = {};
+                this.targetTurningSpeed = null;
+                this.targetTurningSpeed = {};
+                this.targetRadius = null;
+                this.targetRadius = {};
                 this.autoStartIndex = null;
                 this.autoStartIndex = {};
                 this.autoEndIndex = null;
@@ -1129,6 +1186,8 @@
                 this.autoDelay = {};
                 this.gotoType = null;
                 this.gotoType = {};
+                this.circleType = null;
+                this.circleType = {};
                 for(let name in this.$store.state.drone_infos) {
                     if(Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, name)) {
                         if(this.$store.state.drone_infos[name].selected && this.$store.state.drone_infos[name].targeted) {
@@ -1137,11 +1196,14 @@
                             this.targetTakeoffAlt[name] = this.$store.state.drone_infos[name].targetTakeoffAlt;
                             this.targetAlt[name] = this.$store.state.drone_infos[name].targetAlt;
                             this.targetSpeed[name] = this.$store.state.drone_infos[name].targetSpeed;
+                            this.targetTurningSpeed[name] = this.$store.state.drone_infos[name].targetTurningSpeed;
+                            this.targetRadius[name] = this.$store.state.drone_infos[name].targetRadius;
                             this.autoStartIndex[name] = this.$store.state.drone_infos[name].autoStartIndex;
                             this.autoEndIndex[name] = this.$store.state.drone_infos[name].autoEndIndex;
                             this.autoSpeed[name] = this.$store.state.drone_infos[name].autoSpeed;
                             this.autoDelay[name] = this.$store.state.drone_infos[name].autoDelay;
                             this.gotoType[name] = this.$store.state.drone_infos[name].gotoType;
+                            this.circleType[name] = this.$store.state.drone_infos[name].circleType;
                             this.prepared = true;
 
                             if(this.$cookies.isKey('target_mission_num')) {
@@ -1209,6 +1271,11 @@
             // });
         },
         methods: {
+            drawRadius(dName) {
+                this.$store.state.drone_infos[dName].targetRadius = parseInt(this.targetRadius[dName]);
+
+                EventBus.$emit('do-drawLineAllTarget');
+            },
             handleLeftChange(dName, id, { x, y, speed, angle }) {
                 const stick = this[`${id}Stick`];
                 stick.x[dName] = x;
@@ -1500,6 +1567,10 @@
                     if (Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, name)) {
                         if(this.$store.state.drone_infos[name].selected && this.$store.state.drone_infos[name].targeted) {
                             if(this.position_selections[name] && this.position_selections[name] !== '' && this.position_selections[name] !== "") {
+                                this.$store.state.drone_infos[name].circleType = this.circleType[name];
+                                this.$store.state.drone_infos[name].targetTurningSpeed = parseInt(this.targetTurningSpeed[name]);
+                                this.$store.state.drone_infos[name].targetRadius = parseInt(this.targetRadius[name]);
+                                this.$store.state.drone_infos[name].targetAlt = parseInt(this.targetAlt[name]);
                                 EventBus.$emit('command-set-goto-circle-' + name, this.position_selections[name]);
                             }
                         }

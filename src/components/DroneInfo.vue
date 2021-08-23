@@ -656,6 +656,7 @@ export default {
             statusColor: 'indicator-gray',
             statusTextColor: 'indicator-text-gray',
             borderColor: 'indicator-border-gray',
+            missionTimeoutObj: null,
             timeoutObj: null,
             lteTimeoutObj: null,
             flagReceiving: false,
@@ -715,6 +716,8 @@ export default {
             mission_request: {},
 
             rssi: 255,
+
+            mission_seq: 0,
 
             startFlightTime: null,
 
@@ -1954,7 +1957,7 @@ export default {
                     console.log('Mission Upload Error at %s', target_name);
                 }
                 else {
-                    console.log(result_check_count + ' - result_mission_protocol ', target_name);
+                    console.log(result_check_count + ' - result_auto_mission_protocol ', target_name);
                     setTimeout(this.result_auto_mission_protocol, 50, target_name, pub_topic, target_sys_id, goto_each_position, start_idx, end_idx, delay, cur_idx, result_check_count);
                 }
             }
@@ -1998,10 +2001,10 @@ export default {
             else {
                 result_check_count++;
                 if(result_check_count > MISSION_ACK_TIMEOUT_COUNT) {
-                    console.log('Mission Clear Error at %s', target_name);
+                    console.log('Auto mission Clear Error at %s', target_name);
                 }
                 else {
-                    console.log(result_check_count + ' - result_mission_clear_all ', target_name);
+                    console.log(result_check_count + ' - result_auto_mission_clear_all ', target_name);
                     setTimeout(this.result_auto_mission_clear_all, 50, target_name, pub_topic, target_sys_id, goto_each_position, start_idx, end_idx, delay, cur_idx, result_check_count);
                 }
             }
@@ -2161,10 +2164,10 @@ export default {
             }
         },
 
-        send_mission_protocol(target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, seq) {
+        send_mission_protocol(target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, seq, result_check_count) {
             var btn_params = {};
 
-            if(seq == 0) {
+            if(seq === 0) {
                 btn_params.target_system = target_sys_id;
                 btn_params.target_component = 1;
                 btn_params.seq = 0;
@@ -2214,8 +2217,8 @@ export default {
                         }
                         this.mission_request[target_sys_id].seq = 255;
 
-                        this.result_check_count = 0;
-                        setTimeout(this.result_mission_protocol, 50, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, this.result_check_count);
+                        result_check_count = 0;
+                        setTimeout(this.result_mission_protocol, 55, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count);
                     }
                     else {
                         if(!Object.prototype.hasOwnProperty.call(this.result_mission_ack, target_sys_id)) {
@@ -2223,8 +2226,8 @@ export default {
                         }
                         this.result_mission_ack[target_sys_id].type = 255;
 
-                        this.result_check_count = 0;
-                        setTimeout(this.result_mission_item_complete, 50, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, this.result_check_count);
+                        result_check_count = 0;
+                        setTimeout(this.result_mission_item_complete, 55, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count);
                     }
                 }
             }
@@ -2237,7 +2240,8 @@ export default {
             if(this.mission_request[target_sys_id].seq <= 1) {
                 console.log(this.mission_request[target_sys_id].seq + ' MISSION REQUEST from %s', target_name);
 
-                setTimeout(this.send_mission_protocol, 1, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, this.mission_request[target_sys_id].seq);
+                result_check_count = 0;
+                setTimeout(this.send_mission_protocol, 1, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, this.mission_request[target_sys_id].seq, result_check_count);
             }
             else {
                 result_check_count++;
@@ -2246,12 +2250,12 @@ export default {
                 }
                 else {
                     console.log(result_check_count + ' - result_mission_protocol ', target_name);
-                    setTimeout(this.result_mission_protocol, 50, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count);
+                    setTimeout(this.result_mission_protocol, 55, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count);
                 }
             }
         },
 
-        send_mission_count(target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius) {
+        send_mission_count(target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count) {
             var btn_params = {};
             btn_params.target_system = target_sys_id;
             btn_params.target_component = 1;
@@ -2271,8 +2275,8 @@ export default {
                     }
                     this.mission_request[target_sys_id].seq = 255;
 
-                    this.result_check_count = 0;
-                    setTimeout(this.result_mission_protocol, 50, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, this.result_check_count);
+                    result_check_count = 0;
+                    setTimeout(this.result_mission_protocol, 55, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count);
                 }
             }
             catch (ex) {
@@ -2281,14 +2285,15 @@ export default {
         },
 
         result_mission_clear_all(target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count) {
-            if (this.result_mission_ack[target_sys_id].type == 0) {
+            if (this.result_mission_ack[target_sys_id].type === 0) {
                 console.log('Clear All Mission of %s', target_name);
-                setTimeout(this.send_mission_count, 1, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius);
+                result_check_count = 0;
+                setTimeout(this.send_mission_count, 1, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count);
             }
             else {
                 result_check_count++;
                 if (result_check_count > MISSION_ACK_TIMEOUT_COUNT) {
-                    console.log('Mission Clear Error at %s', target_name);
+                    console.log('Mission Clear All Error at %s', target_name);
                 }
                 else {
                     setTimeout(this.result_mission_clear_all, 50, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count);
@@ -3111,6 +3116,27 @@ export default {
                     console.log('MAVLINK_MSG_ID_RADIO_STATUS', this.rssi);
                 }
 
+                else if (msg_id === mavlink.MAVLINK_MSG_ID_MISSION_ITEM_REACHED) {
+                    if (ver === 'fd') {
+                        base_offset = 20;
+                        // time_boot_ms = mavPacket.substr(base_offset, 8).toLowerCase();
+                        // base_offset += (8 + 2 + (4 * 18));
+                        var mission_seq = mavPacket.substr(base_offset, 4).toLowerCase();
+                    }
+                    else {
+                        base_offset = 12;
+                        // time_boot_ms = mavPacket.substr(base_offset, 8).toLowerCase();
+                        // base_offset += (8 + 2 + (4 * 18));
+                        mission_seq = mavPacket.substr(base_offset, 4).toLowerCase();
+                    }
+
+                    console.log('MAVLINK_MSG_ID_MISSION_ITEM_REACHED', mission_seq);
+
+                    this.mission_seq = Buffer.from(mission_seq, 'hex').readUInt16LE(0);
+
+                    console.log(this.mission_seq);
+                }
+
                 // else if (msg_id === mavlink.MAVLINK_MSG_ID_RC_CHANNELS) {
                 //     if (ver === 'fd') {
                 //         base_offset = 20;
@@ -3374,12 +3400,13 @@ export default {
                         //mission_type = mavPacket.substr(base_offset, 2).toLowerCase();
                     }
 
-                    if (Object.prototype.hasOwnProperty.call(this.result_mission_ack, sys_id)) {
-                        mission_result = Buffer.from(target_system, 'hex').readUInt8(0);
-                        this.result_mission_ack[sys_id].target_system = mission_result;
-                        mission_result = Buffer.from(mission_result_type, 'hex').readUInt8(0);
-                        this.result_mission_ack[sys_id].type = mission_result;
+                    if (!Object.prototype.hasOwnProperty.call(this.result_mission_ack, sys_id)) {
+                        this.result_mission_ack = {};
+                        this.result_mission_ack[sys_id] = {};
                     }
+
+                    this.result_mission_ack[sys_id].target_system = Buffer.from(target_system, 'hex').readUInt8(0);
+                    this.result_mission_ack[sys_id].type = Buffer.from(mission_result_type, 'hex').readUInt8(0);
                 }
                 else if (msg_id == mavlink.MAVLINK_MSG_ID_MISSION_ITEM_INT) {
                     // console.log('---> ' + 'MAVLINK_MSG_ID_MISSION_ITEM_INT - ' + mavPacket);
@@ -3868,6 +3895,13 @@ export default {
             var radius = parseFloat(arr_cur_goto_position[4]);
             var circle_speed = parseFloat(arr_cur_goto_position[5]);
             var degree_speed = parseInt((circle_speed / radius) * (180 / 3.14), 10);
+
+            var dir = (this.$store.state.drone_infos[this.name].circleType === 'cw') ? (1) : (-1);
+
+            alt = this.$store.state.drone_infos[this.name].targetAlt;
+            radius = this.$store.state.drone_infos[this.name].targetRadius;
+            circle_speed = this.$store.state.drone_infos[this.name].targetTurningSpeed;
+            degree_speed = dir * parseInt((circle_speed / radius) * (180 / 3.14), 10);
 
             setTimeout((name, target_pub_topic, sys_id, lat, lon, alt, radius, degree_speed) => {
                 this.send_circle_radius_param_set_command(name, target_pub_topic, sys_id, radius);
