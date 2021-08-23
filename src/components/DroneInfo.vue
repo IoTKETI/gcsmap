@@ -1175,7 +1175,7 @@ export default {
                                                             this.lteTimeoutObj = null;
                                                             this.colorLteVal = 'td-text-gray';
                                                             this.iconLte = 'mdi-network-strength-off-outline';
-                                                        }, 2500);
+                                                        }, 5500);
                                                     }
                                                 }
                                             }
@@ -1304,16 +1304,16 @@ export default {
                         var mavPacket = this.mavStrFromDrone[topic].substr(0, mavLength);
                         //this.mavStrFromDrone[topic] = this.mavStrFromDrone[topic].substr(mavLength);
 
-                        let payload = {};
-                        payload.sortie = sortie_name;
-                        payload.data = mavPacket;
+                        // let payload = {};
+                        // payload.sortie = sortie_name;
+                        // payload.data = mavPacket;
 
                         //EventBus.$emit('push-status-' + arr_topic[4], payload);
 
                         this.recv_counter++;
 
-                        this.sortie_name = payload.sortie;
-                        this.mavStr = payload.data;
+                        this.sortie_name = sortie_name;
+                        this.mavStr = mavPacket;
 
                         this.statusColor = 'indicator-green';
                         this.statusTextColor = 'indicator-text-black';
@@ -1321,9 +1321,9 @@ export default {
                         this.flagReceiving = true;
 
                         //setTimeout(this.parseMavFromDrone, 0, JSON.parse(JSON.stringify(payload.data)));
-                        this.parseMavFromDrone(JSON.parse(JSON.stringify(payload.data)));
+                        this.parseMavFromDrone(mavPacket);
 
-                        payload = null;
+                        // payload = null;
 
                         if (this.timeoutObj) {
                             clearTimeout(this.timeoutObj);
