@@ -117,10 +117,29 @@
                                     ></GmapCircle>
 
                                     <GmapCircle
-                                            :center="{lat: drone.home_position.lat, lng: drone.home_position.lng}"
-                                            :radius="5"
-                                            :options="{fillOpacity: 0.6, fillColor: '#FF5722', strokeColor: '#BF360C', strokeOpacity: 1, strokeWeight: 1}"
+                                            :center="{lat: drone.lat, lng: drone.lng}"
+                                            :radius="100"
+                                            :options="{fillOpacity: 0, strokeColor: drone.color, strokeOpacity: 0.15, strokeWeight: 6}"
                                     ></GmapCircle>
+
+<!--                                    <GmapCircle-->
+<!--                                            :center="{lat: drone.lat, lng: drone.lng}"-->
+<!--                                            :radius="250"-->
+<!--                                            :options="{fillOpacity: 0, strokeColor: drone.color, strokeOpacity: 0.6, strokeWeight: 1}"-->
+<!--                                    ></GmapCircle>-->
+
+                                    <GmapCircle
+                                            :center="{lat: drone.home_position.lat, lng: drone.home_position.lng}"
+                                            :radius="3"
+                                            :options="{fillOpacity: 1, fillColor: drone.color, strokeColor: drone.color, strokeOpacity: 1, strokeWeight: 1}"
+                                    ></GmapCircle>
+
+                                    <GmapCircle
+                                            :center="{lat: drone.home_position.lat, lng: drone.home_position.lng}"
+                                            :radius="500"
+                                            :options="{fillOpacity: 0, fillColor: drone.color, strokeColor: drone.color, strokeOpacity: 0.15, strokeWeight: 6}"
+                                    ></GmapCircle>
+
                                 </div>
                             </div>
 
@@ -561,6 +580,7 @@
                     dMarker.icon = null;
                     dMarker.icon = JSON.parse(JSON.stringify(temp));
                     dMarker.icon.strokeWeight = 3;
+                    dMarker.icon.strokeOpacity = 0.5
                     dMarker.icon.strokeColor = 'springgreen';
                 }
                 else {
@@ -568,6 +588,7 @@
                     dMarker.icon = null;
                     dMarker.icon = JSON.parse(JSON.stringify(temp));
                     dMarker.icon.strokeWeight = 1;
+                    dMarker.icon.strokeOpacity = 1
                     dMarker.icon.strokeColor = 'grey';
 
                     this.deleteLineTarget(dName);
