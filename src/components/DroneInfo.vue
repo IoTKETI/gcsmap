@@ -1069,18 +1069,19 @@ export default {
                             while(this.strContentEach.length > 12) {
                                 if (this.strContentEach.substr(0, 2) === 'fe') {
 
-                                    var contentLenth = parseInt(this.strContentEach.substr(2, 2), 16);
+                                    var len = parseInt(this.strContentEach.substr(2, 2), 16);
+                                    var contentLenth = (6 * 2) + (len * 2) + (2 * 2);
 
                                     if(contentLenth > this.strContentEach.length) {
                                         break;
                                     }
                                     else {
-                                        var mavLength = (6 * 2) + (contentLenth * 2) + (2 * 2);
+                                        // var mavLength = (6 * 2) + (contentLenth * 2) + (2 * 2);
                                         //console.log(this.name, this.strContentEach.substr(0, mavLength));
 
-                                        this.receiveFromDrone(topic, this.strContentEach.substr(0, mavLength));
+                                        this.receiveFromDrone(topic, this.strContentEach.substr(0, contentLenth));
 
-                                        this.strContentEach = this.strContentEach.substr(mavLength);
+                                        this.strContentEach = this.strContentEach.substr(contentLenth);
                                         //console.log(this.strContentEach);
                                     }
                                 }

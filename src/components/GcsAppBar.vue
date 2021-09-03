@@ -913,7 +913,7 @@
                     else {
                         this.$refs[f].reset();
                     }
-                })
+                });
             },
 
             updateProfile(item) {

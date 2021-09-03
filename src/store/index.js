@@ -1271,10 +1271,19 @@ export default new Vuex.Store({
         },
 
         resetDroneInfos(state, payload) {
-            console.log(payload);
+            console.log('resetDroneInfos', payload);
             state.drone_infos = null;
             state.drone_infos = {};
             state.drone_infos = JSON.parse(JSON.stringify(payload));
+
+            for(let i = 0; i < state.drone_infos.unknown.goto_positions.length; i) {
+                if(state.drone_infos.unknown.goto_positions[i] === null) {
+                    state.drone_infos.unknown.goto_positions.splice(i, 1);
+                }
+                else {
+                    i++;
+                }
+            }
 
             console.log('resetDroneInfos', state.drone_infos);
         },

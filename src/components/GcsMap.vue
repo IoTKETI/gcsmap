@@ -116,11 +116,12 @@
                                             :options="{fillOpacity: 0, strokeColor: '#FFCDD2', strokeOpacity: 0.8, strokeWeight: 1}"
                                     ></GmapCircle>
 
-                                    <GmapCircle
-                                            :center="{lat: drone.lat, lng: drone.lng}"
-                                            :radius="100"
-                                            :options="{fillOpacity: 0, strokeColor: drone.color, strokeOpacity: 0.15, strokeWeight: 6}"
-                                    ></GmapCircle>
+<!--                                    <GmapCircle-->
+<!--                                            :center="{lat: drone.lat, lng: drone.lng}"-->
+<!--                                            :radius="100"-->
+<!--                                            :options="{fillOpacity: 0, strokeColor: drone.color, strokeOpacity: 0.15, strokeWeight: 6}"-->
+<!--                                            @dblclick="addingTempMarker"-->
+<!--                                    ></GmapCircle>-->
 
 <!--                                    <GmapCircle-->
 <!--                                            :center="{lat: drone.lat, lng: drone.lng}"-->
@@ -138,11 +139,18 @@
                                             :center="{lat: drone.home_position.lat, lng: drone.home_position.lng}"
                                             :radius="500"
                                             :options="{fillOpacity: 0, fillColor: drone.color, strokeColor: drone.color, strokeOpacity: 0.15, strokeWeight: 6}"
+                                            @dblclick="addingTempMarker"
                                     ></GmapCircle>
 
                                 </div>
                             </div>
 
+                            <GmapCircle v-for="(circle, dName) in boundaryCircles" :key="'boundaryCircles'+dName"
+                                        :center="circle"
+                                        :radius="circle.radius"
+                                        :options="circle.options"
+                                        @dblclick="addingTempMarker"
+                            ></GmapCircle>
 
                             <GmapPolyline
                                 v-for="(line, dName) in $store.state.targetLines" :key="'targetLines'+dName"
@@ -230,6 +238,10 @@
                     strokeWeight: 2,
                     zIndex: 5
                 },
+
+                boundaryCircles: {},
+                curBoundaryRadius: 100,
+
 
                 // missionCirclesOptions: {
                 //     strokeColor: 'amber',
@@ -339,6 +351,32 @@
                 //console.log(this.myHeight);
             },
 
+            drawBoundaryCircles(radius) {
+                for(let name in this.$store.state.drone_infos) {
+                    if(Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, name)) {
+                        if(this.$store.state.drone_infos[name].selected) {
+                            if(!Object.hasOwnProperty.call(this.boundaryCircles,  name)) {
+                                this.boundaryCircles[name] = {};
+                            }
+                            else {
+                                delete this.boundaryCircles[name];
+                                this.boundaryCircles[name] = {};
+                            }
+
+                            this.boundaryCircles[name].lat = this.$store.state.drone_infos[name].lat;
+                            this.boundaryCircles[name].lng = this.$store.state.drone_infos[name].lng;
+                            this.boundaryCircles[name].radius = radius;
+                            this.boundaryCircles[name].options = {
+                                strokeColor: this.$store.state.drone_infos[name].color,
+                                fillOpacity: 0,
+                                strokeOpacity: 0.15,
+                                strokeWeight: 6,
+                            };
+                        }
+                    }
+                }
+            },
+
             confirmAddTempMarker() {
                 this.context_flag = false;
 
@@ -352,6 +390,23 @@
             },
 
             addingTempMarker(e) {
+
+                this.drawBoundaryCircles(100);
+
+                //this.curBoundaryRadius = 1;
+
+                // for(let dName in this.boundaryCircles) {
+                //     if (Object.prototype.hasOwnProperty.call(this.boundaryCircles, dName)) {
+                //         this.boundaryCircles[dName].radius = this.curBoundaryRadius;
+                //     }
+                // }
+                //
+                // let temp = JSON.parse(JSON.stringify(this.boundaryCircles));
+                // delete this.boundaryCircles;
+                // this.boundaryCircles = null;
+                // this.boundaryCircles = JSON.parse(JSON.stringify(temp));
+
+                console.log(e);
 
                 this.cancelTempMarker();
 
@@ -372,13 +427,13 @@
                 console.log('click-pos', e.latLng.lat(), e.latLng.lng());
                 //this.center = {lat: e.latLng.lat(), lng: e.latLng.lng()};
 
-                this.click_x = e.pixel.x;
-                this.click_y = e.pixel.y;
+                this.click_x = e.domEvent.clientX;
+                this.click_y = e.domEvent.clientY-50;
 
-                console.log('pixel', e.pixel)
+                console.log('pixel', e.domEvent.clientX, e.domEvent.clientY-50);
 
-                this.context.left = e.pixel.x;
-                this.context.top = e.pixel.y;
+                this.context.left = e.domEvent.clientX;
+                this.context.top = e.domEvent.clientY-50;
 
                 console.log('context', this.context);
 
@@ -406,13 +461,13 @@
                 console.log('click-pos', e.latLng.lat(), e.latLng.lng());
                 //this.center = {lat: e.latLng.lat(), lng: e.latLng.lng()};
 
-                this.click_x = e.pixel.x;
-                this.click_y = e.pixel.y;
+                this.click_x = e.domEvent.clientX;
+                this.click_y = e.domEvent.clientY-50;
 
-                console.log('pixel', e.pixel)
+                console.log('pixel', e.domEvent.clientX, e.domEvent.clientY-50)
 
-                this.context.left = e.pixel.x;
-                this.context.top = e.pixel.y;
+                this.context.left = e.domEvent.clientX;
+                this.context.top = e.domEvent.clientY-50;
 
                 console.log('context', this.context);
 
@@ -1144,6 +1199,26 @@
 
             EventBus.$on('updateDroneMarker', (payload) => {
 
+                // if(!Object.hasOwnProperty.call(this.boundaryCircles,  payload.name)) {
+                //     this.boundaryCircles[payload.name] = {};
+                // }
+                // else {
+                //     delete this.boundaryCircles[payload.name];
+                //     this.boundaryCircles[payload.name] = {};
+                // }
+                //
+                // this.boundaryCircles[payload.name].lat = payload.lat;
+                // this.boundaryCircles[payload.name].lng = payload.lng;
+                // this.boundaryCircles[payload.name].radius = this.curBoundaryRadius;
+                // this.boundaryCircles[payload.name].options = {
+                //     strokeColor: this.$store.state.drone_infos[payload.name].color,
+                //     fillOpacity: 0,
+                //     strokeOpacity: 0.15,
+                //     strokeWeight: 6,
+                // };
+
+                this.drawBoundaryCircles(100);
+
                 //this.droneMarkers[payload.name] = null;
                 this.$refs.mapRef.$mapPromise.then((map) => {
                     this.$store.state.defaultDroneIcon.scale = (map.getZoom() < 15)?(1.4/15):(1.4/map.getZoom());
@@ -1210,6 +1285,9 @@
 
                 this.droneMarkers = null;
                 this.droneMarkers = {};
+
+                this.boundaryCircles = null;
+                this.boundaryCircles = {};
             });
         }
 
