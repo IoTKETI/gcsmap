@@ -1025,6 +1025,7 @@ export default {
                 //var self = this;
 
                 this.client.loading = true;
+                this.connection.clientId = this.name + nanoid(15);
                 const {host, port, endpoint, ...options} = this.connection
                 const connectUrl = `ws://${host}:${port}${endpoint}`
                 try {
