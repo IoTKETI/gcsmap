@@ -1276,11 +1276,18 @@ export default new Vuex.Store({
             state.drone_infos = {};
             state.drone_infos = JSON.parse(JSON.stringify(payload));
 
-            for(let i = 0; i < state.drone_infos.unknown.goto_positions.length; i) {
-                if(state.drone_infos.unknown.goto_positions[i] === null) {
+            if(!Object.hasOwnProperty.call(state.drone_infos.unknown, 'goto_positions')) {
+                state.drone_infos.unknown.goto_positions = [];
+            }
+
+            if(!Array.isArray(state.drone_infos.unknown.goto_positions)) {
+                state.drone_infos.unknown.goto_positions = [];
+            }
+
+            for (let i = 0; i < state.drone_infos.unknown.goto_positions.length; i) {
+                if (state.drone_infos.unknown.goto_positions[i] === null) {
                     state.drone_infos.unknown.goto_positions.splice(i, 1);
-                }
-                else {
+                } else {
                     i++;
                 }
             }
