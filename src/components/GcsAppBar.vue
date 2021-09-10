@@ -860,6 +860,8 @@
                 this.$store.state.MOBIUS_CONNECTION_CONNECTED = false;
 
                 this.$cookies.set('mobius_connected', this.MOBIUS_CONNECTION_CONNECTED);
+
+                this.confirmSelected();
             },
 
             dialogProfile() {
@@ -923,7 +925,6 @@
                     }
                 );
             },
-
             confirmSelected() {
                 console.log('confirmSelected', this.selected);
 
