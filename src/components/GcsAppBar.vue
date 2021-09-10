@@ -10,7 +10,7 @@
 
         <v-spacer></v-spacer>
 
-<!--        <v-row no-gutters>-->
+        <v-row no-gutters>
 <!--            <v-col cols="8" sm="6">-->
 <!--                <v-text-field-->
 <!--                    class="mx-2" style="width: 1%"-->
@@ -41,11 +41,57 @@
 <!--                > {{ MOBIUS_CONNECTION_TEXT }}-->
 <!--                </v-btn>-->
 <!--            </v-col>-->
-<!--        </v-row>-->
+
+            <v-col cols="3">
+                <!--                            <v-text-field hide-details ref="host" v-model="host" :rules="host_rule" placeholder="203.253.128.177" label="Host*" required></v-text-field>-->
+                <v-text-field
+                        class="mx-2 mt-1"
+                        dense hide-details outlined
+                        ref="host"
+                        v-model="host" :rules="host_rule"
+                        placeholder="203.253.128.177"
+                        label="HOST*"
+                        required
+                        :disabled="MOBIUS_CONNECTION_CONNECTED"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="3">
+                <v-text-field
+                        class="mx-2 mt-1"
+                        dense hide-details outlined
+                        ref="gcs"
+                        v-model="gcs" :rules="gcs_rule"
+                        placeholder="KETI_GCS"
+                        label="GCS*"
+                        required
+                        :disabled="MOBIUS_CONNECTION_CONNECTED"
+                ></v-text-field>
+            </v-col>
+            <v-col cols="6">
+                <v-btn
+                        class="mx-2 mt-1"
+                        tile @click="GcsAppBarCreated"
+                        elevation="5"
+                        color="primary"
+                        :disabled="MOBIUS_CONNECTION_CONNECTED"
+                > {{ MOBIUS_CONNECTION_TEXT }}
+                </v-btn>
+<!--            </v-col>-->
+<!--            <v-col cols="2">-->
+                <v-btn
+                        class="mx-2 mt-1"
+                        tile @click="GcsAppBarReseted"
+                        elevation="2"
+                        color="primary"
+                        :disabled="!MOBIUS_CONNECTION_CONNECTED"
+                > {{ MOBIUS_DISCONNECTION_TEXT }}
+                </v-btn>
+            </v-col>
+        </v-row>
 
         <v-spacer></v-spacer>
 
-        <v-btn text @click.stop="dialogProfile">
+        <v-btn text @click.stop="dialogProfile" :disabled="!MOBIUS_CONNECTION_CONNECTED">
             <v-icon>mdi-quadcopter</v-icon>
         </v-btn>
 
@@ -54,7 +100,7 @@
 <!--            <v-icon>mdi-video</v-icon>-->
 <!--        </v-btn>-->
 
-        <v-btn text @click.stop="openCam2">
+        <v-btn text @click.stop="openCam2" :disabled="!MOBIUS_CONNECTION_CONNECTED">
             <v-icon>mdi-video</v-icon>
         </v-btn>
 
@@ -67,7 +113,7 @@
 <!--            </v-btn>-->
 <!--        </router-link>-->
 
-        <v-btn text>
+        <v-btn text :disabled="!MOBIUS_CONNECTION_CONNECTED">
             <v-icon>mdi-account</v-icon>
         </v-btn>
 
@@ -115,51 +161,51 @@
                         <v-col cols="2">
                             <v-subheader>Drone List</v-subheader>
                         </v-col>
-                        <v-col cols="3">
-<!--                            <v-text-field hide-details ref="host" v-model="host" :rules="host_rule" placeholder="203.253.128.177" label="Host*" required></v-text-field>-->
-                            <v-text-field
-                                    class="mx-2"
-                                    dense hide-details
-                                    ref="host"
-                                    v-model="host" :rules="host_rule"
-                                    placeholder="203.253.128.177"
-                                    label="HOST*"
-                                    required
-                                    :disabled="MOBIUS_CONNECTION_CONNECTED"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="3">
-                            <v-text-field
-                                    class="mx-2"
-                                    dense hide-details
-                                    ref="gcs"
-                                    v-model="gcs" :rules="gcs_rule"
-                                    placeholder="KETI_GCS"
-                                    label="GCS*"
-                                    required
-                                    :disabled="MOBIUS_CONNECTION_CONNECTED"
-                            ></v-text-field>
-                        </v-col>
-                        <v-col cols="2">
-                            <v-btn
-                                    class="mx-2"
-                                    tile @click="GcsAppBarCreated"
-                                    elevation="5"
-                                    color="primary"
-                                    :disabled="MOBIUS_CONNECTION_CONNECTED"
-                            > {{ MOBIUS_CONNECTION_TEXT }}
-                            </v-btn>
-                        </v-col>
-                        <v-col cols="2">
-                            <v-btn
-                                    class="mx-0"
-                                    tile @click="GcsAppBarReseted"
-                                    elevation="2"
-                                    color="primary"
-                                    :disabled="!MOBIUS_CONNECTION_CONNECTED"
-                            > {{ MOBIUS_DISCONNECTION_TEXT }}
-                            </v-btn>
-                        </v-col>
+<!--                        <v-col cols="3">-->
+<!--&lt;!&ndash;                            <v-text-field hide-details ref="host" v-model="host" :rules="host_rule" placeholder="203.253.128.177" label="Host*" required></v-text-field>&ndash;&gt;-->
+<!--                            <v-text-field-->
+<!--                                    class="mx-2"-->
+<!--                                    dense hide-details-->
+<!--                                    ref="host"-->
+<!--                                    v-model="host" :rules="host_rule"-->
+<!--                                    placeholder="203.253.128.177"-->
+<!--                                    label="HOST*"-->
+<!--                                    required-->
+<!--                                    :disabled="MOBIUS_CONNECTION_CONNECTED"-->
+<!--                            ></v-text-field>-->
+<!--                        </v-col>-->
+<!--                        <v-col cols="3">-->
+<!--                            <v-text-field-->
+<!--                                    class="mx-2"-->
+<!--                                    dense hide-details-->
+<!--                                    ref="gcs"-->
+<!--                                    v-model="gcs" :rules="gcs_rule"-->
+<!--                                    placeholder="KETI_GCS"-->
+<!--                                    label="GCS*"-->
+<!--                                    required-->
+<!--                                    :disabled="MOBIUS_CONNECTION_CONNECTED"-->
+<!--                            ></v-text-field>-->
+<!--                        </v-col>-->
+<!--                        <v-col cols="2">-->
+<!--                            <v-btn-->
+<!--                                    class="mx-2"-->
+<!--                                    tile @click="GcsAppBarCreated"-->
+<!--                                    elevation="5"-->
+<!--                                    color="primary"-->
+<!--                                    :disabled="MOBIUS_CONNECTION_CONNECTED"-->
+<!--                            > {{ MOBIUS_CONNECTION_TEXT }}-->
+<!--                            </v-btn>-->
+<!--                        </v-col>-->
+<!--                        <v-col cols="2">-->
+<!--                            <v-btn-->
+<!--                                    class="mx-0"-->
+<!--                                    tile @click="GcsAppBarReseted"-->
+<!--                                    elevation="2"-->
+<!--                                    color="primary"-->
+<!--                                    :disabled="!MOBIUS_CONNECTION_CONNECTED"-->
+<!--                            > {{ MOBIUS_DISCONNECTION_TEXT }}-->
+<!--                            </v-btn>-->
+<!--                        </v-col>-->
 
                     </v-row>
                     <v-data-table
@@ -412,9 +458,9 @@
         data: function () {
             return {
                 open: false,
-                MOBIUS_DISCONNECTION_TEXT: '종료',
-                MOBIUS_CONNECTION_TEXT: '연결',
-                MOBIUS_CONNECTION_CONNECTED: false,
+                MOBIUS_DISCONNECTION_TEXT: 'Disconnect',
+                MOBIUS_CONNECTION_TEXT: 'Connect',
+                MOBIUS_CONNECTION_CONNECTED: this.$cookies.isKey('mobius_connected')?(this.$cookies.get('mobius_connected') === 'true'):false,
                 MOBIUS_CONNECTION_DISABLED: false,
                 update_idx: 0,
                 formHasErrors: false,
@@ -689,6 +735,7 @@
 
                             self.MOBIUS_CONNECTION_CONNECTED = true;
                             self.$store.state.MOBIUS_CONNECTION_CONNECTED = true;
+                            self.$cookies.set('mobius_connected', self.MOBIUS_CONNECTION_CONNECTED);
                         }
                         else if(res.status === 404) {
                             axios({
@@ -700,7 +747,7 @@
                                 url: 'http://' + self.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius',
                                 headers: {
                                     'X-M2M-RI': String(parseInt(Math.random() * 10000)),
-                                    'X-M2M-Origin': 'SVue',
+                                    'X-M2M-Origin': 'S'+self.$store.state.VUE_APP_MOBIUS_GCS,
                                     'Content-Type': 'application/json;ty=2'
                                 },
                                 data: {
@@ -776,6 +823,8 @@
 
                                                     self.MOBIUS_CONNECTION_CONNECTED = true;
                                                     self.$store.state.MOBIUS_CONNECTION_CONNECTED = true;
+
+                                                    self.$cookies.set('mobius_connected', self.MOBIUS_CONNECTION_CONNECTED);
                                                 }
                                             ).catch(
                                                 function (err) {
@@ -809,6 +858,8 @@
 
                 this.MOBIUS_CONNECTION_CONNECTED = false;
                 this.$store.state.MOBIUS_CONNECTION_CONNECTED = false;
+
+                this.$cookies.set('mobius_connected', this.MOBIUS_CONNECTION_CONNECTED);
             },
 
             dialogProfile() {
@@ -837,7 +888,7 @@
                 this.open = !this.open;
                 console.log(this.open);
 
-                window.open("http://203.253.128.177/videoroomtest.html", "_blank");
+                window.open("https://13.209.34.14", "_blank");
             },
 
             postDroneInfos(callback) {
@@ -952,6 +1003,23 @@
 
                 this.$store.commit('delDroneInfo', item.name);
 
+                this.selected = null;
+                this.selected = [];
+                this.drone_infos = null;
+                this.drone_infos = [];
+
+                for(let dName in this.$store.state.drone_infos) {
+                    if(Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, dName)) {
+                        if(dName !== 'unknown') {
+                            this.drone_infos.push(this.$store.state.drone_infos[dName]);
+                        }
+
+                        if(this.$store.state.drone_infos[dName].selected) {
+                            this.selected.push(this.$store.state.drone_infos[dName]);
+                        }
+                    }
+                }
+
                 let self = this;
                 this.postDroneInfos(function () {
                     self.fab = false;
@@ -1008,6 +1076,23 @@
                     payload.goto_positions = [];
 
                     this.$store.commit('addDroneInfos', payload);
+
+                    this.selected = null;
+                    this.selected = [];
+                    this.drone_infos = null;
+                    this.drone_infos = [];
+
+                    for(let dName in this.$store.state.drone_infos) {
+                        if(Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, dName)) {
+                            if(dName !== 'unknown') {
+                                this.drone_infos.push(this.$store.state.drone_infos[dName]);
+                            }
+
+                            if(this.$store.state.drone_infos[dName].selected) {
+                                this.selected.push(this.$store.state.drone_infos[dName]);
+                            }
+                        }
+                    }
 
                     let self = this;
                     this.postDroneInfos(function () {
@@ -1251,6 +1336,12 @@
             // //         console.log(err.message);
             // //     }
             // // );
+        },
+
+        mounted() {
+            if(this.MOBIUS_CONNECTION_CONNECTED) {
+                this.GcsAppBarCreated();
+            }
         }
     }
 </script>
