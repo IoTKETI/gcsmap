@@ -1709,6 +1709,29 @@ export default {
             }
         },
 
+        send_rtl_alt_param_set_command(target_name, pub_topic, target_sys_id, target_alt) {
+            var btn_params = {};
+            btn_params.target_system = target_sys_id;
+            btn_params.target_component = 1;
+            btn_params.param_id = "RTL_ALT";
+            btn_params.param_type = mavlink.MAV_PARAM_TYPE_REAL32;
+            btn_params.param_value = target_alt * 100; // cm.
+
+            try {
+                var msg = this.mavlinkGenerateMessage(255, 0xbe, mavlink.MAVLINK_MSG_ID_PARAM_SET, btn_params);
+                if (msg == null) {
+                    console.log("mavlink message is null");
+                }
+                else {
+                    console.log('Send RTL_ALT to (' + target_alt + ')', target_name);
+                    this.doPublish(pub_topic, msg);
+                }
+            }
+            catch (ex) {
+                console.log('[ERROR] ' + ex);
+            }
+        },
+
         send_wpnav_speed_dn_param_set_command(target_name, pub_topic, target_sys_id, target_speed) {
             var btn_params = {};
             btn_params.target_system = target_sys_id;
@@ -3772,6 +3795,17 @@ export default {
 
                     setTimeout((name, target_pub_topic, sys_id, param_value) => {
                         this.send_wpnav_speed_dn_param_set_command(name, target_pub_topic, sys_id, param_value);
+
+                    }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, param_value);
+                }
+            }
+
+            if(Object.prototype.hasOwnProperty.call(params, 'rtlAlt')) {
+                if(params.rtlAlt[this.name] !== undefined) {
+                    let param_value = parseFloat(params.rtlAlt[this.name]);
+
+                    setTimeout((name, target_pub_topic, sys_id, param_value) => {
+                        this.send_rtl_alt_param_set_command(name, target_pub_topic, sys_id, param_value);
 
                     }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, param_value);
                 }

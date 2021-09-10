@@ -456,48 +456,64 @@
                                                         <v-col cols="12">
                                                             <v-subheader>{{d.name}} 파라미터 설정: </v-subheader>
                                                         </v-col>
-                                                        <v-col cols="3">
+                                                        <v-col cols="2">
                                                             <v-select
                                                                     dense outlined :items="items_wp_yaw_behavior"
-                                                                    label="WP_YAW_BEHAVIOR" v-model="params.wpYawBehavior[d.name]"
+                                                                    label="YAW_BEHAVIOR" v-model="params.wpYawBehavior[d.name]"
                                                                     hide-details
                                                                     class="mx-2"
                                                             ></v-select>
                                                         </v-col>
-                                                        <v-col cols="3">
+                                                        <v-col cols="2">
                                                             <v-text-field
-                                                                    label="ATC_SLEW_YAW (meterdgrees/s), 5-180, 1"
-                                                                    class="mx-2 pt-0"
-                                                                    outlined dense hide-details
+                                                                    label="SLEW_YAW (meterdgrees/s), 5-180, 1"
+                                                                    class="mx-1 pt-0"
+                                                                    outlined dense
                                                                     v-model="params.atcSlewYaw[d.name]"
+                                                                    placeholder="5"
                                                                     type="number"
                                                                     min="5"
                                                                     max="180"
                                                                     hint="Range:5~180, Increment:1"
                                                             ></v-text-field>
                                                         </v-col>
-                                                        <v-col cols="3">
+                                                        <v-col cols="2">
                                                             <v-text-field
-                                                                    label="WPNAV_SPEED_UP (m/s), 0.1-10.0, 0.5"
-                                                                    class="mx-2 pt-0"
-                                                                    outlined dense hide-details
+                                                                    label="SPEED_UP (m/s), 0.1-10.0, 0.5"
+                                                                    class="mx-1 pt-0"
+                                                                    outlined dense
                                                                     v-model="params.wpnavSpeedUp[d.name]"
                                                                     placeholder="2.5"
                                                                     type="number"
                                                                     min="0.1"
                                                                     max="10.0"
+                                                                    hint="Range:0.1~10.0, Increment:0.5"
                                                             ></v-text-field>
                                                         </v-col>
-                                                        <v-col cols="3">
+                                                        <v-col cols="2">
                                                             <v-text-field
-                                                                    label="WPNAV_SPEED_DN (m/s), 0.1-5.0, 0.1"
-                                                                    class="mx-2 pt-0"
-                                                                    outlined dense hide-details
+                                                                    label="SPEED_DN (m/s), 0.1-5.0, 0.1"
+                                                                    class="mx-1 pt-0"
+                                                                    outlined dense
                                                                     v-model="params.wpnavSpeedDn[d.name]"
                                                                     placeholder="1.5"
                                                                     type="number"
                                                                     min="0.1"
                                                                     max="5.0"
+                                                                    hint="Range:0.1~5.0, Increment:0.1"
+                                                            ></v-text-field>
+                                                        </v-col>
+                                                        <v-col cols="2">
+                                                            <v-text-field
+                                                                    label="RTL_ALT (m), 2.0-80.0, 0.1"
+                                                                    class="mx-1 pt-0"
+                                                                    outlined dense
+                                                                    v-model="params.rtlAlt[d.name]"
+                                                                    placeholder="30.0"
+                                                                    type="number"
+                                                                    min="2.0"
+                                                                    max="80.0"
+                                                                    hint="The minimum alt above home"
                                                             ></v-text-field>
                                                         </v-col>
                                                     </v-row>
@@ -1058,7 +1074,8 @@
                     wpYawBehavior: {},
                     atcSlewYaw: {},
                     wpnavSpeedUp: {},
-                    wpnavSpeedDn: {}
+                    wpnavSpeedDn: {},
+                    rtlAlt: {}
                 },
 
                 pwms: {
@@ -1742,7 +1759,8 @@
                         wpYawBehavior: {},
                         atcSlewYaw: {},
                         wpnavSpeedUp: {},
-                        wpnavSpeedDn: {}
+                        wpnavSpeedDn: {},
+                        rtlAlt: {}
                     };
 
                 }, 100);
