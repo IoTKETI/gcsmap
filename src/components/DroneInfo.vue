@@ -1873,7 +1873,7 @@ export default {
             if(this.result_mission_ack[target_sys_id].type == 0) {
                 console.log('Mission Upload Complete to %s', target_name);
 
-                let custom_mode = 3; // AUTO Mode
+                let custom_mode = this.$store.state.mode_items.indexOf('AUTO'); // AUTO Mode
                 let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
                 base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
                 setTimeout(this.send_set_mode_command, 100 + parseInt(Math.random()*10), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
@@ -2172,7 +2172,7 @@ export default {
 
                 delete this.$store.state.targetCircles[target_name];
 
-                var custom_mode = 3; // AUTO Mode
+                var custom_mode = this.$store.state.mode_items.indexOf('AUTO'); // AUTO Mode
                 var base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
                 base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
                 setTimeout(this.send_set_mode_command, 50, this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
@@ -3760,8 +3760,21 @@ export default {
                 if(params.wpYawBehavior[this.name] !== undefined) {
                     let param_value = parseInt(params.wpYawBehavior[this.name].charAt(0));
 
+
+                    let pre_custom_mode = this.$store.state.mode_items.indexOf(this.curMode);
+
+                    let custom_mode = this.$store.state.mode_items.indexOf('LOITER');
+                    let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
+                    base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
+                    setTimeout(this.send_set_mode_command, parseInt(Math.random()*2), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
+
                     setTimeout((name, target_pub_topic, sys_id, param_value) => {
                         this.send_wp_yaw_behavior_param_set_command(name, target_pub_topic, sys_id, param_value);
+
+                        custom_mode = pre_custom_mode;
+                        base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
+                        base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
+                        setTimeout(this.send_set_mode_command, parseInt(Math.random()*2), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
 
                     }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, param_value);
                 }
@@ -3830,7 +3843,7 @@ export default {
 
             setTimeout(this.send_wpnav_speed_param_set_command, 10 + parseInt(Math.random()*10), this.name, this.target_pub_topic, this.sys_id, auto_speed);
 
-            let custom_mode = 4;
+            let custom_mode = this.$store.state.mode_items.indexOf('GUIDED');
             let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
             base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
             setTimeout(this.send_set_mode_command, 30 + parseInt(Math.random()*10), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
@@ -3908,7 +3921,7 @@ export default {
         });
 
         EventBus.$on('command-set-stop-' + this.name, () => {
-            var custom_mode = this.mode_items.indexOf('LOITER');
+            var custom_mode = this.$store.state.mode_items.indexOf('LOITER');
             var base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
             base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
             setTimeout(this.send_set_mode_command, 0, this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
@@ -3946,7 +3959,7 @@ export default {
                     this.send_circle_rate_param_set_command(name, target_pub_topic, sys_id, degree_speed);
 
                     setTimeout((name, target_pub_topic, sys_id, lat, lon, alt, radius, degree_speed) => {
-                        let custom_mode = 4;
+                        let custom_mode = this.$store.state.mode_items.indexOf('GUIDED');
                         let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
                         base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
                         this.send_set_mode_command(name, target_pub_topic, sys_id, base_mode, custom_mode);
@@ -3984,7 +3997,7 @@ export default {
         });
 
         EventBus.$on('command-set-goto-' + this.name, (position) => {
-            let custom_mode = 4;
+            let custom_mode = this.$store.state.mode_items.indexOf('GUIDED');
             let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
             base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
             setTimeout(this.send_set_mode_command, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
@@ -4090,7 +4103,7 @@ export default {
         });
 
         EventBus.$on('command-set-goto-alt-' + this.name, () => {
-            let custom_mode = 4;
+            let custom_mode = this.$store.state.mode_items.indexOf('GUIDED');
             let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
             base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
             setTimeout(this.send_set_mode_command, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
@@ -4105,7 +4118,7 @@ export default {
         });
 
         EventBus.$on('command-set-takeoff-' + this.name, () => {
-            let custom_mode = 2; // ALT_HOLD Mode
+            let custom_mode = this.$store.state.mode_items.indexOf('ALT_HOLD'); // ALT_HOLD Mode
             let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
             base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
             setTimeout(this.send_set_mode_command, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
@@ -4116,7 +4129,7 @@ export default {
             let takeoffDelay = this.$store.state.drone_infos[this.name].takeoffDelay;
             let _alt = this.$store.state.drone_infos[this.name].targetTakeoffAlt;
 
-            custom_mode = 4; // GUIDED Mode
+            custom_mode = this.$store.state.mode_items.indexOf('GUIDED'); // GUIDED Mode
             base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
             base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
 
@@ -4155,7 +4168,7 @@ export default {
         });
 
         EventBus.$on('command-set-arm-' + this.name, () => {
-            let custom_mode = 2; // ALT_HOLD Mode
+            let custom_mode = this.$store.state.mode_items.indexOf('ALT_HOLD'); // ALT_HOLD Mode
             let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
             base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
             setTimeout((name, target_pub_topic, sys_id, base_mode, custom_mode) => {
