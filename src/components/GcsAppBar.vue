@@ -890,7 +890,7 @@
                 this.open = !this.open;
                 console.log(this.open);
 
-                window.open("https://13.209.34.14", "_blank");
+                window.open("http://webrtc.iotocean.org", "_blank");
             },
 
             postDroneInfos(callback) {
