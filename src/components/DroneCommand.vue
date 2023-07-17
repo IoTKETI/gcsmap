@@ -63,7 +63,7 @@
                                             <div v-if="d.selected && d.targeted">
                                                 <v-select
                                                         dense hide-details outlined
-                                                        v-if="command.title === commands[0].title" :items="mode_items"
+                                                        v-if="command.title === commands[0].title" :items="$store.state[d.type + '_mode_items']"
                                                         :label="d.name+' 모드: '"
                                                         v-model="targetModeSelection[d.name]"
                                                         class="ml-1 mt-4 mr-1"
@@ -915,6 +915,7 @@
 
         data() {
             return {
+                flyMarketAlt: false,
                 mission_ch_min: 223,
                 mission_ch_max: 1823,
                 channels: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
@@ -1050,6 +1051,7 @@
                 active_tab: 'virtual',
                 target_alt: 20,
 
+                position_selections_items:{},
                 position_selections: {},
                 position_selections_index: {},
 
@@ -1083,7 +1085,10 @@
                     ch10: {},
                     ch11: {},
                     ch12: {}
-                }
+                },
+
+                curPwmChannel: {},
+                curPwmValue: {},
             }
         },
         watch: {
@@ -1467,11 +1472,22 @@
                 this.curTab = 'virtual';
                 this.active_tab = 'virtual';
 
-                this.$store.commit('saveCurrentDroneInfos');
+                for(let dName in this.$store.state.drone_infos) {
+                    if (Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, dName)) {
+                        if(this.$store.state.drone_infos[dName].selected && this.$store.state.drone_infos[dName].targeted) {
+                            this.$store.commit('saveCurrentDroneInfos', dName);
+                        }
+                    }
+                }
+
+                setTimeout(() => {
+                    this.mode_sheet = !this.mode_sheet;
+                    this.loading = false;
+                    this.$forceUpdate();
+                }, 200);
             },
 
             setMode() {
-                let self = this;
                 for(let name in this.$store.state.drone_infos) {
                     if (Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, name)) {
                         if(this.$store.state.drone_infos[name].selected && this.$store.state.drone_infos[name].targeted) {
@@ -1480,12 +1496,6 @@
                         }
                     }
                 }
-
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setArm() {
@@ -1496,13 +1506,6 @@
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setTakeoff() {
@@ -1519,17 +1522,14 @@
                             }
                             this.$store.state.drone_infos[name].targetTakeoffAlt = parseInt(this.targetTakeoffAlt[name]);
 
-                            EventBus.$emit('command-set-takeoff-' + name);
+                            let payload = {};
+                            payload.targetTakeoffAlt = this.$store.state.drone_infos[name].targetTakeoffAlt
+                            payload.takeoffDelay = this.$store.state.drone_infos[name].takeoffDelay;
+
+                            EventBus.$emit('command-set-takeoff-' + name, payload);
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setGotoAlt() {
@@ -1540,17 +1540,10 @@
                                 this.targetAlt[name] = 3;
                             }
                             this.$store.state.drone_infos[name].targetAlt = parseInt(this.targetAlt[name]);
-                            EventBus.$emit('command-set-goto-alt-' + name);
+                            EventBus.$emit('command-set-goto-alt-' + name, this.$store.state.drone_infos[name].targetAlt);
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setGoto() {
@@ -1567,13 +1560,6 @@
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setGotoCircle() {
@@ -1584,22 +1570,23 @@
                     if (Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, name)) {
                         if(this.$store.state.drone_infos[name].selected && this.$store.state.drone_infos[name].targeted) {
                             if(this.position_selections[name] && this.position_selections[name] !== '' && this.position_selections[name] !== "") {
+                                let position_selections_arr = this.position_selections[name].split(':');
+
                                 this.$store.state.drone_infos[name].circleType = this.circleType[name];
                                 this.$store.state.drone_infos[name].targetTurningSpeed = parseInt(this.targetTurningSpeed[name]);
                                 this.$store.state.drone_infos[name].targetRadius = parseInt(this.targetRadius[name]);
                                 this.$store.state.drone_infos[name].targetAlt = parseInt(this.targetAlt[name]);
+
+                                position_selections_arr[2] = parseInt(this.targetAlt[name]);
+                                position_selections_arr[4] = parseInt(this.targetRadius[name]);
+                                position_selections_arr[5] = parseInt(this.targetTurningSpeed[name]);
+
+                                this.position_selections[name] = position_selections_arr.join(':');
                                 EventBus.$emit('command-set-goto-circle-' + name, this.position_selections[name]);
                             }
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setChangeSpeed() {
@@ -1611,13 +1598,6 @@
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setStop() {
@@ -1628,13 +1608,6 @@
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setLand() {
@@ -1645,13 +1618,6 @@
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setRtl() {
@@ -1662,65 +1628,118 @@
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setPwms() {
-                console.log(this.pwms);
-                for(let name in this.$store.state.drone_infos) {
-                    if (Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, name)) {
-                        if(this.$store.state.drone_infos[name].selected && this.$store.state.drone_infos[name].targeted) {
-                            EventBus.$emit('command-set-pwms-' + name, this.pwms);
-                        }
+                for(let dName in this.curPwmChannel) {
+                    if (Object.prototype.hasOwnProperty.call(this.curPwmChannel, dName)) {
+                        // if (this.curPwmValue[dName] < "1100") {
+                        //     this.curPwmValue[dName] = "1100";
+                        // } else if (this.curPwmValue[dName] > "1900") {
+                        //     this.curPwmValue[dName] = "1900";
+                        // }
+
+                        let payload = {};
+                        payload.channel = this.curPwmChannel[dName];
+                        payload.value = this.curPwmValue[dName];
+                        EventBus.$emit('command-set-pwms-' + dName, payload);
                     }
                 }
-
-                setTimeout(() => {
-                    this.mode_sheet = !this.mode_sheet;
-                    this.loading = false;
-                    this.$forceUpdate();
-
-                    this.pwms = {
-                        ch9: {},
-                        ch10: {},
-                        ch11: {},
-                        ch12: {}
-                    };
-
-                }, 100);
             },
 
             setAutoGoto() {
-                let self = this;
-                for(let name in this.$store.state.drone_infos) {
-                    if (Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, name)) {
-                        if(this.$store.state.drone_infos[name].selected && this.$store.state.drone_infos[name].targeted) {
-                            this.$store.state.drone_infos[name].autoStartIndex = this.autoStartIndex[name];
-                            this.$store.state.drone_infos[name].autoEndIndex = this.autoEndIndex[name];
-                            this.$store.state.drone_infos[name].autoDelay = parseInt(this.autoDelay[name]);
-                            this.$store.state.drone_infos[name].autoSpeed = parseInt(this.autoSpeed[name]);
-                            console.log('setAutoGoto', parseInt(this.$store.state.drone_infos[name].autoStartIndex), parseInt(this.$store.state.drone_infos[name].autoEndIndex), this.$store.state.drone_infos[name].autoDelay);
-                            if(parseInt(this.$store.state.drone_infos[name].autoStartIndex) < parseInt(this.$store.state.drone_infos[name].autoEndIndex)) {
-                                EventBus.$emit('command-set-auto_goto-' + name);
+                for(let dName in this.$store.state.drone_infos) {
+                    if (Object.prototype.hasOwnProperty.call(this.$store.state.drone_infos, dName)) {
+                        if(this.$store.state.drone_infos[dName].selected && this.$store.state.drone_infos[dName].targeted) {
+
+                            let start_index = parseInt(this.$store.state.drone_infos[dName].autoStartIndex);
+                            let end_index = parseInt(this.$store.state.drone_infos[dName].autoEndIndex);
+
+                            let payload = {};
+
+                            this.position_selections_items[dName] = [];
+
+                            if(start_index <= end_index) {
+                                for (let pIndex = start_index; pIndex <= end_index; pIndex++) {
+                                    if (Object.prototype.hasOwnProperty.call(this.$store.state.tempMarkers[dName], pIndex)) {
+                                        let targetAlt = 20;
+                                        if(this.flyMarketAlt) {
+                                            targetAlt = this.$store.state.tempMarkers[dName][pIndex].alt;
+                                        }
+                                        else {
+                                            targetAlt = this.$store.state.drone_infos[dName].targetAlt;
+                                        }
+                                        let strPos = this.$store.state.tempMarkers[dName][pIndex].lat + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].lng + ':' +
+                                            targetAlt + ':' +
+                                            this.$store.state.drone_infos[dName].autoSpeed + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].radius + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].turningSpeed + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].targetMavCmd + ':' +
+                                            this.$store.state.drone_infos[dName].autoDelay + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].elevation;
+                                        this.position_selections_items[dName].push(strPos);
+                                    }
+                                }
+
+                                payload.start_index = start_index;
+                                payload.end_index = end_index;
                             }
                             else {
-                                console.log('setAutoGoto-', name, 'auto index setting error!!!');
+                                for (let pIndex = start_index; pIndex >= end_index; pIndex--) {
+                                    if (Object.prototype.hasOwnProperty.call(this.$store.state.tempMarkers[dName], pIndex)) {
+
+                                        let targetAlt = 20;
+                                        if(this.flyMarketAlt) {
+                                            targetAlt = this.$store.state.tempMarkers[dName][pIndex].alt;
+                                        }
+                                        else {
+                                            targetAlt = this.$store.state.drone_infos[dName].targetAlt;
+                                        }
+
+                                        if (targetAlt < 3) {
+                                            targetAlt = 3;
+                                        } else if (targetAlt > 150) {
+                                            targetAlt = 150;
+                                        }
+
+                                        if (this.$store.state.drone_infos[dName].autoSpeed < 1) {
+                                            this.$store.state.drone_infos[dName].autoSpeed = 1;
+                                        } else if (this.$store.state.drone_infos[dName].autoSpeed > 20) {
+                                            this.$store.state.drone_infos[dName].autoSpeed = 20;
+                                        }
+
+                                        if (this.$store.state.drone_infos[dName].autoDelay < 0) {
+                                            this.$store.state.drone_infos[dName].autoDelay = 0;
+                                        } else if (this.$store.state.drone_infos[dName].autoDelay > 60) {
+                                            this.$store.state.drone_infos[dName].autoDelay = 60;
+                                        }
+
+                                        let strPos = this.$store.state.tempMarkers[dName][pIndex].lat + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].lng + ':' +
+                                            targetAlt + ':' +
+                                            this.$store.state.drone_infos[dName].autoSpeed + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].radius + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].turningSpeed + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].targetMavCmd + ':' +
+                                            this.$store.state.drone_infos[dName].autoDelay + ':' +
+                                            this.$store.state.tempMarkers[dName][pIndex].elevation;
+                                        this.position_selections_items[dName].push(strPos);
+                                    }
+                                }
+
+                                payload.start_index = end_index;
+                                payload.end_index = start_index;
+
                             }
+
+                            console.log('setAutoGoto', parseInt(this.$store.state.drone_infos[dName].autoStartIndex), parseInt(this.$store.state.drone_infos[dName].autoEndIndex), this.$store.state.drone_infos[dName].autoDelay);
+
+                            payload.goto_positions = JSON.parse(JSON.stringify(this.position_selections_items[dName]));
+                            EventBus.$emit('command-set-auto_goto-' + dName, payload);
                         }
                     }
                 }
-
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setDisarm() {
@@ -1731,13 +1750,6 @@
                         }
                     }
                 }
-
-                let self = this;
-                setTimeout(function () {
-                    self.mode_sheet = !self.mode_sheet;
-                    self.loading = false;
-                    self.$forceUpdate();
-                }, 100);
             },
 
             setParams() {
@@ -1749,21 +1761,6 @@
                         }
                     }
                 }
-
-                setTimeout(() => {
-                    this.mode_sheet = !this.mode_sheet;
-                    this.loading = false;
-                    this.$forceUpdate();
-
-                    this.params = {
-                        wpYawBehavior: {},
-                        atcSlewYaw: {},
-                        wpnavSpeedUp: {},
-                        wpnavSpeedDn: {},
-                        rtlAlt: {}
-                    };
-
-                }, 100);
             },
         }
     }
