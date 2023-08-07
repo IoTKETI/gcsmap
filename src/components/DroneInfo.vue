@@ -501,6 +501,31 @@ const get_point_dist = (latitude, longitude, distanceInKm, bearingInDegrees) => 
     return {lat, lon};
 }
 
+function calcDistance(x1, y1, a1, x2, y2, a2) {
+    /*
+        x1: Latitude of the first point
+        y1: Longitude of the first point
+        a1: Altitude of the first point
+        x2: Latitude of the second point
+        y2: Longitude of the second point
+        a2: Altitude of the second point
+    */
+    const R = 6371e3; // R is earth’s radius(metres) (mean radius = 6,371km)
+    const φ1 = x1 * Math.PI / 180; // φ(latitude), λ(longitude) in radians
+    const φ2 = x2 * Math.PI / 180;
+    const Δφ = (x2 - x1) * Math.PI / 180;
+    const Δλ = (y2 - y1) * Math.PI / 180;
+
+    const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+        Math.cos(φ1) * Math.cos(φ2) *
+        Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+    let d = R * c + Math.sqrt(Math.pow(a1 - a2, 2)); // in metres
+
+    return d
+}
+
 export default {
     name: "DroneInfo",
 
@@ -3256,15 +3281,16 @@ export default {
                             let cur_lon = this.gpi.lon / 10000000;
                             let cur_alt = this.gpi.relative_alt / 1000;
 
-                            let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
+                            // let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
 
                             let tar_lat = this.$store.state.drone_infos[this.name].targetLat;
                             let tar_lon = this.$store.state.drone_infos[this.name].targetLng;
                             let tar_alt = this.$store.state.drone_infos[this.name].targetAlt;
 
-                            let result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
+                            // let result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
 
-                            let cur_dist = Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2));
+                            // let cur_dist = Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2));
+                            let cur_dist = calcDistance(cur_lat, cur_lon, cur_alt, tar_lat, tar_lon, tar_alt);
 
                             this.watchingMissionStatus = parseInt(Math.abs((1 - (cur_dist / this.watchingInitDist))) * 100);
 
@@ -3288,15 +3314,16 @@ export default {
                             let cur_lon = this.gpi.lon / 10000000;
                             let cur_alt = this.gpi.relative_alt / 1000;
 
-                            let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
+                            // let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
 
                             let tar_lat = this.$store.state.drone_infos[this.name].targetLat;
                             let tar_lon = this.$store.state.drone_infos[this.name].targetLng;
                             let tar_alt = this.$store.state.drone_infos[this.name].targetAlt;
 
-                            let result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
+                            // let result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
 
-                            let cur_dist = Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2));
+                            // let cur_dist = Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2));
+                            let cur_dist = calcDistance(cur_lat, cur_lon, cur_alt, tar_lat, tar_lon, tar_alt);
 
                             //console.log('goto-circle', 'cur_dist-, heading', Math.abs(cur_dist - this.droneStatus.radius), this.heading);
 
@@ -3418,15 +3445,16 @@ export default {
                             let cur_lon = this.gpi.lon / 10000000;
                             let cur_alt = this.gpi.relative_alt / 1000;
 
-                            let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
+                            // let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
 
                             let tar_lat = this.$store.state.drone_infos[this.name].home_position.lat;
                             let tar_lon = this.$store.state.drone_infos[this.name].home_position.lng;
                             let tar_alt = 0;
 
-                            let result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
+                            // let result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
 
-                            this.valueDistance = Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2));
+                            // this.valueDistance = Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2));
+                            this.valueDistance = calcDistance(cur_lat, cur_lon, cur_alt, tar_lat, tar_lon, tar_alt);
 
                             this.$store.state.curDronePositions[this.name] = {};
                             this.$store.state.curDronePositions[this.name].brake = false;
@@ -3465,15 +3493,16 @@ export default {
                                         let cur_lon = (this.gpi.lon / 10000000);
                                         let cur_alt = (this.gpi.relative_alt / 1000);
 
-                                        let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
+                                        // let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
 
                                         let tar_lat = this.$store.state.tempMarkers[this.name][this.$store.state.curTargetedTempMarkerIndex[this.name]].lat;
                                         let tar_lon = this.$store.state.tempMarkers[this.name][this.$store.state.curTargetedTempMarkerIndex[this.name]].lng;
                                         let tar_alt = this.$store.state.tempMarkers[this.name][this.$store.state.curTargetedTempMarkerIndex[this.name]].alt;
 
-                                        let result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
+                                        // let result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
 
-                                        this.$store.state.distanceTarget[this.name] = Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2));
+                                        // this.$store.state.distanceTarget[this.name] = Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2));
+                                        this.$store.state.distanceTarget[this.name] = calcDistance(cur_lat, cur_lon, cur_alt, tar_lat, tar_lon, tar_alt);
 
                                         this.$store.state.distanceTarget = this.clone(this.$store.state.distanceTarget);
                                     }
@@ -4859,12 +4888,12 @@ export default {
                 let cur_lat = this.gpi.lat / 10000000;
                 let cur_lon = this.gpi.lon / 10000000;
                 let cur_alt = this.gpi.relative_alt / 1000;
-                let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
+                // let result1 = dfs_xy_conv('toXY', cur_lat, cur_lon);
 
                 let tar_lat = lat;
                 let tar_lon = lon;
                 let tar_alt = alt;
-                var result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
+                // var result2 = dfs_xy_conv('toXY', tar_lat, tar_lon);
 
                 this.$store.state.drone_infos[name].targetLat = lat;
                 this.$store.state.drone_infos[name].targetLng = lon;
@@ -4872,7 +4901,9 @@ export default {
 
                 this.watchingMission = 'goto';
                 this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
-                this.watchingInitDist = parseFloat(Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2)).toFixed(1));
+                // this.watchingInitDist = parseFloat(Math.sqrt(Math.pow(result2.x - result1.x, 2) + Math.pow(result2.y - result1.y, 2) + Math.pow((tar_alt - cur_alt), 2)).toFixed(1));
+                this.watchingInitDist = calcDistance(cur_lat, cur_lon, cur_alt, tar_lat, tar_lon, tar_alt);
+
                 this.watchingMissionStatus = 0;
 
                 if(this.watchingInitDist <= 0.1) {
