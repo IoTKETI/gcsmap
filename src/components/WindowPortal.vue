@@ -42,7 +42,7 @@
             },
             targetUrl: {
                 type: String,
-                default: 'http://203.253.128.177/videoroomtest.html'
+                default: 'http://mobius.iotocean.org/videoroomtest.html'
             }
         },
         data() {

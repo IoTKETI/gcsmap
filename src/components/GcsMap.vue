@@ -953,7 +953,7 @@
         },
 
         created() {
-            console.log(window.innerHeight);
+            // console.log(window.innerHeight);
 
             // for (let pName in this.tempMarkers) {
             //     if(Object.prototype.hasOwnProperty.call(this.tempMarkers, pName)) {

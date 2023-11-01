@@ -17,7 +17,7 @@
 <!--                    dense hide-details outlined-->
 <!--                    ref="host"-->
 <!--                    v-model="host" :rules="host_rule"-->
-<!--                    placeholder="203.253.128.177"-->
+<!--                    placeholder="mobius.iotocean.org"-->
 <!--                    label="HOST*"-->
 <!--                    required-->
 <!--                    :disabled="MOBIUS_CONNECTION_CONNECTED"-->
@@ -43,13 +43,13 @@
 <!--            </v-col>-->
 
             <v-col cols="3">
-                <!--                            <v-text-field hide-details ref="host" v-model="host" :rules="host_rule" placeholder="203.253.128.177" label="Host*" required></v-text-field>-->
+                <!--                            <v-text-field hide-details ref="host" v-model="host" :rules="host_rule" placeholder="mobius.iotocean.org" label="Host*" required></v-text-field>-->
                 <v-text-field
                         class="mx-2 mt-1"
                         dense hide-details outlined
                         ref="host"
                         v-model="host" :rules="host_rule"
-                        placeholder="203.253.128.177"
+                        placeholder="mobius.iotocean.org"
                         label="HOST*"
                         required
                         :disabled="MOBIUS_CONNECTION_CONNECTED"
@@ -162,13 +162,13 @@
                             <v-subheader>Drone List</v-subheader>
                         </v-col>
 <!--                        <v-col cols="3">-->
-<!--&lt;!&ndash;                            <v-text-field hide-details ref="host" v-model="host" :rules="host_rule" placeholder="203.253.128.177" label="Host*" required></v-text-field>&ndash;&gt;-->
+<!--&lt;!&ndash;                            <v-text-field hide-details ref="host" v-model="host" :rules="host_rule" placeholder="mobius.iotocean.org" label="Host*" required></v-text-field>&ndash;&gt;-->
 <!--                            <v-text-field-->
 <!--                                    class="mx-2"-->
 <!--                                    dense hide-details-->
 <!--                                    ref="host"-->
 <!--                                    v-model="host" :rules="host_rule"-->
-<!--                                    placeholder="203.253.128.177"-->
+<!--                                    placeholder="mobius.iotocean.org"-->
 <!--                                    label="HOST*"-->
 <!--                                    required-->
 <!--                                    :disabled="MOBIUS_CONNECTION_CONNECTED"-->
@@ -249,7 +249,7 @@
                         <v-container>
                             <v-row>
                                 <v-col cols="12" sm="6">
-                                    <v-text-field ref="drone_host" v-model="drone_host" :rules="drone_host_rule" label="Drone Host*" required></v-text-field>
+                                    <v-text-field ref="drone_host" v-model="$store.state.VUE_APP_MOBIUS_HOST" :rules="drone_host_rule" label="Drone Host*" required></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="6">
                                     <v-text-field ref="drone_name" v-model="drone_name" :rules="drone_name_rule" label="Drone Name*" required></v-text-field>
@@ -264,7 +264,7 @@
                                 <v-col cols="12" sm="6">
                                     <v-select
                                             v-model="type_selected"
-                                            :items="['pixhawk', 'dji', 'etc']"
+                                            :items="['ardupilot', 'px4', 'dji', 'etc']"
                                             label="Type*"
                                             hint="Type of FC"
                                             required
@@ -344,7 +344,7 @@
                         <v-container>
                             <v-row>
                                 <v-col cols="12" sm="4">
-                                    <v-text-field ref="drone_host" v-model="drone_host" :rules="drone_host_update_rule" label="Drone Host*" required></v-text-field>
+                                    <v-text-field ref="drone_host" v-model="$store.state.VUE_APP_MOBIUS_HOST" :rules="drone_host_update_rule" label="Drone Host*" required></v-text-field>
                                 </v-col>
                                 <v-col cols="12" sm="4">
                                     <v-text-field disabled ref="drone_name" v-model="drone_name" :rules="drone_name_update_rule" label="Drone Name*" required></v-text-field>
@@ -359,7 +359,7 @@
                                 <v-col cols="12" sm="6">
                                     <v-select
                                         v-model="type_selected"
-                                        :items="['pixhawk', 'dji', 'etc']"
+                                        :items="['ardupilot', 'px4', 'dji', 'etc']"
                                         label="Type*"
                                         hint="Type of FC"
                                         required
@@ -525,7 +525,7 @@
                 //     v => !!v || 'GCS 이름은 필수 입력사항입니다.',
                 //     v => !/[~!@#$%^&*()+|<>?:{}]/.test(v) || 'GCS 이름에는 특수문자를 사용할 수 없습니다.'
                 // ],
-                type_selected: 'pixhawk',
+                type_selected: 'ardupilot',
                 color_selected: 'teal',
                 selected: [],
                 drone_infos: [],
@@ -775,8 +775,8 @@
                                         },
                                         data: {
                                             'm2m:cnt': {
-                                                rn: 'Info',
-                                                lbl: ['Info'],
+                                                rn: 'DroneInfos',
+                                                lbl: ['DroneInfos'],
                                             }
                                         }
                                     }).then(
@@ -787,44 +787,70 @@
                                                     return status < 500;
                                                 },
                                                 method: 'post',
-                                                url: 'http://' + self.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius/' + self.$store.state.VUE_APP_MOBIUS_GCS + '/Info',
+                                                url: 'http://' + self.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius/' + self.$store.state.VUE_APP_MOBIUS_GCS,
                                                 headers: {
                                                     'X-M2M-RI': String(parseInt(Math.random() * 10000)),
                                                     'X-M2M-Origin': 'SVue',
-                                                    'Content-Type': 'application/json;ty=4'
+                                                    'Content-Type': 'application/json;ty=3'
                                                 },
                                                 data: {
-                                                    'm2m:cin': {
-                                                        con: {
-                                                            'unknown': {
-
-                                                            }
-                                                        }
+                                                    'm2m:cnt': {
+                                                        rn: 'Info',
+                                                        lbl: ['Info'],
                                                     }
                                                 }
                                             }).then(
-                                                function (res) {
-                                                    let payload = res.data;
+                                                function () {
+                                                    axios({
+                                                        validateStatus: function (status) {
+                                                            // 상태 코드가 500 이상일 경우 거부. 나머지(500보다 작은)는 허용.
+                                                            return status < 500;
+                                                        },
+                                                        method: 'post',
+                                                        url: 'http://' + self.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius/' + self.$store.state.VUE_APP_MOBIUS_GCS + '/Info',
+                                                        headers: {
+                                                            'X-M2M-RI': String(parseInt(Math.random() * 10000)),
+                                                            'X-M2M-Origin': 'SVue',
+                                                            'Content-Type': 'application/json;ty=4'
+                                                        },
+                                                        data: {
+                                                            'm2m:cin': {
+                                                                con: {
+                                                                    'unknown': {
 
-                                                    self.$store.commit('resetDroneInfos', payload['m2m:cin'].con);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }).then(
+                                                        function (res) {
+                                                            let payload = res.data;
 
-                                                    console.log('GcsAppBar-created-drone_infos', self.$store.state.drone_infos);
+                                                            self.$store.commit('resetDroneInfos', payload['m2m:cin'].con);
 
-                                                    self.$store.commit('updateDroneInfosSelected');
+                                                            console.log('GcsAppBar-created-drone_infos', self.$store.state.drone_infos);
 
-                                                    let unknown = JSON.parse(JSON.stringify(self.$store.state.drone_infos.unknown));
+                                                            self.$store.commit('updateDroneInfosSelected');
 
-                                                    console.log('GcsAppBar-created-unknown', unknown);
-                                                    self.$store.commit('initUnknownInfo', unknown);
+                                                            let unknown = JSON.parse(JSON.stringify(self.$store.state.drone_infos.unknown));
 
-                                                    EventBus.$emit('gcs-map-ready', {});
+                                                            console.log('GcsAppBar-created-unknown', unknown);
+                                                            self.$store.commit('initUnknownInfo', unknown);
 
-                                                    unknown = null;
+                                                            EventBus.$emit('gcs-map-ready', {});
 
-                                                    self.MOBIUS_CONNECTION_CONNECTED = true;
-                                                    self.$store.state.MOBIUS_CONNECTION_CONNECTED = true;
+                                                            unknown = null;
 
-                                                    self.$cookies.set('mobius_connected', self.MOBIUS_CONNECTION_CONNECTED);
+                                                            self.MOBIUS_CONNECTION_CONNECTED = true;
+                                                            self.$store.state.MOBIUS_CONNECTION_CONNECTED = true;
+
+                                                            self.$cookies.set('mobius_connected', self.MOBIUS_CONNECTION_CONNECTED);
+                                                        }
+                                                    ).catch(
+                                                        function (err) {
+                                                            console.log(err.message);
+                                                        }
+                                                    );
                                                 }
                                             ).catch(
                                                 function (err) {

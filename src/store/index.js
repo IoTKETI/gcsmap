@@ -318,7 +318,7 @@ const _defaultDroneInfo = {
 export default new Vuex.Store({
     state: {
         MOBIUS_CONNECTION_CONNECTED: false,
-        VUE_APP_MOBIUS_HOST: '203.253.128.177',
+        VUE_APP_MOBIUS_HOST: 'mobius.iotocean.org',
         VUE_APP_MOBIUS_GCS: 'KETI_GCS',
 
         params: {

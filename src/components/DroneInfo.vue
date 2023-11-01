@@ -5159,7 +5159,7 @@ export default {
             console.log('createConnection - Subscribe to ', self.drone_topic);
         });
 
-        this.getDroneMissionInfo();
+        // this.getDroneMissionInfo();
 
         console.log('DroneInfo-mounted', this.lat, this.lng);
 
