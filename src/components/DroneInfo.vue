@@ -742,7 +742,7 @@ export default {
             },
             connection: {
                 host: this.$store.state.VUE_APP_MOBIUS_HOST,
-                port: 8883,
+                port: 18883,
                 endpoint: '',
                 clean: true,
                 connectTimeout: 4000,
