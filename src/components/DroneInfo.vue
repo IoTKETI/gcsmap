@@ -1295,10 +1295,10 @@ export default {
                                                     if (this.missionLteUrl === payload.sur) {
                                                         // console.log(payload.sur);
 
-                                                        if (Object.prototype.hasOwnProperty.call(payload.con, 'RSRP')) {
+                                                        if (Object.prototype.hasOwnProperty.call(payload.con, 'rsrp')) {
                                                             this.colorLteVal = 'td-text-gray';
 
-                                                            this.curLteVal = payload.con.RSRP;
+                                                            this.curLteVal = payload.con.rsrp;
                                                             //console.log(this.curLteVal);
 
                                                             payload = null;
@@ -4311,7 +4311,7 @@ export default {
             // this.$store.state.didIPublish = true;
         },
         async checkMissionLteUrl() {
-            this.missionLteUrl = '/Mobius/' + this.gcs + '/Mission_Data/' + this.name + '/msw_lte/LTE';
+            this.missionLteUrl = '/Mobius/' + this.gcs + '/Mission_Data/' + this.name + '/msw_lte_simul/LTE';
             console.log('this.missionLteUrl', this.missionLteUrl);
 
             this.doSubscribe(this.missionLteUrl);
@@ -4959,7 +4959,7 @@ export default {
                 }
 
                 setTimeout(this.send_set_mode_command, parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, target_mode);
-                console.log('send_arm_command ', this.name);
+                console.log('send_arm_command ', this.name, this.target_pub_topic, this.sys_id, target_mode);
 
                 await sleep(parseInt(1+Math.random()*4));
 
