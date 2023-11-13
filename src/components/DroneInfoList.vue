@@ -5,15 +5,15 @@
                 <v-card flat tile outlined color="#E8F5E9">
                     <v-card ref="prev" flat tile class="overflow-y-auto" :style="listHeight"
                             :min-width="myMinWidth+'px'">
-                        <v-card flat tile outlined>
-                            <v-switch
-                                v-model="distanceMonitor"
-                                label="드론간 근접감시"
-                                color="warning"
-                                class="ma-0 pa-0 pl-2 py-2"
-                                hide-details
-                            ></v-switch>
-                        </v-card>
+<!--                        <v-card flat tile outlined>-->
+<!--                            <v-switch-->
+<!--                                v-model="distanceMonitor"-->
+<!--                                label="드론간 근접감시"-->
+<!--                                color="warning"-->
+<!--                                class="ma-0 pa-0 pl-2 py-2"-->
+<!--                                hide-details-->
+<!--                            ></v-switch>-->
+<!--                        </v-card>-->
                         <v-card flat tile v-for="drone in $store.state.drone_infos" :key="drone.id">
                             <div v-if="drone.selected">
                                 <DroneInfo
