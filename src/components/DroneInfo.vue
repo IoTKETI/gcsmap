@@ -8,10 +8,12 @@
                             <v-row no-gutters align="center" justify="center">
                                 <v-col cols="6">
                                     <v-card flat tile :color="$store.state.drone_infos[name].color">
-                                        <v-checkbox dense @change="checkDroneSelected" class="pt-0 pl-2 ma-0 shadow" v-model="targeted" hide-details>
+                                        <v-checkbox dense @change="checkDroneSelected" class="pt-0 pl-2 ma-0 shadow"
+                                                    v-model="targeted" hide-details>
                                             <template v-slot:label>
                                                 <div>
-                                                    <span :class="statusTextColor">{{name+'('+sys_id+')'}}</span>
+                                                    <span
+                                                        :class="statusTextColor">{{ name + '(' + sys_id + ')' }}</span>
                                                 </div>
                                             </template>
                                         </v-checkbox>
@@ -40,7 +42,7 @@
                                         >
                                             <v-card>
                                                 <v-card-title class="text-h6">
-                                                    Information of {{name}}
+                                                    Information of {{ name }}
                                                 </v-card-title>
 
                                                 <v-textarea
@@ -218,34 +220,44 @@
                     </v-row>
                     <v-row no-gutters class="d-flex justify-center" align="center">
                         <v-col cols="12" class="text-center align-self-center">
-                            <v-card flat tile class="align-self-center justify-space-between ma-0 py-0 pt-0" :class="colorArming" @click="currentPosition">
-            <!--                    <v-icon x-large :class="colorArming">{{ iconArming }}</v-icon>-->
+                            <v-card flat tile class="align-self-center justify-space-between ma-0 py-0 pt-0"
+                                    :class="colorArming" @click="currentPosition">
+                                <!--                    <v-icon x-large :class="colorArming">{{ iconArming }}</v-icon>-->
 
                                 <div class="py-4">
                                     <Heading :size="heading_size" :heading="heading"/>
                                     <v-fade-transition>
                                         <v-avatar
-                                                v-if="isPlaying"
-                                                :color="color"
-                                                :style="{animationDuration: animationDuration, top: '1px', left: (myWidth/2-12)+'px'}"
-                                                class="mt-1 ml-1 v-avatar--metronome"
-                                                size="14"
+                                            v-if="isPlaying"
+                                            :color="color"
+                                            :style="{animationDuration: animationDuration, top: '1px', left: (myWidth/2-12)+'px'}"
+                                            class="mt-1 ml-1 v-avatar--metronome"
+                                            size="14"
                                         ></v-avatar>
                                     </v-fade-transition>
                                     <Attitude :size="attitude_size" :roll="roll" :pitch="pitch"/>
                                 </div>
                                 <div class="info_position align-self-center" :style="{top: 0, left: 0}">
-                                    <span :style="{'font-size': '22px'}" :class="colorMode" :color="$store.state.drone_infos[name].color" class="shadow_icon px-1">{{ curMode }}</span>
+                                    <span :style="{'font-size': '22px'}" :class="colorMode"
+                                          :color="$store.state.drone_infos[name].color"
+                                          class="shadow_icon px-1">{{ curMode }}</span>
                                 </div>
 
                                 <div class="info_position" :style="{top: '36px', left: 0}">
-                                    <v-icon class="shadow_icon pl-1" :style="{color: 'white'}">mdi-satellite-variant</v-icon>
-                                    <span class="shadow_icon px-1 text--white" :style="{color: 'white'}">{{ num_satellites }} </span>
+                                    <v-icon class="shadow_icon pl-1" :style="{color: 'white'}">mdi-satellite-variant
+                                    </v-icon>
+                                    <span class="shadow_icon px-1 text--white"
+                                          :style="{color: 'white'}">{{ num_satellites }} </span>
                                 </div>
 
                                 <div class="info_position" :style="{top: '62px', left: 0}">
-                                    <v-icon :class="colorLteVal" :style="iconSize" class="shadow_icon pl-1">{{ iconLte }}</v-icon>
-                                    <span :class="colorLteVal" :style="fontSize" class="shadow_icon px-1">{{ curLteVal }}</span>
+                                    <v-icon :class="colorLteVal" :style="iconSize" class="shadow_icon pl-1">{{
+                                            iconLte
+                                        }}
+                                    </v-icon>
+                                    <span :class="colorLteVal" :style="fontSize" class="shadow_icon px-1">{{
+                                            curLteVal
+                                        }}</span>
                                 </div>
 
                                 <div class="info_position" :style="{top: '90px', left: 0}">
@@ -254,22 +266,34 @@
                                 </div>
 
                                 <div class="info_position" :style="{top: '118px', left: 0}">
-                                    <v-icon class="shadow_icon pl-1" :style="{color: 'white'}">{{ iconFlightElapsed }}</v-icon>
-                                    <span class="shadow_icon px-1" :style="{color: 'white'}">{{ flightElapsedTime }}</span>
+                                    <v-icon class="shadow_icon pl-1" :style="{color: 'white'}">{{
+                                            iconFlightElapsed
+                                        }}
+                                    </v-icon>
+                                    <span class="shadow_icon px-1" :style="{color: 'white'}">{{
+                                            flightElapsedTime
+                                        }}</span>
                                 </div>
 
-                                <div class="info_position" :style="{top: 0, left: ((curArmStatus==='ARMED')?(myWidth-84):(myWidth-118))+'px'}">
-                                    <span :style="{'font-size': '22px'}" :class="colorArm" :color="$store.state.drone_infos[name].color" class="shadow_icon px-1">{{ curArmStatus }}</span>
+                                <div class="info_position"
+                                     :style="{top: 0, left: ((curArmStatus==='ARMED')?(myWidth-84):(myWidth-118))+'px'}">
+                                    <span :style="{'font-size': '22px'}" :class="colorArm"
+                                          :color="$store.state.drone_infos[name].color"
+                                          class="shadow_icon px-1">{{ curArmStatus }}</span>
                                 </div>
 
                                 <div class="info_position" :style="{top: '36px', left: (myWidth-94)+'px'}">
-                                    <v-icon :class="colorBattery" :style="iconSize" class="shadow_icon pl-1">{{ iconBattery }}</v-icon>
-                                    <span class="shadow_icon px-1" :class="colorBattery">{{ (ss.voltage_battery / 1000).toFixed(1) }} V</span>
+                                    <v-icon :class="colorBattery" :style="iconSize" class="shadow_icon pl-1">
+                                        {{ iconBattery }}
+                                    </v-icon>
+                                    <span class="shadow_icon px-1"
+                                          :class="colorBattery">{{ (ss.voltage_battery / 1000).toFixed(1) }} V</span>
                                 </div>
 
                                 <div class="info_position" :style="{top: '62px', left: (myWidth-100)+'px'}">
                                     <v-icon class="shadow_icon pl-1" :style="{color: 'white'}">mdi-altimeter</v-icon>
-                                    <span class="shadow_icon px-1" :style="{color: 'white'}">{{ (gpi.relative_alt / 1000).toFixed(1) }} m</span>
+                                    <span class="shadow_icon px-1"
+                                          :style="{color: 'white'}">{{ (gpi.relative_alt / 1000).toFixed(1) }} m</span>
                                 </div>
 
                                 <div class="info_position" :style="{top: '90px', left: (myWidth-100)+'px'}">
@@ -278,12 +302,22 @@
                                 </div>
 
                                 <div class="info_position" :style="{top: '118px', left: (myWidth-110)+'px'}">
-                                    <v-icon class="shadow_icon pl-1" :style="{color: 'white'}">{{ iconDistance }}</v-icon>
-                                    <span class="shadow_icon px-1" :style="{color: 'white'}">{{ (valueDistance > 1000) ? (valueDistance/1000).toFixed(1) + ' km' : (valueDistance.toFixed(0) + ' m') }}</span>
+                                    <v-icon class="shadow_icon pl-1" :style="{color: 'white'}">{{
+                                            iconDistance
+                                        }}
+                                    </v-icon>
+                                    <span class="shadow_icon px-1" :style="{color: 'white'}">{{
+                                            (valueDistance > 1000) ? (valueDistance / 1000).toFixed(1) + ' km' : (valueDistance.toFixed(0) + ' m')
+                                        }}</span>
                                 </div>
 
                                 <div class="info_position text-center" :style="{top: '144px', left: 0}">
-                                    <span class="shadow_icon px-2" :style="{color: 'white'}">{{ (gpi.lat / 10000000).toFixed(7) }} : {{ (gpi.lon / 10000000).toFixed(7) }} : <span style="font-size: 20px">{{ (gpi.relative_alt / 1000).toFixed(1) }}</span> ({{ (gpi.alt / 1000).toFixed(1) }})</span>
+                                    <span class="shadow_icon px-2" :style="{color: 'white'}">{{
+                                            (gpi.lat / 10000000).toFixed(7)
+                                        }} : {{ (gpi.lon / 10000000).toFixed(7) }} : <span
+                                            style="font-size: 20px">{{ (gpi.relative_alt / 1000).toFixed(1) }}</span> ({{
+                                            (gpi.alt / 1000).toFixed(1)
+                                        }})</span>
                                 </div>
 
                                 <!--                                <v-overlay :absolute="absolute" :value="!flagReceiving" :opacity="opacity" color="#E0E0E0"></v-overlay>-->
@@ -294,12 +328,13 @@
                         <v-col cols="12">
                             <v-card class="singleline-ellipsis" outlined tile>
                                 <span style="font-size: 14px">{{ mavStr }}</span>
-                                <v-overlay :absolute="absolute" :value="!flagReceiving" :opacity="opacity" color="#E0E0E0"></v-overlay>
+                                <v-overlay :absolute="absolute" :value="!flagReceiving" :opacity="opacity"
+                                           color="#E0E0E0"></v-overlay>
                                 <v-progress-linear
-                                        active absolute top
-                                        :color="$store.state.drone_infos[name].color"
-                                        height="25"
-                                        :value="watchingMissionStatus"
+                                    active absolute top
+                                    :color="$store.state.drone_infos[name].color"
+                                    height="25"
+                                    :value="watchingMissionStatus"
                                 >
                                     <template v-slot:default="{ value }">
                                         <strong>{{ watchingMission + ' - ' + value }}%</strong>
@@ -314,72 +349,73 @@
                         <v-col cols="12">
                             <v-card tile outlined
                                     class="mx-auto overflow-y-auto overflow">
-<!--                                    :class="flagReceiving?'overflow-y-auto':'overflow-y-hidden'"-->
-<!--                                    max-height="135"-->
-<!--                                    min-height="135"-->
+                                <!--                                    :class="flagReceiving?'overflow-y-auto':'overflow-y-hidden'"-->
+                                <!--                                    max-height="135"-->
+                                <!--                                    min-height="135"-->
                                 <v-sheet
-                                        elevation="10"
-                                        class="py-2 px-1"
+                                    elevation="10"
+                                    class="py-2 px-1"
                                 >
                                     <v-chip-group
-                                            v-model="selectedItem"
-                                            active-class="primary--text"
-                                            :center-active="true"
-                                            show-arrows
+                                        v-model="selectedItem"
+                                        active-class="primary--text"
+                                        :center-active="true"
+                                        show-arrows
                                     >
                                         <draggable v-model="positions">
                                             <v-chip
-                                                    v-for="(position, i) in positions"
-                                                    :key="'pos_chip'+i"
-                                                    @click="selectedPosition(i)"
+                                                v-for="(position, i) in positions"
+                                                :key="'pos_chip'+i"
+                                                @click="selectedPosition(i)"
                                             >
                                                 {{ String(i) }}
                                             </v-chip>
                                         </draggable>
                                     </v-chip-group>
                                 </v-sheet>
-<!--                                <v-list dense>-->
-<!--                                    <v-list-item-group-->
-<!--                                        v-model="selectedItem"-->
-<!--                                        color="deep-orange darken-4"-->
-<!--                                    >-->
-<!--                                        <draggable v-model="positions">-->
-<!--                                            <v-list-item v-for="(position, i) in positions" :key="i">-->
-<!--                                                &lt;!&ndash;                                <v-card flat rounded shaped width="25" class="mr-2 text-center" style="{border-radius: 50%; }">{{i}}</v-card>&ndash;&gt;-->
-<!--                                                <v-list-item-avatar class="ma-0 mr-1" size="24" color="grey lighten-4">-->
-<!--                                                    <span>{{ i + 1 }}</span>-->
-<!--                                                </v-list-item-avatar>-->
-<!--                                                <v-list-item-icon>-->
-<!--                                                    <v-icon class="mr-2" v-text="position.icon"></v-icon>-->
-<!--                                                </v-list-item-icon>-->
-<!--                                                <v-hover>-->
-<!--                                                    <template v-slot:default="{ hover }">-->
-<!--                                                        <v-list-item-content>-->
-<!--                                                            <v-list-item-title v-text="position.text"></v-list-item-title>-->
-<!--                                                            <v-overlay-->
-<!--                                                                v-if="hover"-->
-<!--                                                                absolute-->
-<!--                                                                color="transparent"-->
-<!--                                                                style="padding-left: 88%"-->
-<!--                                                            >-->
-<!--                                                                <v-btn-->
-<!--                                                                    class="pa-0 ma-0"-->
-<!--                                                                    fab-->
-<!--                                                                    dark-->
-<!--                                                                    x-small-->
-<!--                                                                    color="grey darken-3"-->
-<!--                                                                >-->
-<!--                                                                    <v-icon dark>mdi-trash-can</v-icon>-->
-<!--                                                                </v-btn>-->
-<!--                                                            </v-overlay>-->
-<!--                                                        </v-list-item-content>-->
-<!--                                                    </template>-->
-<!--                                                </v-hover>-->
-<!--                                            </v-list-item>-->
-<!--                                        </draggable>-->
-<!--                                    </v-list-item-group>-->
-<!--                                </v-list>-->
-                                <v-overlay :absolute="absolute" :value="!flagReceiving" :opacity="opacity" color="#E0E0E0"></v-overlay>
+                                <!--                                <v-list dense>-->
+                                <!--                                    <v-list-item-group-->
+                                <!--                                        v-model="selectedItem"-->
+                                <!--                                        color="deep-orange darken-4"-->
+                                <!--                                    >-->
+                                <!--                                        <draggable v-model="positions">-->
+                                <!--                                            <v-list-item v-for="(position, i) in positions" :key="i">-->
+                                <!--                                                &lt;!&ndash;                                <v-card flat rounded shaped width="25" class="mr-2 text-center" style="{border-radius: 50%; }">{{i}}</v-card>&ndash;&gt;-->
+                                <!--                                                <v-list-item-avatar class="ma-0 mr-1" size="24" color="grey lighten-4">-->
+                                <!--                                                    <span>{{ i + 1 }}</span>-->
+                                <!--                                                </v-list-item-avatar>-->
+                                <!--                                                <v-list-item-icon>-->
+                                <!--                                                    <v-icon class="mr-2" v-text="position.icon"></v-icon>-->
+                                <!--                                                </v-list-item-icon>-->
+                                <!--                                                <v-hover>-->
+                                <!--                                                    <template v-slot:default="{ hover }">-->
+                                <!--                                                        <v-list-item-content>-->
+                                <!--                                                            <v-list-item-title v-text="position.text"></v-list-item-title>-->
+                                <!--                                                            <v-overlay-->
+                                <!--                                                                v-if="hover"-->
+                                <!--                                                                absolute-->
+                                <!--                                                                color="transparent"-->
+                                <!--                                                                style="padding-left: 88%"-->
+                                <!--                                                            >-->
+                                <!--                                                                <v-btn-->
+                                <!--                                                                    class="pa-0 ma-0"-->
+                                <!--                                                                    fab-->
+                                <!--                                                                    dark-->
+                                <!--                                                                    x-small-->
+                                <!--                                                                    color="grey darken-3"-->
+                                <!--                                                                >-->
+                                <!--                                                                    <v-icon dark>mdi-trash-can</v-icon>-->
+                                <!--                                                                </v-btn>-->
+                                <!--                                                            </v-overlay>-->
+                                <!--                                                        </v-list-item-content>-->
+                                <!--                                                    </template>-->
+                                <!--                                                </v-hover>-->
+                                <!--                                            </v-list-item>-->
+                                <!--                                        </draggable>-->
+                                <!--                                    </v-list-item-group>-->
+                                <!--                                </v-list>-->
+                                <v-overlay :absolute="absolute" :value="!flagReceiving" :opacity="opacity"
+                                           color="#E0E0E0"></v-overlay>
                             </v-card>
                         </v-col>
                     </v-row>
@@ -405,8 +441,8 @@ import mqtt from "mqtt";
 import {nanoid} from "nanoid";
 
 const sleep = (ms) => {
-    return new Promise(resolve=>{
-        setTimeout(resolve,ms)
+    return new Promise(resolve => {
+        setTimeout(resolve, ms)
     });
 }
 
@@ -463,7 +499,7 @@ function dfs_xy_conv(code, v1, v2) {
         var xn = v1 - XO;
         var yn = ro - v2 + YO;
         ra = Math.sqrt(xn * xn + yn * yn);
-        if (sn < 0.0) - ra;
+        if (sn < 0.0) -ra;
         var alat = Math.pow((re * sf / ra), (1.0 / sn));
         alat = 2.0 * Math.atan(alat) - Math.PI * 0.5;
 
@@ -473,7 +509,7 @@ function dfs_xy_conv(code, v1, v2) {
         else {
             if (Math.abs(yn) <= 0.0) {
                 theta = Math.PI * 0.5;
-                if (xn < 0.0) - theta;
+                if (xn < 0.0) -theta;
             }
             else theta = Math.atan2(xn, yn);
         }
@@ -503,13 +539,13 @@ const get_point_dist = (latitude, longitude, distanceInKm, bearingInDegrees) => 
 
 function calcDistance(x1, y1, a1, x2, y2, a2) {
     /*
-        x1: Latitude of the first point
-        y1: Longitude of the first point
-        a1: Altitude of the first point
-        x2: Latitude of the second point
-        y2: Longitude of the second point
-        a2: Altitude of the second point
-    */
+     x1: Latitude of the first point
+     y1: Longitude of the first point
+     a1: Altitude of the first point
+     x2: Latitude of the second point
+     y2: Longitude of the second point
+     a2: Altitude of the second point
+     */
     const R = 6371e3; // R is earth’s radius(metres) (mean radius = 6,371km)
     const φ1 = x1 * Math.PI / 180; // φ(latitude), λ(longitude) in radians
     const φ2 = x2 * Math.PI / 180;
@@ -560,7 +596,7 @@ export default {
             isPlaying: true,
             bpm: 40,
 
-            left_pos: ((this.heading_size*2)-16),
+            left_pos: ((this.heading_size * 2) - 16),
 
             stat_flttime_param: {param_value: 0},
 
@@ -718,7 +754,16 @@ export default {
             mid_v: (this.bat_cell * 3.95),
             min_v: (this.bat_cell * 3.75),
             ss: {voltage_battery: 44000},
-            adsb: {ICAO_address: '12K345', lat: 370000000, lon: 1270000000, attitude: 1000000, heading: 100, callsign: 'KETI', speed: 100, squawk: 0},
+            adsb: {
+                ICAO_address: '12K345',
+                lat: 370000000,
+                lon: 1270000000,
+                attitude: 1000000,
+                heading: 100,
+                callsign: 'KETI',
+                speed: 100,
+                squawk: 0
+            },
             att: {},
             rc1: {},
             rc2: {},
@@ -791,7 +836,7 @@ export default {
 
             droneStatus: {},
 
-                        MAV_CMD_ACK_CODE: {
+            MAV_CMD_ACK_CODE: {
                 0: 'MAV_CMD_ACK_OK',
                 1: 'MAV_CMD_ACK_ERR_FAIL',
                 2: 'MAV_CMD_ACK_ERR_ACCESS_DENIED',
@@ -852,7 +897,7 @@ export default {
     },
 
     computed: {
-        color () {
+        color() {
             if (this.bpm < 150) return 'grey'
             if (this.bpm < 250) return 'indigo'
             if (this.bpm < 350) return 'teal'
@@ -860,7 +905,7 @@ export default {
             if (this.bpm < 550) return 'orange'
             return 'red'
         },
-        animationDuration () {
+        animationDuration() {
             return `${60 / this.bpm}s`
         },
         mode_items() {
@@ -879,26 +924,38 @@ export default {
         heightInfo() {
             return ('height: ' + (this.airspeed_size / 2) + 'px');
         },
-        fontSize () {
+        fontSize() {
             console.log(this.$vuetify.breakpoint.name);
             switch (this.$vuetify.breakpoint.name) {
-                case 'xs': return ("font-size: 14px");
-                case 'sm': return ("font-size: 15px");
-                case 'md': return ("font-size: 16px");
-                case 'lg': return ("font-size: 17px");
-                case 'xl': return ("font-size: 18px");
-                default: return ("font-size: 16px");
+                case 'xs':
+                    return ("font-size: 14px");
+                case 'sm':
+                    return ("font-size: 15px");
+                case 'md':
+                    return ("font-size: 16px");
+                case 'lg':
+                    return ("font-size: 17px");
+                case 'xl':
+                    return ("font-size: 18px");
+                default:
+                    return ("font-size: 16px");
             }
         },
-        iconSize () {
+        iconSize() {
             console.log(this.$vuetify.breakpoint.name);
             switch (this.$vuetify.breakpoint.name) {
-                case 'xs': return ("font-size: 16px");
-                case 'sm': return ("font-size: 18px");
-                case 'md': return ("font-size: 20px");
-                case 'lg': return ("font-size: 22px");
-                case 'xl': return ("font-size: 24px");
-                default: return ("font-size: 16px");
+                case 'xs':
+                    return ("font-size: 16px");
+                case 'sm':
+                    return ("font-size: 18px");
+                case 'md':
+                    return ("font-size: 20px");
+                case 'lg':
+                    return ("font-size: 22px");
+                case 'xl':
+                    return ("font-size: 24px");
+                default:
+                    return ("font-size: 16px");
             }
         },
     },
@@ -911,8 +968,8 @@ export default {
                 //console.log('DroneInfo-watch-goto_positions', newData);
 
                 this.positions = [];
-                for(let i in newData) {
-                    if(Object.prototype.hasOwnProperty.call(newData, i)) {
+                for (let i in newData) {
+                    if (Object.prototype.hasOwnProperty.call(newData, i)) {
                         let goto_pos = {};
                         goto_pos.type = 'goto';
                         goto_pos.text = newData[i];
@@ -930,7 +987,7 @@ export default {
             this.$store.state.drone_infos[this.name].curMode = newVal;
             this.$store.state.drone_infos[this.name].targetModeSelection = newVal;
 
-            if(this.$store.state.drone_infos[this.name].preMode === 'AUTO' && this.curArmStatus === 'ARMED') {
+            if (this.$store.state.drone_infos[this.name].preMode === 'AUTO' && this.curArmStatus === 'ARMED') {
                 this.$store.state.drone_infos[this.name].pausePosition = {
                     lat: this.gpi.lat / 10000000,
                     lng: this.gpi.lon / 10000000,
@@ -1049,7 +1106,7 @@ export default {
     },
 
     methods: {
-        selectedPosition: function(i) {
+        selectedPosition: function (i) {
             let payload = {};
             payload.pName = this.name;
             payload.pIndex = i;
@@ -1083,7 +1140,7 @@ export default {
 
                 EventBus.$emit('gcs-map-ready');
             }
-            catch(e) {
+            catch (e) {
                 console.log('updateMyDroneInfo-JSON parsing error', e.message);
             }
 
@@ -1099,7 +1156,7 @@ export default {
                 method: 'post',
                 url: 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/DroneInfos/' + this.name,
                 headers: {
-                    'X-M2M-RI': String(parseInt(Math.random()*10000)),
+                    'X-M2M-RI': String(parseInt(Math.random() * 10000)),
                     'X-M2M-Origin': 'SVue',
                     'Content-Type': 'application/json;ty=4'
                 },
@@ -1197,7 +1254,7 @@ export default {
 
                         let arr_topic = topic.split('/');
 
-                        if(arr_topic[3] === 'Drone_Data') {
+                        if (arr_topic[3] === 'Drone_Data') {
                             let chkTopic = topic.substr(0, 7);
 
                             if (chkTopic === "/Mobius") {
@@ -1209,7 +1266,8 @@ export default {
 
                                         if (contentLenth > this.strContentEach.length) {
                                             break;
-                                        } else {
+                                        }
+                                        else {
                                             // var mavLength = (6 * 2) + (contentLenth * 2) + (2 * 2);
                                             //console.log(this.name, this.strContentEach.substr(0, mavLength));
 
@@ -1218,13 +1276,15 @@ export default {
                                             this.strContentEach = this.strContentEach.substr(contentLenth);
                                             //console.log(this.strContentEach);
                                         }
-                                    } else if (this.strContentEach.substr(0, 2) === 'fd') {
+                                    }
+                                    else if (this.strContentEach.substr(0, 2) === 'fd') {
                                         len = parseInt(this.strContentEach.substr(2, 2), 16);
                                         contentLenth = (10 * 2) + (len * 2) + (2 * 2);
 
                                         if (contentLenth > this.strContentEach.length) {
                                             break;
-                                        } else {
+                                        }
+                                        else {
                                             // var mavLength = (6 * 2) + (contentLenth * 2) + (2 * 2);
                                             //console.log(this.name, this.strContentEach.substr(0, contentLenth));
 
@@ -1233,53 +1293,28 @@ export default {
                                             this.strContentEach = this.strContentEach.substr(contentLenth);
                                             //console.log(this.strContentEach);
                                         }
-                                    } else {
+                                    }
+                                    else {
                                         this.strContentEach = this.strContentEach.substr(2);
                                     }
                                 }
                             }
                         }
-                        else if (arr_topic[3] === 'Mission_Data') {
-                            let chkTopic = topic.substr(0, 7);
+                        else if (arr_topic[2] === 'Mission_Data') {
+                            if (arr_topic[4] === 'msw_lte_simul') {
+                                let jsonObj = JSON.parse(message.toString());
 
-                            if (chkTopic === '/oneM2M') {
-                                var jsonObj = JSON.parse(message.toString());
-
-                                if (jsonObj['m2m:rqp'] == null) {
-                                    jsonObj['m2m:rqp'] = jsonObj;
-                                }
-
-                                if (Object.prototype.hasOwnProperty.call(jsonObj['m2m:rqp'], 'pc')) {
-
-                                    // console.log(Object.keys(jsonObj['m2m:rqp'].pc)[0]);
-                                    // console.log(jsonObj['m2m:rqp'].pc);
-
-                                    let arr_topic = topic.split('/');
-                                    let resp_topic = topic.replace('/req/', '/resp/');
-                                    let rsp_message = {};
-                                    rsp_message['m2m:rsp'] = {};
-                                    rsp_message['m2m:rsp'].rsc = 2001;
-                                    rsp_message['m2m:rsp'].to = '';
-                                    rsp_message['m2m:rsp'].fr = arr_topic[4];
-                                    rsp_message['m2m:rsp'].rqi = '12345';
-                                    rsp_message['m2m:rsp'].pc = '';
-
-                                    //console.log(resp_topic);
-
-                                    this.doPublish(resp_topic, JSON.stringify(rsp_message['m2m:rsp']));
-
-                                    rsp_message = null;
-
-                                    if (Object.prototype.hasOwnProperty.call(jsonObj['m2m:rqp'].pc, 'm2m:sgn')) {
-                                        if (Object.prototype.hasOwnProperty.call(jsonObj['m2m:rqp'].pc['m2m:sgn'], 'nev')) {
-                                            if (Object.prototype.hasOwnProperty.call(jsonObj['m2m:rqp'].pc['m2m:sgn'].nev, 'rep')) {
-                                                if (Object.keys(jsonObj['m2m:rqp'].pc['m2m:sgn'].nev.rep)[0] === 'm2m:cin') {
+                                if (Object.prototype.hasOwnProperty.call(jsonObj, 'pc')) {
+                                    if (Object.prototype.hasOwnProperty.call(jsonObj.pc, 'm2m:sgn')) {
+                                        if (Object.prototype.hasOwnProperty.call(jsonObj.pc['m2m:sgn'], 'nev')) {
+                                            if (Object.prototype.hasOwnProperty.call(jsonObj.pc['m2m:sgn'].nev, 'rep')) {
+                                                if (Object.keys(jsonObj.pc['m2m:sgn'].nev.rep)[0] === 'm2m:cin') {
                                                     let mission_payload = {};
 
                                                     mission_payload.drone_name = arr_topic[4];
                                                     mission_payload.payload = {}
-                                                    mission_payload.payload.sur = jsonObj['m2m:rqp'].pc['m2m:sgn'].sur;
-                                                    mission_payload.payload.con = jsonObj['m2m:rqp'].pc['m2m:sgn'].nev.rep['m2m:cin'].con;
+                                                    mission_payload.payload.sur = jsonObj.pc['m2m:sgn'].sur;
+                                                    mission_payload.payload.con = jsonObj.pc['m2m:sgn'].nev.rep['m2m:cin'].con;
 
                                                     //this.$store.commit('setMissionPayload', mission_payload);
 
@@ -1293,26 +1328,28 @@ export default {
 
                                                     // if ((this.missionLteUrl + '/' + this.sortie_name) === payload.sur) {
                                                     if (this.missionLteUrl === payload.sur) {
-                                                        // console.log(payload.sur);
 
-                                                        if (Object.prototype.hasOwnProperty.call(payload.con, 'rsrp')) {
+                                                        if (Object.prototype.hasOwnProperty.call(payload.con, 'RSRP')) {
                                                             this.colorLteVal = 'td-text-gray';
 
-                                                            this.curLteVal = payload.con.rsrp;
-                                                            //console.log(this.curLteVal);
+                                                            this.curLteVal = payload.con.RSRP;
+                                                            // console.log(this.curLteVal);
 
                                                             payload = null;
 
                                                             if (0 > this.curLteVal && this.curLteVal >= -80) {
                                                                 this.iconLte = this.$vuetify.icons.values.networkStrength4;
                                                                 this.colorLteVal = 'td-text-blue';
-                                                            } else if (-80 > this.curLteVal && this.curLteVal >= -90) {
+                                                            }
+                                                            else if (-80 > this.curLteVal && this.curLteVal >= -90) {
                                                                 this.iconLte = this.$vuetify.icons.values.networkStrength3;
                                                                 this.colorLteVal = 'td-text-green';
-                                                            } else if (-90 > this.curLteVal && this.curLteVal >= -100) {
+                                                            }
+                                                            else if (-90 > this.curLteVal && this.curLteVal >= -100) {
                                                                 this.iconLte = this.$vuetify.icons.values.networkStrength2;
                                                                 this.colorLteVal = 'td-text-yellow';
-                                                            } else {
+                                                            }
+                                                            else {
                                                                 this.iconLte = this.$vuetify.icons.values.networkStrength1;
                                                                 this.colorLteVal = 'td-text-red';
                                                             }
@@ -1333,53 +1370,18 @@ export default {
                                         }
                                     }
                                 }
-                            } else if  (chkTopic === '/Mobius') {
-                                let con = JSON.parse(message.toString());
-                                if (Object.prototype.hasOwnProperty.call(con, 'RSRP')) {
-                                    this.colorLteVal = 'td-text-gray';
-
-                                    let regex = /[a-zA-Z]/g;
-                                    this.curLteVal = con.RSRP.toString().replace(regex, "");
-                                    // console.log(this.curLteVal);
-
-                                    if (0 > this.curLteVal && this.curLteVal >= -80) {
-                                        this.iconLte = this.$vuetify.icons.values.networkStrength4;
-                                        this.colorLteVal = 'td-text-blue';
-                                    }
-                                    else if (-80 > this.curLteVal && this.curLteVal >= -90) {
-                                        this.iconLte = this.$vuetify.icons.values.networkStrength3;
-                                        this.colorLteVal = 'td-text-green';
-                                    }
-                                    else if (-90 > this.curLteVal && this.curLteVal >= -100) {
-                                        this.iconLte = this.$vuetify.icons.values.networkStrength2;
-                                        this.colorLteVal = 'td-text-yellow';
-                                    }
-                                    else {
-                                        this.iconLte = this.$vuetify.icons.values.networkStrength1;
-                                        this.colorLteVal = 'td-text-red';
-                                    }
-
-                                    if (this.lteTimeoutObj) {
-                                        clearTimeout(this.lteTimeoutObj);
-                                    }
-
-                                    this.lteTimeoutObj = setTimeout(() => {
-                                        this.lteTimeoutObj = null;
-                                        this.colorLteVal = 'td-text-gray';
-                                        this.iconLte = this.$vuetify.icons.values.networkStrengthOffOutline;
-                                    }, 5500);
-                                }
                             }
                         }
                     });
-                } catch (error) {
+                }
+                catch (error) {
                     console.log('mqtt.connect error', error);
                     this.client.connected = false;
                 }
             }
         },
         doSubscribe(topic) {
-            if(this.client.connected) {
+            if (this.client.connected) {
                 const qos = 0;
                 let self = this;
                 this.client.subscribe(topic, {qos}, (error) => {
@@ -1392,7 +1394,7 @@ export default {
             }
         },
         doUnSubscribe(topic) {
-            if(this.client.connected) {
+            if (this.client.connected) {
                 let self = this;
                 this.client.unsubscribe(topic, error => {
                     if (error) {
@@ -1407,7 +1409,7 @@ export default {
             }
         },
         doPublish(topic, payload) {
-            if(this.client.connected) {
+            if (this.client.connected) {
                 this.client.publish(topic, payload, 0, error => {
                     if (error) {
                         console.log('Publish error', error)
@@ -1451,7 +1453,8 @@ export default {
                     //         console.log(err.message);
                     //     }
                     // );
-                } catch (error) {
+                }
+                catch (error) {
                     console.log('Disconnect failed', error.toString())
                 }
             }
@@ -1488,42 +1491,42 @@ export default {
                 recv_sys_id = parseInt(mavPacket.substr(10, 2), 16);
             }
 
-            if(recv_sys_id === parseInt(this.ref_sys_id)) {
+            if (recv_sys_id === parseInt(this.ref_sys_id)) {
                 // if ((this.mavStrFromDrone[topic].length - this.mavStrFromDroneLength[topic]) >= mavLength) {
                 //     this.mavStrFromDroneLength[topic] += mavLength;
                 //     var mavPacket = this.mavStrFromDrone[topic].substr(0, mavLength);
-                    //this.mavStrFromDrone[topic] = this.mavStrFromDrone[topic].substr(mavLength);
+                //this.mavStrFromDrone[topic] = this.mavStrFromDrone[topic].substr(mavLength);
 
-                    // let payload = {};
-                    // payload.sortie = sortie_name;
-                    // payload.data = mavPacket;
+                // let payload = {};
+                // payload.sortie = sortie_name;
+                // payload.data = mavPacket;
 
-                    //EventBus.$emit('push-status-' + arr_topic[4], payload);
+                //EventBus.$emit('push-status-' + arr_topic[4], payload);
 
                 this.recv_counter++;
 
-                if(this.sortie_name !== curSortieName) {
+                if (this.sortie_name !== curSortieName) {
                     this.$store.state.drone_infos[this.name].sortie_name = curSortieName;
                     this.sortie_name = curSortieName;
 
-                    localStorage.setItem(this.name+'_sortie_name', curSortieName);
+                    localStorage.setItem(this.name + '_sortie_name', curSortieName);
 
-                    let url = 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/DroneInfos/' + this.name;
-                    let response = await axios.post(url, {
-                        'm2m:cin': {
-                            con: this.$store.state.drone_infos[this.name]
-                        }
-                    }, {
-                        validateStatus: status => {
-                            return status < 500;
-                        }, // 상태 코드가 500 이상일 경우 거부. 나머지(500보다 작은)는 허용.
-                        headers: {
-                            'X-M2M-RI': String(parseInt(Math.random() * 10000)),
-                            'X-M2M-Origin': 'S' + this.$store.state.VUE_APP_MOBIUS_GCS,
-                            'Content-Type': 'application/json;ty=4'
-                        },
-                    });
-                    console.log('postDroneInfos-' + this.name, response.status, response.data['m2m:cin']);
+                    // let url = 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS + '/DroneInfos/' + this.name;
+                    // let response = await axios.post(url, {
+                    //     'm2m:cin': {
+                    //         con: this.$store.state.drone_infos[this.name]
+                    //     }
+                    // }, {
+                    //     validateStatus: status => {
+                    //         return status < 500;
+                    //     }, // 상태 코드가 500 이상일 경우 거부. 나머지(500보다 작은)는 허용.
+                    //     headers: {
+                    //         'X-M2M-RI': String(parseInt(Math.random() * 10000)),
+                    //         'X-M2M-Origin': 'S' + this.$store.state.VUE_APP_MOBIUS_GCS,
+                    //         'Content-Type': 'application/json;ty=4'
+                    //     },
+                    // });
+                    // console.log('postDroneInfos-' + this.name, response.status, response.data['m2m:cin']);
 
                     if (this.sortie_name !== 'disarm') {
                         var now = moment.utc();
@@ -1563,19 +1566,19 @@ export default {
 
                 this.timeoutObj = setTimeout(() => {
                     // if(this.curArmStatus === 'ARMED') {
-                        // let posLat = this.gpi.lat / 10000000;
-                        // let posLng = this.gpi.lon / 10000000;
-                        // let posAlt = this.gpi.alt / 1000;
-                        // let posKey = (parseInt(this.gpi.lat / 1000) / 10000) + '_' + parseInt(this.gpi.lon / 1000) / 10000;
-                        // console.log('this.$store.state.loss_lte_infos', this.$store.state.loss_lte_infos);
+                    // let posLat = this.gpi.lat / 10000000;
+                    // let posLng = this.gpi.lon / 10000000;
+                    // let posAlt = this.gpi.alt / 1000;
+                    // let posKey = (parseInt(this.gpi.lat / 1000) / 10000) + '_' + parseInt(this.gpi.lon / 1000) / 10000;
+                    // console.log('this.$store.state.loss_lte_infos', this.$store.state.loss_lte_infos);
 
-                        // this.$store.state.loss_lte_infos[posKey] = {
-                        //     lat: posLat,
-                        //     lng: posLng,
-                        //     alt: posAlt
-                        // };
+                    // this.$store.state.loss_lte_infos[posKey] = {
+                    //     lat: posLat,
+                    //     lng: posLng,
+                    //     alt: posAlt
+                    // };
 
-                        // this.postLossLTEInfoToMobius();
+                    // this.postLossLTEInfoToMobius();
                     // }
 
                     this.colorArming = 'white';
@@ -2114,17 +2117,17 @@ export default {
         },
 
         result_auto_mission_item_complete(target_name, pub_topic, target_sys_id, goto_each_position, start_idx, end_idx, delay, cur_idx, result_check_count) {
-            if(this.result_mission_ack[target_sys_id].type == 0) {
+            if (this.result_mission_ack[target_sys_id].type == 0) {
                 console.log('Mission Upload Complete to %s', target_name);
 
                 let custom_mode = this.$store.state.mode_items.indexOf('AUTO'); // AUTO Mode
                 let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
                 base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
-                setTimeout(this.send_set_mode_command, 100 + parseInt(Math.random()*10), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
+                setTimeout(this.send_set_mode_command, 100 + parseInt(Math.random() * 10), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
             }
             else {
                 result_check_count++;
-                if(result_check_count > MISSION_ACK_TIMEOUT_COUNT) {
+                if (result_check_count > MISSION_ACK_TIMEOUT_COUNT) {
                     console.log('Mission Upload Error at %s', target_name);
                 }
                 else {
@@ -2150,7 +2153,7 @@ export default {
 
             let mav_cmd = mavlink.MAV_CMD_NAV_WAYPOINT;
 
-            if(this.$store.state.drone_infos[this.name].flyShape === '곡선비행') {
+            if (this.$store.state.drone_infos[this.name].flyShape === '곡선비행') {
                 if (seq % 2 === 1) {
                     if (seq !== 1) {
                         mav_cmd = mavlink.MAV_CMD_NAV_SPLINE_WAYPOINT;
@@ -2158,17 +2161,17 @@ export default {
                 }
             }
 
-            if(arr_cur_goto_position.length > 6) {
-                if(parseInt(arr_cur_goto_position[6]) === mavlink.MAV_CMD_NAV_TAKEOFF) {
+            if (arr_cur_goto_position.length > 6) {
+                if (parseInt(arr_cur_goto_position[6]) === mavlink.MAV_CMD_NAV_TAKEOFF) {
                     mav_cmd = mavlink.MAV_CMD_NAV_TAKEOFF;
                     radius = 0;
                 }
-                else if(parseInt(arr_cur_goto_position[6]) === mavlink.MAV_CMD_NAV_LAND) {
+                else if (parseInt(arr_cur_goto_position[6]) === mavlink.MAV_CMD_NAV_LAND) {
                     mav_cmd = mavlink.MAV_CMD_NAV_LAND
                     radius = 0;
                     rel_altitude = 0.0;
                 }
-                else if(parseInt(arr_cur_goto_position[6]) === mavlink.MAV_CMD_NAV_LOITER_TURNS) {
+                else if (parseInt(arr_cur_goto_position[6]) === mavlink.MAV_CMD_NAV_LOITER_TURNS) {
                     mav_cmd = mavlink.MAV_CMD_NAV_LOITER_TURNS;
                 }
                 else {
@@ -2179,7 +2182,7 @@ export default {
                 radius = 0;
             }
 
-            if(arr_cur_goto_position.length > 7) {
+            if (arr_cur_goto_position.length > 7) {
                 delay = parseInt(arr_cur_goto_position[7]);
             }
 
@@ -2191,7 +2194,7 @@ export default {
             btn_params.frame = mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT; // 0: MAV_FRAME_GLOBAL, 3: MAV_FRAME_GLOBAL_RELATIVE_ALT
             btn_params.command = mav_cmd;
 
-            if(seq === 0) {
+            if (seq === 0) {
                 btn_params.current = 1;
                 btn_params.autocontinue = 0;
             }
@@ -2247,14 +2250,14 @@ export default {
         },
 
         result_auto_mission_protocol(target_name, pub_topic, target_sys_id, goto_each_position, start_idx, end_idx, delay, cur_idx, result_check_count) {
-            if(this.mission_request[target_sys_id].seq != 255) {
+            if (this.mission_request[target_sys_id].seq != 255) {
                 console.log(this.mission_request[target_sys_id].seq + ' MISSION REQUEST from %s', target_name);
 
                 setTimeout(this.send_auto_mission_protocol, 1, target_name, pub_topic, target_sys_id, goto_each_position, start_idx, end_idx, delay, cur_idx, this.mission_request[target_sys_id].seq);
             }
             else {
                 result_check_count++;
-                if(result_check_count > MISSION_ACK_TIMEOUT_COUNT) {
+                if (result_check_count > MISSION_ACK_TIMEOUT_COUNT) {
                     console.log('Mission Upload Error at %s', target_name);
                 }
                 else {
@@ -2318,13 +2321,13 @@ export default {
         },
 
         result_auto_mission_clear_all(target_name, pub_topic, target_sys_id, goto_each_position, start_idx, end_idx, delay, cur_idx, result_check_count) {
-            if(this.result_mission_ack[target_sys_id].type == 0) {
+            if (this.result_mission_ack[target_sys_id].type == 0) {
                 console.log('Clear All Mission of %s', target_name);
                 setTimeout(this.send_auto_mission_count, 1, target_name, pub_topic, target_sys_id, goto_each_position, start_idx, end_idx, delay, cur_idx);
             }
             else {
                 result_check_count++;
-                if(result_check_count > MISSION_ACK_TIMEOUT_COUNT) {
+                if (result_check_count > MISSION_ACK_TIMEOUT_COUNT) {
                     console.log('Auto mission Clear Error at %s', target_name);
                 }
                 else {
@@ -2503,7 +2506,7 @@ export default {
         send_mission_protocol(target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, seq, result_check_count) {
             var btn_params = {};
 
-            if(seq === 0) {
+            if (seq === 0) {
                 btn_params.target_system = target_sys_id;
                 btn_params.target_component = 1;
                 btn_params.seq = 0;
@@ -2547,7 +2550,7 @@ export default {
                     console.log(seq + ' Send MISSION_ITEM to %s, ' + 'msg: ' + msg.toString('hex') + ' - ' + radius, target_name);
                     this.doPublish(pub_topic, msg);
 
-                    if(seq < 1) {
+                    if (seq < 1) {
                         if (!Object.prototype.hasOwnProperty.call(this.mission_request, target_sys_id)) {
                             this.mission_request[target_sys_id] = {};
                         }
@@ -2557,7 +2560,7 @@ export default {
                         setTimeout(this.result_mission_protocol, 55, target_name, pub_topic, target_sys_id, latitude, longitude, rel_altitude, speed, radius, result_check_count);
                     }
                     else {
-                        if(!Object.prototype.hasOwnProperty.call(this.result_mission_ack, target_sys_id)) {
+                        if (!Object.prototype.hasOwnProperty.call(this.result_mission_ack, target_sys_id)) {
                             this.result_mission_ack[target_sys_id] = {};
                         }
                         this.result_mission_ack[target_sys_id].type = 255;
@@ -2651,7 +2654,7 @@ export default {
                 else {
                     this.doPublish(pub_topic, msg);
 
-                    if(!Object.prototype.hasOwnProperty.call(this.result_mission_ack, target_sys_id)) {
+                    if (!Object.prototype.hasOwnProperty.call(this.result_mission_ack, target_sys_id)) {
                         this.result_mission_ack[target_sys_id] = {};
                     }
                     this.result_mission_ack[target_sys_id].type = 255;
@@ -2701,7 +2704,7 @@ export default {
                     console.log("mavlink message is null");
                 }
                 else {
-                    console.log('send_rtl_speed_param_set_command (', rtl_speed,') ', this.name);
+                    console.log('send_rtl_speed_param_set_command (', rtl_speed, ') ', this.name);
                     this.doPublish(pub_topic, msg);
                 }
             }
@@ -2752,7 +2755,7 @@ export default {
                     console.log("mavlink message is null");
                 }
                 else {
-                    console.log('send_change_speed_command (', target_speed,') ', this.name);
+                    console.log('send_change_speed_command (', target_speed, ') ', this.name);
                     this.doPublish(pub_topic, msg);
                 }
             }
@@ -2960,7 +2963,7 @@ export default {
 
             let url_base = 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius/' + this.$store.state.VUE_APP_MOBIUS_GCS;
             let url = url_base + '/Drone_Data/' + this.name + '/' + this.sortie_name;
-            let response = await axios.get(url,{
+            let response = await axios.get(url, {
                 validateStatus: status => {
                     return status < 500;
                 }, // 상태 코드가 500 이상일 경우 거부. 나머지(500보다 작은)는 허용.
@@ -2971,7 +2974,7 @@ export default {
                 },
             });
 
-            if(isNaN(response.data['m2m:cnt'].lbl[0])) {
+            if (isNaN(response.data['m2m:cnt'].lbl[0])) {
                 // number 가 아님
                 this.time_boot_ms_armed = this.gpi.time_boot_ms;
             }
@@ -3036,8 +3039,8 @@ export default {
                     let my_len = 9;
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (my_len - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -3072,7 +3075,7 @@ export default {
                     }
 
                     if ((this.hb.base_mode & 0x80) === 0x80) {
-                        if(this.curArmStatus === 'DISARMED') {
+                        if (this.curArmStatus === 'DISARMED') {
                             this.$store.state.drone_infos[this.name].home_position = {
                                 lat: (this.gpi.lat / 10000000),
                                 lng: (this.gpi.lon / 10000000)
@@ -3098,7 +3101,7 @@ export default {
                     this.curMode = this.$store.state[this.fcType + '_mode_items_obj'][custom_mode];
 
                     //console.log(this.name, ' - bpm - ', this.bpm);
-                    if(this.bpm < 50) {
+                    if (this.bpm < 50) {
                         console.log(this.name + ' - REQUEST_DATA_STREAM - bpm', this.bpm);
                         setTimeout(this.send_request_data_stream_command, 1, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_RAW_SENSORS, 3, 1);
                         setTimeout(this.send_request_data_stream_command, 3, this.name, this.target_pub_topic, this.sys_id, mavlink.MAV_DATA_STREAM_EXTENDED_STATUS, 3, 1);
@@ -3114,13 +3117,13 @@ export default {
 
                 else if (msg_id === mavlink.MAVLINK_MSG_ID_SYS_STATUS && ((ver === 'fd') || (ver === 'fe' && mavPacket.length === 78))) {
                     let my_len = 31;
-                    if(ver === 'fd') {
+                    if (ver === 'fd') {
                         my_len += 12;
                     }
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (my_len - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -3149,8 +3152,8 @@ export default {
                     let my_len = 28;
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (my_len - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -3198,16 +3201,19 @@ export default {
 
                     let h_pos = get_point_dist((this.gpi.lat / 10000000), (this.gpi.lon / 10000000), 1, this.heading);
                     this.$store.state.drone_infos[this.name].headingLine = [];
-                    this.$store.state.drone_infos[this.name].headingLine.push({lat: (this.gpi.lat / 10000000), lng: (this.gpi.lon / 10000000)});
+                    this.$store.state.drone_infos[this.name].headingLine.push({
+                        lat: (this.gpi.lat / 10000000),
+                        lng: (this.gpi.lon / 10000000)
+                    });
                     this.$store.state.drone_infos[this.name].headingLine.push({lat: h_pos.lat, lng: h_pos.lon});
 
                     EventBus.$emit('do-current-drone-position', this.name);
 
-                    if(Math.abs(this.gpi.vx) < 10) {
+                    if (Math.abs(this.gpi.vx) < 10) {
                         this.gpi.vx = 0;
                     }
 
-                    if(Math.abs(this.gpi.vy) < 10) {
+                    if (Math.abs(this.gpi.vy) < 10) {
                         this.gpi.vy = 0;
                     }
 
@@ -3216,24 +3222,27 @@ export default {
                     let theta = (360 + (Math.atan2(vyy, vxx) * 180 / Math.PI)) % 360;
 
                     //console.log('vxx', vxx, ', vyy', vyy, ', theta', theta);
-                    if(vxx >= 0 && vyy >= 0) {
-                        var dir = (360 + (90-theta)) % 360;
+                    if (vxx >= 0 && vyy >= 0) {
+                        var dir = (360 + (90 - theta)) % 360;
                     }
-                    else if(vxx < 0 && vyy >= 0) {
-                        dir = (360 + (180-theta+270)) % 360;
+                    else if (vxx < 0 && vyy >= 0) {
+                        dir = (360 + (180 - theta + 270)) % 360;
                     }
-                    else if(vxx < 0 && vyy < 0) {
-                        dir = (360 + (270-theta+180)) % 360;
+                    else if (vxx < 0 && vyy < 0) {
+                        dir = (360 + (270 - theta + 180)) % 360;
                     }
                     else {
-                        dir = (360 + (360-theta+90)) % 360;
+                        dir = (360 + (360 - theta + 90)) % 360;
                     }
                     //console.log("vx", this.gpi.vx / 100, "vy", this.gpi.vy / 100, "theta", dir, "heading", this.heading);
 
 
-                    let dir_pos = get_point_dist((this.gpi.lat / 10000000), (this.gpi.lon / 10000000), (0.001 + ((this.airspeed * 3)/1000)), dir);
+                    let dir_pos = get_point_dist((this.gpi.lat / 10000000), (this.gpi.lon / 10000000), (0.001 + ((this.airspeed * 3) / 1000)), dir);
                     this.$store.state.drone_infos[this.name].directionLine = [];
-                    this.$store.state.drone_infos[this.name].directionLine.push({lat: (this.gpi.lat / 10000000), lng: (this.gpi.lon / 10000000)});
+                    this.$store.state.drone_infos[this.name].directionLine.push({
+                        lat: (this.gpi.lat / 10000000),
+                        lng: (this.gpi.lon / 10000000)
+                    });
                     this.$store.state.drone_infos[this.name].directionLine.push({lat: dir_pos.lat, lng: dir_pos.lon});
 
                     if (this.flagReceiving) {
@@ -3246,7 +3255,7 @@ export default {
 
                             if (this.watchingMissionStatus >= 98) {
                                 this.watchingCount++;
-                                if(this.watchingCount > 32) {
+                                if (this.watchingCount > 32) {
                                     this.watchingMissionStatus = 100;
                                     this.watchingMission = 'takeoff-complete';
                                     this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
@@ -3265,7 +3274,7 @@ export default {
 
                             if (this.watchingMissionStatus >= 98) {
                                 this.watchingCount++;
-                                if(this.watchingCount > 32) {
+                                if (this.watchingCount > 32) {
                                     this.watchingMissionStatus = 100;
                                     this.watchingMission = 'goto-alt-complete';
                                     this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
@@ -3296,7 +3305,7 @@ export default {
 
                             if (this.watchingMissionStatus >= 98) {
                                 this.watchingCount++;
-                                if(this.watchingCount > 32) {
+                                if (this.watchingCount > 32) {
                                     this.watchingMissionStatus = 100;
                                     this.watchingMission = 'goto-complete';
                                     this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
@@ -3327,7 +3336,7 @@ export default {
 
                             //console.log('goto-circle', 'cur_dist-, heading', Math.abs(cur_dist - this.droneStatus.radius), this.heading);
 
-                            if(Math.abs(cur_dist - this.droneStatus.radius) < 3) {
+                            if (Math.abs(cur_dist - this.droneStatus.radius) < 3) {
 
                                 // this.droneStatus.startCount++;
                                 //
@@ -3335,31 +3344,31 @@ export default {
                                 //console.log(this.droneStatus.initHeading, this.heading)
                                 let cur_heading = this.heading;
                                 let diff = 0;
-                                if(this.$store.state.drone_infos[this.name].circleType === '시계방향') {
+                                if (this.$store.state.drone_infos[this.name].circleType === '시계방향') {
                                     diff = cur_heading - this.droneStatus.initHeading;
                                 }
                                 else {
                                     diff = this.droneStatus.initHeading - cur_heading;
                                 }
 
-                                if(diff < 0) {
+                                if (diff < 0) {
                                     diff += 360;
                                 }
 
                                 this.watchingMissionStatus = parseInt((diff / 360) * 100);
                                 //console.log('goto-circle', 'diff, heading', diff, this.heading, this.droneStatus.initHeading);
-//                                 }
-//                                 else {
-//                                     let deg = (Math.atan2((result2.y - result1.y), (result2.x - result1.x)) * (180/3.14));
-//                                     deg = 360-deg;
-//                                     deg -= 90;
-//                                     deg %= 360;
-//
-// //                                    console.log(deg);
-//                                     this.droneStatus.initHeading = (deg + 180) % 360;
-//
-//                                     console.log(this.droneStatus.initHeading, this.heading)
-//                                 }
+                                //                                 }
+                                //                                 else {
+                                //                                     let deg = (Math.atan2((result2.y - result1.y), (result2.x - result1.x)) * (180/3.14));
+                                //                                     deg = 360-deg;
+                                //                                     deg -= 90;
+                                //                                     deg %= 360;
+                                //
+                                // //                                    console.log(deg);
+                                //                                     this.droneStatus.initHeading = (deg + 180) % 360;
+                                //
+                                //                                     console.log(this.droneStatus.initHeading, this.heading)
+                                //                                 }
                             }
                             // else {
                             //     this.droneStatus.startCount = 0;
@@ -3383,7 +3392,7 @@ export default {
 
                             this.watchingMissionStatus = parseInt(Math.abs((1 - (cur_dist / this.watchingInitDist))) * 100);
 
-                            if(this.curArmStatus !== 'ARMED') {
+                            if (this.curArmStatus !== 'ARMED') {
                                 this.watchingMissionStatus = 100;
                                 this.watchingMission = 'land-complete';
                                 this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
@@ -3392,7 +3401,7 @@ export default {
                         else if (this.$store.state.drone_infos[this.name].watchingMission === 'rtl') {
                             this.watchingMissionStatus = parseInt(Math.abs((1 - (this.valueDistance / this.watchingInitDist))) * 100);
 
-                            if(this.curArmStatus !== 'ARMED') {
+                            if (this.curArmStatus !== 'ARMED') {
                                 this.watchingMissionStatus = 100;
                                 this.watchingMission = 'rtl-complete';
                                 this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
@@ -3421,7 +3430,7 @@ export default {
                                 this.$store.state.trackingLines[this.name].shift();
                             }
 
-                            if(this.curArmStatus === 'ARMED') {
+                            if (this.curArmStatus === 'ARMED') {
                                 this.$store.state.trackingLines[this.name].push({lat: _payload.lat, lng: _payload.lng});
 
                                 localStorage.setItem('trackingLines-' + this.name, JSON.stringify(this.$store.state.trackingLines[this.name]));
@@ -3466,8 +3475,8 @@ export default {
                         }
 
                         if (this.$store.state.currentCommandTab === '이동' || this.$store.state.currentCommandTab === '선회' || this.$store.state.currentCommandTab === '관심') {
-                            if(this.$store.state.drone_infos[this.name].selected && this.$store.state.drone_infos[this.name].targeted) {
-                                if(Object.prototype.hasOwnProperty.call(this.$store.state.curTargetedTempMarkerIndex, this.name)) {
+                            if (this.$store.state.drone_infos[this.name].selected && this.$store.state.drone_infos[this.name].targeted) {
+                                if (Object.prototype.hasOwnProperty.call(this.$store.state.curTargetedTempMarkerIndex, this.name)) {
                                     if (this.$store.state.curTargetedTempMarkerIndex[this.name] !== null) {
                                         // console.log(this.$store.state.curTargetedTempMarkerIndex[this.name]);
                                         // console.log(this.$store.state.tempMarkers[this.name][0]);
@@ -3516,8 +3525,8 @@ export default {
                     let my_len = 28;
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (my_len - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -3549,44 +3558,44 @@ export default {
                     this.att.yawspeed = Buffer.from(yawspeed, 'hex').readFloatLE(0);
 
                     this.arrRoll.push((-1) * this.att.roll * 100);
-                    while(this.arrRoll.length > 3) {
+                    while (this.arrRoll.length > 3) {
                         this.arrRoll.shift();
                     }
-                    this.roll = this.arrRoll.reduce( ( p, c ) => p + c, 0 ) / this.arrRoll.length;
-                    this.roll = this.att.roll * (180/3.14);
+                    this.roll = this.arrRoll.reduce((p, c) => p + c, 0) / this.arrRoll.length;
+                    this.roll = this.att.roll * (180 / 3.14);
 
                     // console.log('roll(rad): ' + (this.att.roll));
 
                     this.arrPitch.push(this.att.pitch * 100);
-                    while(this.arrPitch.length > 3) {
+                    while (this.arrPitch.length > 3) {
                         this.arrPitch.shift();
                     }
-                    this.pitch = this.arrPitch.reduce( ( p, c ) => p + c, 0 ) / this.arrPitch.length;
-                    this.pitch = this.att.pitch * (180/3.14);
+                    this.pitch = this.arrPitch.reduce((p, c) => p + c, 0) / this.arrPitch.length;
+                    this.pitch = this.att.pitch * (180 / 3.14);
 
                     // console.log('pitch(rad): ' + (this.att.pitch));
                     // console.log('pitch(deg): ' + (this.att.pitch * (180/3.14)));
 
                     // console.log('roll: ' + this.roll, 'pitch: ' + this.pitch);
 
-                    if(this.att.yaw < 0) {
+                    if (this.att.yaw < 0) {
                         this.att.yaw += (2 * Math.PI);
                     }
 
                     // console.log('yaw', ((this.att.yaw * 180) / Math.PI));
 
-                    this.heading = ((this.att.yaw * 180)/Math.PI);
+                    this.heading = ((this.att.yaw * 180) / Math.PI);
                 }
 
-                else if( msg_id === mavlink.MAVLINK_MSG_ID_GPS_RAW_INT) {
+                else if (msg_id === mavlink.MAVLINK_MSG_ID_GPS_RAW_INT) {
                     let my_len = 30;
-                    if(ver === 'fd') {
+                    if (ver === 'fd') {
                         my_len += 22;
                     }
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (my_len - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -3600,8 +3609,8 @@ export default {
                     let my_len = 25;
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (my_len - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -3862,13 +3871,13 @@ export default {
                     // console.log('---> ' + 'MAVLINK_MSG_ID_MISSION_REQUEST - ' + mavPacket);
 
                     let my_len = 4;
-                    if(ver === 'fd') {
+                    if (ver === 'fd') {
                         my_len += 1;
                     }
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (my_len - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -3891,7 +3900,7 @@ export default {
 
                     console.log(this.name, sys_id, 'MAVLINK_MSG_ID_MISSION_REQUEST', '-', this.mission_request[sys_id].target_system, this.mission_request[sys_id].seq_requested);
 
-                    this.watchingMissionStatus = parseInt((this.mission_request[sys_id].seq_requested) / (this.droneStatus.mission_count-1) * 100);
+                    this.watchingMissionStatus = parseInt((this.mission_request[sys_id].seq_requested) / (this.droneStatus.mission_count - 1) * 100);
 
                     console.log('downloading ' + this.watchingMissionStatus + '%');
 
@@ -3903,13 +3912,13 @@ export default {
                 }
                 else if (msg_id === mavlink.MAVLINK_MSG_ID_MISSION_ITEM_REACHED) {
                     let my_len = 30;
-                    if(ver === 'fd') {
+                    if (ver === 'fd') {
                         my_len += 22;
                     }
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (my_len - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -3919,15 +3928,15 @@ export default {
 
                     console.log(this.name, 'MAVLINK_MSG_ID_MISSION_ITEM_REACHED', this.mission_seq);
 
-                    if(this.$store.state.drone_infos[this.name].watchingMission === 'auto-goto') {
+                    if (this.$store.state.drone_infos[this.name].watchingMission === 'auto-goto') {
 
-                        this.watchingMissionStatus = parseInt((this.mission_seq) / (this.$store.state.drone_infos[this.name].mission_count-1) * 100);
+                        this.watchingMissionStatus = parseInt((this.mission_seq) / (this.$store.state.drone_infos[this.name].mission_count - 1) * 100);
 
-                        if(this.$store.state.drone_infos[this.name].mission_count === (this.mission_seq+1)) {
+                        if (this.$store.state.drone_infos[this.name].mission_count === (this.mission_seq + 1)) {
                             console.log('Auto Mission Complete at %s', this.droneStatus.target_name);
 
                             let target_mode = 'GUIDED';
-                            if(this.fcType === 'px4') {
+                            if (this.fcType === 'px4') {
                                 target_mode = 'AUTO_LOITER';
                             }
                             this.send_set_mode_command(this.name, this.target_pub_topic, this.sys_id, target_mode);
@@ -3949,13 +3958,13 @@ export default {
                         }
                     }
 
-                    else if(this.$store.state.drone_infos[this.name].watchingMission === 'goto-circle') {
+                    else if (this.$store.state.drone_infos[this.name].watchingMission === 'goto-circle') {
                         this.watchingMissionStatus = 100;
 
                         this.droneStatus.startFlag = false;
 
                         let target_mode = 'GUIDED';
-                        if(this.fcType === 'px4') {
+                        if (this.fcType === 'px4') {
                             target_mode = 'AUTO_LOITER';
                         }
                         this.send_set_mode_command(this.name, this.target_pub_topic, this.sys_id, target_mode);
@@ -3964,13 +3973,13 @@ export default {
                         this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
                     }
 
-                    else if(this.$store.state.drone_infos[this.name].watchingMission === 'takeoff') {
+                    else if (this.$store.state.drone_infos[this.name].watchingMission === 'takeoff') {
                         this.watchingMissionStatus = 100;
                         this.watchingMission = 'takeoff-complete';
                         this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
                     }
 
-                    else if(this.$store.state.drone_infos[this.name].watchingMission === 'goto') {
+                    else if (this.$store.state.drone_infos[this.name].watchingMission === 'goto') {
                         this.watchingMissionStatus = 100;
                         this.watchingMission = 'goto-complete';
                         this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
@@ -3978,7 +3987,7 @@ export default {
                         //this.setWpYawBehavior(1);
                     }
 
-                    else if(this.$store.state.drone_infos[this.name].watchingMission === 'goto-alt') {
+                    else if (this.$store.state.drone_infos[this.name].watchingMission === 'goto-alt') {
                         this.watchingMissionStatus = 100;
                         this.watchingMission = 'goto-alt-complete';
                         this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
@@ -3994,13 +4003,13 @@ export default {
                     // console.log('---> ' + 'MAVLINK_MSG_ID_MISSION_ACK - ' + mavPacket);
 
                     let my_len = 3;
-                    if(ver === 'fd') {
+                    if (ver === 'fd') {
                         my_len += 1;
                     }
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (my_len - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -4021,13 +4030,13 @@ export default {
 
                     console.log(this.name, 'MAVLINK_MSG_ID_MISSION_ACK', '-', this.result_mission_ack[sys_id].target_system, this.MAV_MISSION_RESULT_CODE[this.result_mission_ack[sys_id].type]);
 
-                    if((this.droneStatus.curCommand === 'auto_mission_clear_all') && (this.result_mission_ack[sys_id].type === 0)) {
+                    if ((this.droneStatus.curCommand === 'auto_mission_clear_all') && (this.result_mission_ack[sys_id].type === 0)) {
                         clearTimeout(this.droneStatus.objTimeout);
                         this.droneStatus.curCommand = '';
 
                         this.send_auto_mission_count(this.droneStatus.target_name, this.droneStatus.pub_topic, this.droneStatus.target_sys_id, this.droneStatus.goto_each_position, this.droneStatus.start_idx, this.droneStatus.end_idx, this.droneStatus.delay, this.droneStatus.cur_idx);
                     }
-                    else if((this.droneStatus.curCommand === 'auto_mission_item') && (this.result_mission_ack[sys_id].type === 0)) {
+                    else if ((this.droneStatus.curCommand === 'auto_mission_item') && (this.result_mission_ack[sys_id].type === 0)) {
                         clearTimeout(this.droneStatus.objTimeout);
                         this.droneStatus.curCommand = '';
 
@@ -4035,7 +4044,7 @@ export default {
 
                         this.watchingMissionStatus = 0;
 
-                        if(this.$store.state.drone_infos[this.name].watchingMission === 'goto-circle') {
+                        if (this.$store.state.drone_infos[this.name].watchingMission === 'goto-circle') {
                             delete this.$store.state.missionLines[this.droneStatus.target_name];
                             this.$store.state.missionCircles[this.droneStatus.target_name] = null;
                             delete this.$store.state.missionCircles[this.droneStatus.target_name];
@@ -4064,8 +4073,8 @@ export default {
 
                     let ar = mavPacket.split('');
                     for (let i = 0; i < (3 - msg_len); i++) {
-                        ar.splice(ar.length-4, 0, '0');
-                        ar.splice(ar.length-4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
+                        ar.splice(ar.length - 4, 0, '0');
                     }
                     mavPacket = ar.join('');
 
@@ -4085,7 +4094,8 @@ export default {
                     console.log(this.name, 'MAVLINK_MSG_ID_COMMAND_ACK', '-', this.result_command_ack[sys_id].command, this.MAV_CMD_ACK_CODE[this.result_command_ack[sys_id].command_result]);
                 }
                 mavPacket = null;
-            } catch (e) {
+            }
+            catch (e) {
                 console.log(e);
                 console.log(e.message);
             }
@@ -4100,7 +4110,7 @@ export default {
                 method: 'get',
                 url: 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579' + this.missionLteUrl,
                 headers: {
-                    'X-M2M-RI': String(parseInt(Math.random()*10000)),
+                    'X-M2M-RI': String(parseInt(Math.random() * 10000)),
                     'X-M2M-Origin': 'SVue'
                 }
             }).then(
@@ -4114,7 +4124,7 @@ export default {
                 });
         },
 
-        getSubscription(sortie, callback) {
+        getSubscription(url, callback) {
             const subscription_name = 'sub_' + this.name + '_of_gcs';
             axios({
                 validateStatus: function (status) {
@@ -4122,9 +4132,9 @@ export default {
                     return status < 500;
                 },
                 method: 'get',
-                url: 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579' + this.missionLteUrl + '/' + subscription_name,
+                url: 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579' + url + '/' + subscription_name,
                 headers: {
-                    'X-M2M-RI': String(parseInt(Math.random()*10000)),
+                    'X-M2M-RI': String(parseInt(Math.random() * 10000)),
                     'X-M2M-Origin': 'SVue'
                 }
             }).then(
@@ -4139,7 +4149,7 @@ export default {
             );
         },
 
-        deleteSubscription(sortie, callback) {
+        deleteSubscription(url, callback) {
             const subscription_name = 'sub_' + this.name + '_of_gcs';
             axios({
                 validateStatus: function (status) {
@@ -4147,10 +4157,10 @@ export default {
                     return status < 500;
                 },
                 method: 'delete',
-                url: 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579' + this.missionLteUrl + '/' + sortie + '/' + subscription_name,
+                url: 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579' + url + '/' + subscription_name,
                 headers: {
-                    'X-M2M-RI': String(parseInt(Math.random()*10000)),
-                    'X-M2M-Origin': 'Superman'
+                    'X-M2M-RI': String(parseInt(Math.random() * 10000)),
+                    'X-M2M-Origin': 'SVue'
                 }
             }).then(
                 function (res) {
@@ -4163,9 +4173,9 @@ export default {
                 });
         },
 
-        createSubscription(sortie, callback) {
+        createSubscription(url, callback) {
             const subscription_name = 'sub_' + this.name + '_of_gcs';
-            let nu = 'mqtt://' + this.$store.state.VUE_APP_MOBIUS_HOST + '/' + this.name + '?ct=json';
+            let nu = 'mqtt://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':1883' + url.substring(7, url.length) + '?ct=json';
 
             axios({
                 validateStatus: function (status) {
@@ -4173,9 +4183,9 @@ export default {
                     return status < 500;
                 },
                 method: 'post',
-                url: 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579' + this.missionLteUrl,
+                url: 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579' + url,
                 headers: {
-                    'X-M2M-RI': String(parseInt(Math.random()*10000)),
+                    'X-M2M-RI': String(parseInt(Math.random() * 10000)),
                     'X-M2M-Origin': 'SVue',
                     'Content-Type': 'application/json;ty=23'
                 },
@@ -4207,7 +4217,7 @@ export default {
                 method: 'get',
                 url: 'http://' + this.$store.state.VUE_APP_MOBIUS_HOST + ':7579/Mobius/MUV/approval/' + this.id + '/la',
                 headers: {
-                    'X-M2M-RI': String(parseInt(Math.random()*10000)),
+                    'X-M2M-RI': String(parseInt(Math.random() * 10000)),
                     'X-M2M-Origin': 'SVue'
                 }
             }).then(
@@ -4273,7 +4283,7 @@ export default {
             watchingPayload.watchingInitDist = this.watchingInitDist;
             watchingPayload.watchingMissionStatus = this.watchingMissionStatus;
 
-            if(watchingPayload.watchingMission === 'goto') {
+            if (watchingPayload.watchingMission === 'goto') {
                 watchingPayload.targetLat = this.$store.state.drone_infos[this.name].targetLat;
                 watchingPayload.targetLng = this.$store.state.drone_infos[this.name].targetLng;
                 watchingPayload.targetAlt = this.$store.state.drone_infos[this.name].targetAlt;
@@ -4281,7 +4291,7 @@ export default {
                 watchingPayload.missionLines = this.$store.state.missionLines;
                 watchingPayload.missionCircles = this.$store.state.missionCircles;
             }
-            else if(watchingPayload.watchingMission === 'goto-circle') {
+            else if (watchingPayload.watchingMission === 'goto-circle') {
                 watchingPayload.targetLat = this.$store.state.drone_infos[this.name].targetLat;
                 watchingPayload.targetLng = this.$store.state.drone_infos[this.name].targetLng;
                 watchingPayload.targetAlt = this.$store.state.drone_infos[this.name].targetAlt;
@@ -4292,10 +4302,10 @@ export default {
                 watchingPayload.missionCircles = this.$store.state.missionCircles;
                 watchingPayload.missionLines = this.$store.state.missionLines;
             }
-            else if(watchingPayload.watchingMission === 'goto-alt') {
+            else if (watchingPayload.watchingMission === 'goto-alt') {
                 watchingPayload.targetAlt = this.$store.state.drone_infos[this.name].targetAlt;
             }
-            else if(watchingPayload.watchingMission === 'takeoff') {
+            else if (watchingPayload.watchingMission === 'takeoff') {
                 watchingPayload.homePosition = this.$store.state.drone_infos[this.name].home_position;
             }
 
@@ -4314,17 +4324,37 @@ export default {
             this.missionLteUrl = '/Mobius/' + this.gcs + '/Mission_Data/' + this.name + '/msw_lte_simul/LTE';
             console.log('this.missionLteUrl', this.missionLteUrl);
 
-            this.doSubscribe(this.missionLteUrl);
+            // this.doSubscribe(this.missionLteUrl);
 
-            this.missionLteUrlFlag = true;
+            this.getSubscription(this.missionLteUrl, (res) => {
+                console.log('getSubscription', res);
+                if (res.status === 404) {
+                    this.createSubscription(this.missionLteUrl, (res) => {
+                        console.log('createSubscription', res);
+                        this.doSubscribe(this.missionLteUrl.substring(7, this.missionLteUrl.length));
+                        console.log('Subscribe mission topic to ', this.missionLteUrl.substring(7, this.missionLteUrl.length) + '/#');
+                    });
+                }
+                else {
+                    this.deleteSubscription(this.missionLteUrl, (res) => {
+                        console.log('deleteSubscription', res);
+                        if (res.status === 200 || res.status === 404) {
+                            this.createSubscription(this.missionLteUrl, (res) => {
+                                console.log('createSubscription', res);
+                                this.doSubscribe(this.missionLteUrl.substring(7, this.missionLteUrl.length));
+                                console.log('Subscribe mission topic to ', this.missionLteUrl.substring(7, this.missionLteUrl.length) + '/#');
+                            });
+                        }
+                    });
+                }
+            });
         },
     },
 
-
     created() {
         this.positions = []
-        for(let idx in this.$store.state.tempMarkers[this.name]) {
-            if(Object.prototype.hasOwnProperty.call(this.$store.state.tempMarkers[this.name], idx)) {
+        for (let idx in this.$store.state.tempMarkers[this.name]) {
+            if (Object.prototype.hasOwnProperty.call(this.$store.state.tempMarkers[this.name], idx)) {
                 let str = this.$store.state.tempMarkers[this.name][idx].lat + ':' + this.$store.state.tempMarkers[this.name][idx].lng +
                     ':' + this.$store.state.tempMarkers[this.name][idx].alt + ':' + this.$store.state.tempMarkers[this.name][idx].radius +
                     ':' + this.$store.state.tempMarkers[this.name][idx].airspeed;
@@ -4413,7 +4443,7 @@ export default {
         });
 
         EventBus.$on('do-target-selected' + this.name, (payload) => {
-            if(payload.value) {
+            if (payload.value) {
                 this.selectedItem = payload.pIndex;
             }
             else {
@@ -4424,7 +4454,7 @@ export default {
         EventBus.$on('initialize-' + this.name, (payload) => {
             this.flagReceiving = false;
 
-            console.log('DroneInfo-initialize-'+this.name, payload);
+            console.log('DroneInfo-initialize-' + this.name, payload);
 
             let _payload = {};
             _payload.name = this.name;
@@ -4457,8 +4487,8 @@ export default {
         });
 
         EventBus.$on('command-set-params-' + this.name, (params) => {
-            if(Object.prototype.hasOwnProperty.call(params, 'wpYawBehavior')) {
-                if(params.wpYawBehavior[this.name] !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(params, 'wpYawBehavior')) {
+                if (params.wpYawBehavior[this.name] !== undefined) {
                     let param_value = parseInt(params.wpYawBehavior[this.name].charAt(0));
 
 
@@ -4467,7 +4497,7 @@ export default {
                     let custom_mode = this.$store.state.mode_items.indexOf('LOITER');
                     let base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
                     base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
-                    setTimeout(this.send_set_mode_command, parseInt(Math.random()*2), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
+                    setTimeout(this.send_set_mode_command, parseInt(Math.random() * 2), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
 
                     setTimeout((name, target_pub_topic, sys_id, param_value) => {
                         this.send_wp_yaw_behavior_param_set_command(name, target_pub_topic, sys_id, param_value);
@@ -4475,14 +4505,14 @@ export default {
                         custom_mode = pre_custom_mode;
                         base_mode = this.hb.base_mode & ~mavlink.MAV_MODE_FLAG_DECODE_POSITION_CUSTOM_MODE;
                         base_mode |= mavlink.MAV_MODE_FLAG_CUSTOM_MODE_ENABLED;
-                        setTimeout(this.send_set_mode_command, parseInt(Math.random()*2), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
+                        setTimeout(this.send_set_mode_command, parseInt(Math.random() * 2), this.name, this.target_pub_topic, this.sys_id, base_mode, custom_mode);
 
                     }, 5 + parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, param_value);
                 }
             }
 
-            if(Object.prototype.hasOwnProperty.call(params, 'atcSlewYaw')) {
-                if(params.atcSlewYaw[this.name] !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(params, 'atcSlewYaw')) {
+                if (params.atcSlewYaw[this.name] !== undefined) {
                     let param_value = parseFloat(params.atcSlewYaw[this.name]);
 
                     setTimeout((name, target_pub_topic, sys_id, param_value) => {
@@ -4492,8 +4522,8 @@ export default {
                 }
             }
 
-            if(Object.prototype.hasOwnProperty.call(params, 'wpnavSpeedUp')) {
-                if(params.wpnavSpeedUp[this.name] !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(params, 'wpnavSpeedUp')) {
+                if (params.wpnavSpeedUp[this.name] !== undefined) {
                     let param_value = parseFloat(params.wpnavSpeedUp[this.name]);
 
                     setTimeout((name, target_pub_topic, sys_id, param_value) => {
@@ -4503,8 +4533,8 @@ export default {
                 }
             }
 
-            if(Object.prototype.hasOwnProperty.call(params, 'wpnavSpeedDn')) {
-                if(params.wpnavSpeedDn[this.name] !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(params, 'wpnavSpeedDn')) {
+                if (params.wpnavSpeedDn[this.name] !== undefined) {
                     let param_value = parseFloat(params.wpnavSpeedDn[this.name]);
 
                     setTimeout((name, target_pub_topic, sys_id, param_value) => {
@@ -4514,8 +4544,8 @@ export default {
                 }
             }
 
-            if(Object.prototype.hasOwnProperty.call(params, 'rtlAlt')) {
-                if(params.rtlAlt[this.name] !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(params, 'rtlAlt')) {
+                if (params.rtlAlt[this.name] !== undefined) {
                     let param_value = parseFloat(params.rtlAlt[this.name]);
 
                     setTimeout((name, target_pub_topic, sys_id, param_value) => {
@@ -4530,13 +4560,13 @@ export default {
 
         EventBus.$on('command-set-disarm-' + this.name, () => {
             console.log('send_disarm_command ', this.name);
-            setTimeout(this.send_arm_command, parseInt(Math.random()*5), this.name, this.target_pub_topic, this.sys_id, 0, 0);
+            setTimeout(this.send_arm_command, parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, 0, 0);
 
             this.watchingMission = 'disarm';
         });
 
         EventBus.$on('command-set-auto_goto-' + this.name, async (payload) => {
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             let start_idx = payload.start_index;
             let end_idx = payload.end_index;
@@ -4545,10 +4575,10 @@ export default {
 
             this.send_wpnav_speed_param_set_command(this.name, this.target_pub_topic, this.sys_id, auto_speed);
 
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             let target_mode = 'GUIDED';
-            if(this.fcType === 'px4') {
+            if (this.fcType === 'px4') {
                 target_mode = 'AUTO_LOITER';
             }
             this.send_set_mode_command(this.name, this.target_pub_topic, this.sys_id, target_mode);
@@ -4561,7 +4591,7 @@ export default {
 
             console.log('auto_goto_position2', start_idx, end_idx, auto_goto_positions);
 
-            await sleep(parseInt(10+Math.random()*10));
+            await sleep(parseInt(10 + Math.random() * 10));
 
             if (this.curArmStatus === 'DISARMED') {
                 this.$store.state.drone_infos[this.name].targetTakeoffAlt = auto_goto_positions[1].split(':')[2];
@@ -4602,8 +4632,8 @@ export default {
         });
 
         EventBus.$on('command-set-pwms-' + this.name, (pwms) => {
-            if(Object.prototype.hasOwnProperty.call(pwms, 'ch9')) {
-                if(pwms.ch9[this.name] !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(pwms, 'ch9')) {
+                if (pwms.ch9[this.name] !== undefined) {
                     let pwm_value = parseInt(pwms.ch9[this.name]);
 
                     setTimeout((name, target_pub_topic, sys_id, pwm_value) => {
@@ -4613,8 +4643,8 @@ export default {
                 }
             }
 
-            if(Object.prototype.hasOwnProperty.call(pwms, 'ch10')) {
-                if(pwms.ch10[this.name] !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(pwms, 'ch10')) {
+                if (pwms.ch10[this.name] !== undefined) {
                     let pwm_value = parseInt(pwms.ch10[this.name]);
 
                     setTimeout((name, target_pub_topic, sys_id, pwm_value) => {
@@ -4624,8 +4654,8 @@ export default {
                 }
             }
 
-            if(Object.prototype.hasOwnProperty.call(pwms, 'ch11')) {
-                if(pwms.ch11[this.name] !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(pwms, 'ch11')) {
+                if (pwms.ch11[this.name] !== undefined) {
                     let pwm_value = parseInt(pwms.ch11[this.name]);
 
                     setTimeout((name, target_pub_topic, sys_id, pwm_value) => {
@@ -4635,8 +4665,8 @@ export default {
                 }
             }
 
-            if(Object.prototype.hasOwnProperty.call(pwms, 'ch12')) {
-                if(pwms.ch12[this.name] !== undefined) {
+            if (Object.prototype.hasOwnProperty.call(pwms, 'ch12')) {
+                if (pwms.ch12[this.name] !== undefined) {
                     let pwm_value = parseInt(pwms.ch12[this.name]);
 
                     setTimeout((name, target_pub_topic, sys_id, pwm_value) => {
@@ -4650,11 +4680,11 @@ export default {
         });
 
         EventBus.$on('command-set-rtl-' + this.name, async (rtl_speed) => {
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             this.send_rtl_speed_param_set_command(this.name, this.target_pub_topic, this.sys_id, rtl_speed);
 
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             this.send_rtl_command(this.name, this.target_pub_topic, this.sys_id);
 
@@ -4666,7 +4696,7 @@ export default {
         });
 
         EventBus.$on('command-set-land-' + this.name, async () => {
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             this.send_land_command(this.name, this.target_pub_topic, this.sys_id);
 
@@ -4675,7 +4705,7 @@ export default {
             this.watchingInitDist = Math.abs(0 - parseFloat((this.gpi.relative_alt / 1000).toFixed(1)));
             this.watchingMissionStatus = 0;
 
-            if(this.watchingInitDist <= 0.1) {
+            if (this.watchingInitDist <= 0.1) {
                 this.watchingMission = 'land-complete';
                 this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
                 this.watchingMissionStatus = 100;
@@ -4685,23 +4715,23 @@ export default {
         });
 
         EventBus.$on('command-set-stop-' + this.name, async () => {
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             let target_mode = 'LOITER';
-            if(this.fcType === 'px4') {
+            if (this.fcType === 'px4') {
                 target_mode = 'AUTO_LOITER';
             }
             this.send_set_mode_command(this.name, this.target_pub_topic, this.sys_id, target_mode);
         });
 
         EventBus.$on('command-set-change-speed-' + this.name, async (target_speed) => {
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             this.send_change_speed_command(this.name, this.target_pub_topic, this.sys_id, target_speed);
         });
 
         EventBus.$on('command-set-goto-circle-' + this.name, async (position) => {
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             var dir = (this.$store.state.drone_infos[this.name].circleType === 'cw') ? (1) : (-1);
             var arr_cur_goto_position = position.split(':');
@@ -4715,19 +4745,19 @@ export default {
 
             this.send_circle_radius_param_set_command(this.name, this.target_pub_topic, this.sys_id, radius);
 
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             this.send_circle_rate_param_set_command(this.name, this.target_pub_topic, this.sys_id, degree_speed);
 
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             let target_mode = 'GUIDED';
-            if(this.fcType === 'px4') {
+            if (this.fcType === 'px4') {
                 target_mode = 'AUTO_LOITER';
             }
             this.send_set_mode_command(this.name, this.target_pub_topic, this.sys_id, target_mode);
 
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             var auto_goto_positions = [];
 
@@ -4772,8 +4802,8 @@ export default {
             this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
             this.watchingMissionStatus = 0;
 
-            let deg = (Math.atan2((result2.y - result1.y), (result2.x - result1.x)) * (180/3.14));
-            deg = 360-deg;
+            let deg = (Math.atan2((result2.y - result1.y), (result2.x - result1.x)) * (180 / 3.14));
+            deg = 360 - deg;
             deg -= 90;
             deg %= 360;
 
@@ -4784,10 +4814,10 @@ export default {
         });
 
         EventBus.$on('command-set-goto-' + this.name, async (position) => {
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             let target_mode = 'GUIDED';
-            if(this.fcType === 'px4') {
+            if (this.fcType === 'px4') {
                 target_mode = 'AUTO_LOITER';
             }
             console.log('send_set_mode_command', target_mode);
@@ -4811,7 +4841,10 @@ export default {
                 }
             };
 
-            this.$store.state.missionLines[this.name].path.push({lat: this.gpi.lat / 10000000, lng: this.gpi.lon / 10000000});
+            this.$store.state.missionLines[this.name].path.push({
+                lat: this.gpi.lat / 10000000,
+                lng: this.gpi.lon / 10000000
+            });
             this.$store.state.missionLines[this.name].path.push({lat: lat, lng: lon});
 
             delete this.$store.state.targetLines[this.name];
@@ -4819,8 +4852,8 @@ export default {
             this.$store.state.missionLines = this.clone(this.$store.state.missionLines)
 
 
-            if(this.$store.state.drone_infos[this.name].gotoType === 'alt_first') {
-                await sleep(parseInt(1+Math.random()*4));
+            if (this.$store.state.drone_infos[this.name].gotoType === 'alt_first') {
+                await sleep(parseInt(1 + Math.random() * 4));
 
                 this.$store.state.drone_infos[this.name].targetAlt = alt;
 
@@ -4832,7 +4865,7 @@ export default {
                 this.watchingInitDist = Math.abs(alt - parseFloat((this.gpi.relative_alt / 1000).toFixed(1)));
                 this.watchingMissionStatus = 0;
 
-                if(this.watchingInitDist <= 0.1) {
+                if (this.watchingInitDist <= 0.1) {
                     this.watchingMission = 'goto-alt-complete';
                     this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
                     this.watchingMissionStatus = 100;
@@ -4858,11 +4891,11 @@ export default {
             }
 
             const nextProc = async (name, target_pub_topic, sys_id, lat, lon, alt, speed) => {
-                await sleep(parseInt(1+Math.random()*4));
+                await sleep(parseInt(1 + Math.random() * 4));
 
                 this.send_goto_command(this.name, this.target_pub_topic, this.sys_id, lat, lon, alt);
 
-                await sleep(parseInt(10+Math.random()*10));
+                await sleep(parseInt(10 + Math.random() * 10));
 
                 this.send_change_speed_command(this.name, this.target_pub_topic, this.sys_id, speed);
 
@@ -4906,7 +4939,7 @@ export default {
 
                 this.watchingMissionStatus = 0;
 
-                if(this.watchingInitDist <= 0.1) {
+                if (this.watchingInitDist <= 0.1) {
                     this.watchingMission = 'goto-complete';
                     this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
                     this.watchingMissionStatus = 100;
@@ -4922,7 +4955,7 @@ export default {
             await sleep(parseInt(1 + Math.random() * 4));
 
             let target_mode = 'GUIDED';
-            if(this.fcType === 'px4') {
+            if (this.fcType === 'px4') {
                 target_mode = 'AUTO_LOITER';
             }
             this.send_set_mode_command(this.name, this.target_pub_topic, this.sys_id, target_mode);
@@ -4932,7 +4965,7 @@ export default {
             this.watchingInitDist = Math.abs(_alt - parseFloat((this.gpi.relative_alt / 1000).toFixed(1)));
             this.watchingMissionStatus = 0;
 
-            if(this.watchingInitDist <= 0.1) {
+            if (this.watchingInitDist <= 0.1) {
                 this.watchingMission = 'goto-alt-complete';
                 this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
                 this.watchingMissionStatus = 100;
@@ -4940,7 +4973,7 @@ export default {
 
             this.doPublishBroadcast();
 
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             console.log('send_goto_alt_command - alt: ', _alt);
             this.send_goto_alt_command(this.name, this.target_pub_topic, this.sys_id, _alt);
@@ -4951,7 +4984,7 @@ export default {
                 console.log("무인이동체가 이륙된 상태 입니다.");
             }
             else {
-                await sleep(parseInt(1+Math.random()*4));
+                await sleep(parseInt(1 + Math.random() * 4));
 
                 let target_mode = 'ALT_HOLD';
                 if (this.fcType === 'px4') {
@@ -4961,31 +4994,31 @@ export default {
                 setTimeout(this.send_set_mode_command, parseInt(Math.random() * 5), this.name, this.target_pub_topic, this.sys_id, target_mode);
                 console.log('send_arm_command ', this.name, this.target_pub_topic, this.sys_id, target_mode);
 
-                await sleep(parseInt(1+Math.random()*4));
+                await sleep(parseInt(1 + Math.random() * 4));
 
                 let takeoffDelay = payload.takeoffDelay;
                 let relativeAlt = payload.targetTakeoffAlt;
                 let absoluteAlt = parseFloat((this.gpi.alt / 1000) + relativeAlt);
                 let takeoffAlt = relativeAlt;
-                if(this.fcType === 'px4') {
+                if (this.fcType === 'px4') {
                     takeoffAlt = absoluteAlt;
                 }
                 setTimeout(this.send_arm_command, parseInt(50 + Math.random() * 50), this.name, this.target_pub_topic, this.sys_id, 1, 0);
 
-                await sleep(parseInt(takeoffDelay*500));
+                await sleep(parseInt(takeoffDelay * 500));
 
                 if (this.curArmStatus === 'ARMED') {
                     console.log('send_takeoff_command - alt - delay: ', relativeAlt, takeoffDelay);
 
-                    await sleep(parseInt(takeoffDelay*500));
+                    await sleep(parseInt(takeoffDelay * 500));
 
                     target_mode = 'GUIDED';
-                    if(this.fcType === 'px4') {
+                    if (this.fcType === 'px4') {
                         target_mode = 'AUTO_LOITER';
                     }
                     this.send_set_mode_command(this.name, this.target_pub_topic, this.sys_id, target_mode);
 
-                    await sleep(parseInt(1+Math.random()*3));
+                    await sleep(parseInt(1 + Math.random() * 3));
 
                     this.send_takeoff_command(this.name, this.target_pub_topic, this.sys_id, takeoffAlt);
 
@@ -4994,7 +5027,7 @@ export default {
                     this.watchingInitDist = Math.abs(relativeAlt - parseFloat((this.gpi.relative_alt / 1000).toFixed(1)));
                     this.watchingMissionStatus = 0;
 
-                    if(this.watchingInitDist <= 0.1) {
+                    if (this.watchingInitDist <= 0.1) {
                         this.watchingMission = 'takeoff-complete';
                         this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
                         this.watchingMissionStatus = 100;
@@ -5008,8 +5041,8 @@ export default {
             }
         });
 
-        EventBus.$on('command-set-mode-' + this.name, async(selected_mode) => {
-            await sleep(parseInt(1+Math.random()));
+        EventBus.$on('command-set-mode-' + this.name, async (selected_mode) => {
+            await sleep(parseInt(1 + Math.random()));
             this.send_set_mode_command(this.name, this.target_pub_topic, this.sys_id, selected_mode);
 
             // setTimeout(this.send_set_mode_command, 1, this.name, this.target_pub_topic, this.sys_id, selected_mode);
@@ -5018,14 +5051,14 @@ export default {
             this.$store.state.drone_infos[this.name].watchingMission = this.watchingMission;
         });
 
-        EventBus.$on('command-set-arm-' + this.name, async() => {
+        EventBus.$on('command-set-arm-' + this.name, async () => {
             let target_mode = 'ALT_HOLD';
-            if(this.fcType === 'px4') {
+            if (this.fcType === 'px4') {
                 target_mode = 'AUTO_LOITER';
             }
             this.send_set_mode_command(this.name, this.target_pub_topic, this.sys_id, target_mode);
             console.log('send_arm_command ', this.name);
-            await sleep(parseInt(1+Math.random()*4));
+            await sleep(parseInt(1 + Math.random() * 4));
 
             // setTimeout((name, target_pub_topic, sys_id) => {
             this.send_arm_command(this.name, this.target_pub_topic, this.sys_id, 1, 0);
@@ -5120,7 +5153,8 @@ export default {
         //         }
         //     }
         // });
-    },
+    }
+    ,
 
 
     mounted: function () {
@@ -5137,8 +5171,8 @@ export default {
         //     }
         // }
 
-        for(let idx in this.$store.state.tempMarkers[this.name]) {
-            if(Object.prototype.hasOwnProperty.call(this.$store.state.tempMarkers[this.name], idx)) {
+        for (let idx in this.$store.state.tempMarkers[this.name]) {
+            if (Object.prototype.hasOwnProperty.call(this.$store.state.tempMarkers[this.name], idx)) {
                 let str = this.$store.state.tempMarkers[this.name][idx].lat + ':' + this.$store.state.tempMarkers[this.name][idx].lng +
                     ':' + this.$store.state.tempMarkers[this.name][idx].alt + ':' + this.$store.state.tempMarkers[this.name][idx].radius +
                     ':' + this.$store.state.tempMarkers[this.name][idx].airspeed;
@@ -5166,7 +5200,7 @@ export default {
         let payload = {};
         payload.lat = parseFloat(this.lat);
         payload.lng = parseFloat(this.lng);
-        payload.alt = parseFloat(this.gpi.relative_alt/1000);
+        payload.alt = parseFloat(this.gpi.relative_alt / 1000);
         payload.heading = 0;
         EventBus.$emit('initialize-' + this.name, JSON.parse(JSON.stringify(payload)));
         payload = null;
@@ -5191,10 +5225,11 @@ export default {
         else {
             this.stopFlightTimer();
         }
-    },
+    }
+    ,
 
     beforeDestroy() {
-        if(this.timer_id) {
+        if (this.timer_id) {
             clearInterval(this.timer_id);
         }
 
